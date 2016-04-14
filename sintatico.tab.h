@@ -59,7 +59,8 @@ extern int yydebug;
      OP_ARIT = 268,
      PAR_ABRE = 269,
      PAR_FECHA = 270,
-     VIRGULA = 271
+     VIRGULA = 271,
+     PONTO_VIRGULA = 272
    };
 #endif
 

@@ -17,21 +17,31 @@
 %token PAR_ABRE
 %token PAR_FECHA
 %token VIRGULA
+%token PONTO_VIRGULA
 
 %%
 /* Regras definindo a GLC e acoes correspondentes */
 /* neste nosso exemplo quase todas as acoes estao vazias */
 
-programa:	 BLOCO_ABRE estrutura BLOCO_FECHA 	{;} /*Tiramos BLOCO_ABRE e BLOCO_FECHA da regra. Colocar de volta depois*/
+programa:	 BLOCO_ABRE componente BLOCO_FECHA 	{;} /*Tiramos BLOCO_ABRE e BLOCO_FECHA da regra. Colocar de volta depois*/
+;
+
+componente:	estrutura {;}
+			|estrutura PONTO_VIRGULA componente {;}
 ;
 
 estrutura: 	estrutura_simples {;}
 			|estrutura_bloco {;}
-			|estrutura_simples ';' estrutura {;}
 ;
-estrutura_bloco: BLOCO_ABRE estrutura BLOCO_FECHA {;}
-				| WHILE rel DO estrutura {;}
+estrutura_bloco: bloco_composto {;}
+				|WHILE rel DO estrutura {;}
 ;
+bloco_composto:	BLOCO_ABRE repete_estrutura BLOCO_FECHA {;}
+;
+repete_estrutura: 	estrutura {;}
+					| estrutura PONTO_VIRGULA repete_estrutura {;}
+;
+
 estrutura_simples:		ID OP_ATRIB exp			{;}
 						|func PAR_ABRE argumentos_func PAR_FECHA{;}
 		

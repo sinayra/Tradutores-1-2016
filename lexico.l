@@ -30,6 +30,7 @@ RELACAO		("<"|">"|"=")
 ("(") 			{return PAR_ABRE;}
 (")") 			{return PAR_FECHA;}
 (",") 			{return VIRGULA;}
+(";") 			{return PONTO_VIRGULA;}
 
 {RELACAO} 		{return RELACAO;}
 {OP_ARIT} 		{return OP_ARIT;}
