@@ -28,7 +28,6 @@ local.properties
 # PDT-specific
 .buildpath
 
-/Especificação da Gramática/minipascal-master/*
 #################
 ## Visual Studio
 #################
@@ -214,3 +213,5 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+
+\Especificação da Gramática\minipascal-master\
