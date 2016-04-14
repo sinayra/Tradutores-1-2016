@@ -3,24 +3,34 @@
 #include "sintatico.tab.h"
 %}
 
-BLOCO_ABRE	("comeca")
-BLOCO_FECHA ("termina")
-WHILE ("while")
-DO ("do")
-ID	[a-zA-Z][a-zA-Z0-9]*	
-NUM 	("+"|"-")?[0-9]+(".")[0-9]+
-BRANCO	(" "|"\t"|"\n"|"\r")
+WRITE		("write")
+READ		("read")
+BLOCO_ABRE	("begin")
+BLOCO_FECHA ("end")
+WHILE 		("while")
+DO 			("do")
+ID			[a-zA-Z][a-zA-Z0-9]*	
+NUM 		("+"|"-")?[0-9]+(".")[0-9]+
+BRANCO		(" "|"\t"|"\n"|"\r")
 OP_ARIT		("+"|"-"|"*")
-RELACAO	("<"|">"|"=")
+RELACAO		("<"|">"|"=")
+
 
 %%
+{READ} 			{return READ;}
+{WRITE} 		{return WRITE;}
 {BLOCO_ABRE} 	{return BLOCO_ABRE;}
 {BLOCO_FECHA}	{return BLOCO_FECHA;}
 {WHILE}			{return WHILE;}
 {DO}			{return DO;}
 {ID}			{return ID;}
 {NUM}			{return NUM;}
+
 (":=") 			{return OP_ATRIB;}
+("(") 			{return PAR_ABRE;}
+(")") 			{return PAR_FECHA;}
+(",") 			{return VIRGULA;}
+
 {RELACAO} 		{return RELACAO;}
 {OP_ARIT} 		{return OP_ARIT;}
 
