@@ -1,1 +1,1 @@
-comeca a := 1.1 termina
+begin a := 1.1 end

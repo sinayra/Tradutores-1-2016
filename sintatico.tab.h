@@ -56,11 +56,13 @@ extern int yydebug;
      ID = 265,
      OP_ATRIB = 266,
      RELACAO = 267,
-     OP_ARIT = 268,
-     PAR_ABRE = 269,
-     PAR_FECHA = 270,
-     VIRGULA = 271,
-     PONTO_VIRGULA = 272
+     SOMA = 268,
+     SUB = 269,
+     MULT = 270,
+     PAR_ABRE = 271,
+     PAR_FECHA = 272,
+     VIRGULA = 273,
+     PONTO_VIRGULA = 274
    };
 #endif
 

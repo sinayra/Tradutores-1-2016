@@ -13,17 +13,21 @@
 %token ID
 %token OP_ATRIB
 %token RELACAO
-%token OP_ARIT
+%token SOMA
+%token SUB
+%token MULT
 %token PAR_ABRE
 %token PAR_FECHA
 %token VIRGULA
 %token PONTO_VIRGULA
+%left SOMA SUB
+%left MULT
 
 %%
 /* Regras definindo a GLC e acoes correspondentes */
 /* neste nosso exemplo quase todas as acoes estao vazias */
 
-programa:	 BLOCO_ABRE componente BLOCO_FECHA 	{;} /*Tiramos BLOCO_ABRE e BLOCO_FECHA da regra. Colocar de volta depois*/
+programa:	 BLOCO_ABRE componente BLOCO_FECHA 	{;} 
 ;
 
 componente:	estrutura {;}
@@ -46,9 +50,11 @@ estrutura_simples:		ID OP_ATRIB exp			{;}
 						|func PAR_ABRE argumentos_func PAR_FECHA{;}
 		
 ;
-exp:		NUM				{;}
-		| ID				{;}
-		| exp exp OP_ARIT	{;}
+exp:	NUM					{$$ = $1;}
+		| ID				{$$ = $1;}
+		| exp SOMA exp		{$$ = $1 + $3;}
+		| exp SUB exp		{$$ = $1 - $3;}
+		| exp MULT exp		{$$ = $1 * $3;}
 ;
 rel:	exp RELACAO exp	{;}
 ;

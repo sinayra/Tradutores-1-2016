@@ -12,7 +12,9 @@ DO 			("do")
 ID			[a-zA-Z][a-zA-Z0-9]*	
 NUM 		("+"|"-")?[0-9]+(".")[0-9]+
 BRANCO		(" "|"\t"|"\n"|"\r")
-OP_ARIT		("+"|"-"|"*")
+SOMA		("+")
+SUB			("-")
+MULT		("*")
 RELACAO		("<"|">"|"=")
 
 
@@ -33,7 +35,9 @@ RELACAO		("<"|">"|"=")
 (";") 			{return PONTO_VIRGULA;}
 
 {RELACAO} 		{return RELACAO;}
-{OP_ARIT} 		{return OP_ARIT;}
+{SOMA}	 		{return SOMA;}
+{SUB}	 		{return SUB;}
+{MULT}	 		{return MULT;}
 
 {BRANCO}		{;}
 .			{return yytext[0];}
