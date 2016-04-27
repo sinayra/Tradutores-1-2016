@@ -1469,7 +1469,7 @@ yyreduce:
   case 18:
 /* Line 1792 of yacc.c  */
 #line 57 "sintatico.y"
-    {3;}
+    {;}
     break;
 
   case 19:

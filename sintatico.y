@@ -54,7 +54,7 @@ exp:	NUM					{;}
 		| ID				{;}
 		| exp SOMA exp		{;}
 		| exp SUB exp		{;}
-		| exp MULT exp		{3;}
+		| exp MULT exp		{;}
 ;
 rel:	exp RELACAO exp	{;}
 ;
