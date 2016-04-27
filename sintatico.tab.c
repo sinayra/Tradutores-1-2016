@@ -1445,31 +1445,31 @@ yyreduce:
   case 14:
 /* Line 1792 of yacc.c  */
 #line 53 "sintatico.y"
-    {(yyval) = (yyvsp[(1) - (1)]);}
+    {;}
     break;
 
   case 15:
 /* Line 1792 of yacc.c  */
 #line 54 "sintatico.y"
-    {(yyval) = (yyvsp[(1) - (1)]);}
+    {;}
     break;
 
   case 16:
 /* Line 1792 of yacc.c  */
 #line 55 "sintatico.y"
-    {(yyval) = (yyvsp[(1) - (3)]) + (yyvsp[(3) - (3)]);}
+    {;}
     break;
 
   case 17:
 /* Line 1792 of yacc.c  */
 #line 56 "sintatico.y"
-    {(yyval) = (yyvsp[(1) - (3)]) - (yyvsp[(3) - (3)]);}
+    {;}
     break;
 
   case 18:
 /* Line 1792 of yacc.c  */
 #line 57 "sintatico.y"
-    {(yyval) = (yyvsp[(1) - (3)]) * (yyvsp[(3) - (3)]);}
+    {3;}
     break;
 
   case 19:
