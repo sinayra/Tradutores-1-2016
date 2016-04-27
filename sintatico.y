@@ -50,11 +50,11 @@ estrutura_simples:		ID OP_ATRIB exp			{;}
 						|func PAR_ABRE argumentos_func PAR_FECHA{;}
 		
 ;
-exp:	NUM					{$$ = $1;}
-		| ID				{$$ = $1;}
-		| exp SOMA exp		{$$ = $1 + $3;}
-		| exp SUB exp		{$$ = $1 - $3;}
-		| exp MULT exp		{$$ = $1 * $3;}
+exp:	NUM					{;}
+		| ID				{;}
+		| exp SOMA exp		{;}
+		| exp SUB exp		{;}
+		| exp MULT exp		{3;}
 ;
 rel:	exp RELACAO exp	{;}
 ;
