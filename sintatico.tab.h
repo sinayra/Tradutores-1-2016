@@ -52,17 +52,20 @@ extern int yydebug;
      BLOCO_FECHA = 261,
      WHILE = 262,
      DO = 263,
-     NUM = 264,
-     ID = 265,
-     OP_ATRIB = 266,
-     RELACAO = 267,
-     SOMA = 268,
-     SUB = 269,
-     MULT = 270,
-     PAR_ABRE = 271,
-     PAR_FECHA = 272,
-     VIRGULA = 273,
-     PONTO_VIRGULA = 274
+     VAR = 264,
+     TIPO = 265,
+     NUM = 266,
+     ID = 267,
+     OP_ATRIB = 268,
+     RELACAO = 269,
+     SOMA = 270,
+     SUB = 271,
+     MULT = 272,
+     PAR_ABRE = 273,
+     PAR_FECHA = 274,
+     VIRGULA = 275,
+     PONTO_VIRGULA = 276,
+     DOIS_PONTOS = 277
    };
 #endif
 

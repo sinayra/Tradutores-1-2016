@@ -1,3 +1,6 @@
+var 
+	a, b: integer;
+	c: boolean;
 begin
 	while a < b do
 	begin

@@ -9,6 +9,8 @@
 %token BLOCO_FECHA
 %token WHILE
 %token DO
+%token VAR
+%token TIPO
 %token NUM
 %token ID
 %token OP_ATRIB
@@ -20,6 +22,7 @@
 %token PAR_FECHA
 %token VIRGULA
 %token PONTO_VIRGULA
+%token DOIS_PONTOS
 %left SOMA SUB
 %left MULT
 
@@ -27,7 +30,7 @@
 /* Regras definindo a GLC e acoes correspondentes */
 /* neste nosso exemplo quase todas as acoes estao vazias */
 
-programa:	 BLOCO_ABRE componente BLOCO_FECHA 	{;} 
+programa:	 variavel_declaracao_inicio BLOCO_ABRE componente BLOCO_FECHA 	{;} 
 ;
 
 componente:	estrutura {;}
@@ -50,6 +53,18 @@ estrutura_simples:		ID OP_ATRIB exp			{;}
 						|func PAR_ABRE argumentos_func PAR_FECHA{;}
 		
 ;
+
+variavel_declaracao_inicio:	/*empty*/	{;}
+							| VAR variavel_declaracao_lista	{;}
+;
+
+variavel_declaracao_lista:	variavel_declaracao PONTO_VIRGULA	{;}
+							|variavel_declaracao PONTO_VIRGULA variavel_declaracao_lista	{;}
+;
+	
+variavel_declaracao: ID DOIS_PONTOS TIPO	{;}
+					| ID VIRGULA variavel_declaracao	{;}
+;
 exp:	NUM					{;}
 		| ID				{;}
 		| exp SOMA exp		{;}
@@ -66,6 +81,8 @@ func:		READ {;}
 argumentos_func:	 ID {;}
 					| ID VIRGULA argumentos_func {;}
 ;
+
+
 
 %%
 int main(int argc, char* argv[]){
