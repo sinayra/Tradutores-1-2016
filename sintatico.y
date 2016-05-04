@@ -3,6 +3,7 @@
 %{
 #include <stdio.h> 
 %}
+%token PROGRAM
 %token READ
 %token WRITE
 %token BLOCO_ABRE
@@ -23,6 +24,7 @@
 %token VIRGULA
 %token PONTO_VIRGULA
 %token DOIS_PONTOS
+%token PONTO
 %left SOMA SUB
 %left MULT
 
@@ -30,7 +32,10 @@
 /* Regras definindo a GLC e acoes correspondentes */
 /* neste nosso exemplo quase todas as acoes estao vazias */
 
-programa:	 variavel_declaracao_inicio BLOCO_ABRE componente BLOCO_FECHA 	{;} 
+programa:	PROGRAM ID PONTO_VIRGULA bloco_principal PONTO	{;} 
+;
+
+bloco_principal:  variavel_declaracao_inicio BLOCO_ABRE componente BLOCO_FECHA	{;}
 ;
 
 componente:	estrutura {;}

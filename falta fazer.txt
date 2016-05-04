@@ -1,8 +1,12 @@
-4) Até este ponto sua gramática permite escrever um corpo de programa que é definido como uma lista de comandos entre delimitadores de abre e fecha bloco. Alterar sua BNF para incluir uma estrutura de declaração de variáveis globais que preceda a estrutura do corpo do programa. Observar que a estrutura de declarações deve ser opcional, ou seja, um programa pode ou não ter uma estrutura de declarações de variáveis.
+6) Na gramática do seu sintático, alterar a regra que define comando para incluir um comando de entrada
+e um comando de saída (usar BNF adotada como referência para montar a definição desses comandos). Alterar
+o léxico para levar em conta as novas palavras reservadas.
 
-6) Na gramática do seu sintático, alterar a regra que define comando para incluir um comando de entrada e um comando de saída (usar BNF adotada como referência para montar a definição desses comandos). Alterar o léxico para levar em conta as novas palavras reservadas.
-
-7) Na gramática do seu sintático, alterar a regra que define comando para incluir o comando condicional e o de repetição que seu grupo recebeu (usar BNF adotada como referência para montar a definição dos novos comandos). Alterar o léxico para levar em conta as novas
+7) Na gramática do seu sintático, alterar a regra que define comando para incluir o comando condicional 
+e o de repetição que seu grupo recebeu (usar BNF adotada como referência para montar a definição dos novos comandos). Alterar o léxico para levar em conta as novas
 palavras reservadas.
 
-8) Até este ponto sua gramática permite escrever um programa com um módulo apenas (o principal). Alterar sua BNF para possibilitar que um programa seja dado por um ou mais módulos (sub-rotinas). A definição de uma sub-rotina é simples: não tem parâmetros nem variáveis locais, mas tem um nome (seguindo as mesma regras que um identificador de variáveis). Sendo assim, a chamada a uma sub-rotina deve ser possível usando seu nome como um comando.
+8) Até este ponto sua gramática permite escrever um programa com um módulo apenas (o principal). Alterar 
+sua BNF para possibilitar que um programa seja dado por um ou mais módulos (sub-rotinas). A definição de uma sub-rotina é simples: não
+tem parâmetros nem variáveis locais, mas tem um nome (seguindo as mesma regras que um identificador de variáveis). Sendo assim, a 
+chamada a uma sub-rotina deve ser possível usando seu nome como um comando.

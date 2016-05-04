@@ -46,26 +46,28 @@ extern int yydebug;
    /* Put the tokens into the symbol table, so that GDB and other debuggers
       know about them.  */
    enum yytokentype {
-     READ = 258,
-     WRITE = 259,
-     BLOCO_ABRE = 260,
-     BLOCO_FECHA = 261,
-     WHILE = 262,
-     DO = 263,
-     VAR = 264,
-     TIPO = 265,
-     NUM = 266,
-     ID = 267,
-     OP_ATRIB = 268,
-     RELACAO = 269,
-     SOMA = 270,
-     SUB = 271,
-     MULT = 272,
-     PAR_ABRE = 273,
-     PAR_FECHA = 274,
-     VIRGULA = 275,
-     PONTO_VIRGULA = 276,
-     DOIS_PONTOS = 277
+     PROGRAM = 258,
+     READ = 259,
+     WRITE = 260,
+     BLOCO_ABRE = 261,
+     BLOCO_FECHA = 262,
+     WHILE = 263,
+     DO = 264,
+     VAR = 265,
+     TIPO = 266,
+     NUM = 267,
+     ID = 268,
+     OP_ATRIB = 269,
+     RELACAO = 270,
+     SOMA = 271,
+     SUB = 272,
+     MULT = 273,
+     PAR_ABRE = 274,
+     PAR_FECHA = 275,
+     VIRGULA = 276,
+     PONTO_VIRGULA = 277,
+     DOIS_PONTOS = 278,
+     PONTO = 279
    };
 #endif
 

@@ -1,3 +1,4 @@
+program Exe6;
 var 
 	a, b: integer;
 	c: boolean;
@@ -10,4 +11,4 @@ begin
 	end;
 
 	a := c
-end
+end.

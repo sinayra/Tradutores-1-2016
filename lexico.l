@@ -3,6 +3,7 @@
 #include "sintatico.tab.h"
 %}
 
+PROGRAM		("program")
 WRITE		("write")
 READ		("read")
 BLOCO_ABRE	("begin")
@@ -21,6 +22,7 @@ RELACAO		("<"|">"|"=")
 
 
 %%
+{PROGRAM}		{return PROGRAM;}
 {READ} 			{return READ;}
 {WRITE} 		{return WRITE;}
 {BLOCO_ABRE} 	{return BLOCO_ABRE;}
@@ -38,6 +40,7 @@ RELACAO		("<"|">"|"=")
 (",") 			{return VIRGULA;}
 (";") 			{return PONTO_VIRGULA;}
 (":")			{return DOIS_PONTOS;}
+(".")			{return PONTO;}
 
 {RELACAO} 		{return RELACAO;}
 {SOMA}	 		{return SOMA;}
