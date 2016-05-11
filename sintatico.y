@@ -1,11 +1,14 @@
 /* Verificando a sintaxe de programas segundo nossa GLC-exemplo */
 /* considerando notacao polonesa para expressoes */
+
 %{
 #include <stdio.h> 
 %}
+
 %union {
-char *cadeia;
+	char *cadeia;
 }
+
 %token PROGRAM
 %token READ
 %token WRITE
@@ -31,11 +34,13 @@ char *cadeia;
 %left SOMA SUB
 %left MULT
 
+%type<cadeia> ID TIPO variavel_declaracao
+
 %%
 /* Regras definindo a GLC e acoes correspondentes */
 /* neste nosso exemplo quase todas as acoes estao vazias */
 
-programa:	PROGRAM ID PONTO_VIRGULA {printf("ID NOME\n");} bloco_principal PONTO 
+programa:	PROGRAM ID PONTO_VIRGULA {printf("Nome do programa: %s \n", $2);} bloco_principal PONTO 
 ;
 
 bloco_principal:  variavel_declaracao_inicio BLOCO_ABRE componente BLOCO_FECHA	{;}
@@ -57,7 +62,7 @@ repete_estrutura: 	estrutura {;}
 					| estrutura PONTO_VIRGULA repete_estrutura {;}
 ;
 
-estrutura_simples:		ID OP_ATRIB exp			{printf("uso de ID\n");}
+estrutura_simples:		ID OP_ATRIB exp			{printf("ID usado: %s \n", $1);}
 						|func PAR_ABRE argumentos_func PAR_FECHA{;}
 		
 ;
@@ -70,11 +75,11 @@ variavel_declaracao_lista:	variavel_declaracao PONTO_VIRGULA	{;}
 							|variavel_declaracao PONTO_VIRGULA variavel_declaracao_lista	{;}
 ;
 	
-variavel_declaracao: ID DOIS_PONTOS TIPO	{printf("declaracao de ID\n");}
-					| ID VIRGULA variavel_declaracao	{printf("declaracao de ID\n");}
+variavel_declaracao: ID DOIS_PONTOS TIPO	{$$ = $3; printf("ID declarado: %s\t Tipo$3: %s\t $$: %s \n", $1, $3, $$);}
+					| ID VIRGULA variavel_declaracao	{printf("ID declarado: %s\t Tipo: %s\t $$: %s \n", $1, $3, $$);}
 ;
 exp:	NUM					{;}
-		| ID				{printf("uso de ID\n");}
+		| ID				{printf("ID usado: %s \n", $1);}
 		| exp SOMA exp		{;}
 		| exp SUB exp		{;}
 		| exp MULT exp		{;}
@@ -86,8 +91,8 @@ func:		READ {;}
 			|WRITE {;}
 ;
 
-argumentos_func:	 ID {printf("declaracao de ID\n");}
-					| ID VIRGULA argumentos_func {printf("declaracao de ID\n");}
+argumentos_func:	 ID {printf("ID declarado: %s \n", $1);}
+					| ID VIRGULA argumentos_func {printf("ID declarado: %s \n", $1);}
 ;
 
 

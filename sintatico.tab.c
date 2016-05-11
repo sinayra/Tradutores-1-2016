@@ -63,7 +63,7 @@
 
 /* Copy the first part of user declarations.  */
 /* Line 371 of yacc.c  */
-#line 3 "sintatico.y"
+#line 4 "sintatico.y"
 
 #include <stdio.h> 
 
@@ -134,9 +134,9 @@ extern int yydebug;
 typedef union YYSTYPE
 {
 /* Line 387 of yacc.c  */
-#line 6 "sintatico.y"
+#line 8 "sintatico.y"
 
-char *cadeia;
+	char *cadeia;
 
 
 /* Line 387 of yacc.c  */
@@ -469,10 +469,10 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    38,    38,    38,    41,    44,    45,    48,    49,    51,
-      52,    54,    56,    57,    60,    61,    65,    66,    69,    70,
-      73,    74,    76,    77,    78,    79,    80,    82,    85,    86,
-      89,    90
+       0,    43,    43,    43,    46,    49,    50,    53,    54,    56,
+      57,    59,    61,    62,    65,    66,    70,    71,    74,    75,
+      78,    79,    81,    82,    83,    84,    85,    87,    90,    91,
+      94,    95
 };
 #endif
 
@@ -1405,176 +1405,176 @@ yyreduce:
     {
         case 2:
 /* Line 1792 of yacc.c  */
-#line 38 "sintatico.y"
-    {printf("ID NOME\n");}
+#line 43 "sintatico.y"
+    {printf("Nome do programa: %s \n", (yyvsp[(2) - (3)].cadeia));}
     break;
 
   case 4:
 /* Line 1792 of yacc.c  */
-#line 41 "sintatico.y"
+#line 46 "sintatico.y"
     {;}
     break;
 
   case 5:
 /* Line 1792 of yacc.c  */
-#line 44 "sintatico.y"
+#line 49 "sintatico.y"
     {;}
     break;
 
   case 6:
 /* Line 1792 of yacc.c  */
-#line 45 "sintatico.y"
+#line 50 "sintatico.y"
     {;}
     break;
 
   case 7:
 /* Line 1792 of yacc.c  */
-#line 48 "sintatico.y"
+#line 53 "sintatico.y"
     {;}
     break;
 
   case 8:
 /* Line 1792 of yacc.c  */
-#line 49 "sintatico.y"
+#line 54 "sintatico.y"
     {;}
     break;
 
   case 9:
 /* Line 1792 of yacc.c  */
-#line 51 "sintatico.y"
+#line 56 "sintatico.y"
     {;}
     break;
 
   case 10:
 /* Line 1792 of yacc.c  */
-#line 52 "sintatico.y"
+#line 57 "sintatico.y"
     {;}
     break;
 
   case 11:
 /* Line 1792 of yacc.c  */
-#line 54 "sintatico.y"
+#line 59 "sintatico.y"
     {;}
     break;
 
   case 12:
 /* Line 1792 of yacc.c  */
-#line 56 "sintatico.y"
+#line 61 "sintatico.y"
     {;}
     break;
 
   case 13:
 /* Line 1792 of yacc.c  */
-#line 57 "sintatico.y"
+#line 62 "sintatico.y"
     {;}
     break;
 
   case 14:
 /* Line 1792 of yacc.c  */
-#line 60 "sintatico.y"
-    {printf("uso de ID\n");}
+#line 65 "sintatico.y"
+    {printf("ID usado: %s \n", (yyvsp[(1) - (3)].cadeia));}
     break;
 
   case 15:
-/* Line 1792 of yacc.c  */
-#line 61 "sintatico.y"
-    {;}
-    break;
-
-  case 16:
-/* Line 1792 of yacc.c  */
-#line 65 "sintatico.y"
-    {;}
-    break;
-
-  case 17:
 /* Line 1792 of yacc.c  */
 #line 66 "sintatico.y"
     {;}
     break;
 
-  case 18:
-/* Line 1792 of yacc.c  */
-#line 69 "sintatico.y"
-    {;}
-    break;
-
-  case 19:
+  case 16:
 /* Line 1792 of yacc.c  */
 #line 70 "sintatico.y"
     {;}
     break;
 
+  case 17:
+/* Line 1792 of yacc.c  */
+#line 71 "sintatico.y"
+    {;}
+    break;
+
+  case 18:
+/* Line 1792 of yacc.c  */
+#line 74 "sintatico.y"
+    {;}
+    break;
+
+  case 19:
+/* Line 1792 of yacc.c  */
+#line 75 "sintatico.y"
+    {;}
+    break;
+
   case 20:
 /* Line 1792 of yacc.c  */
-#line 73 "sintatico.y"
-    {printf("declaracao de ID\n");}
+#line 78 "sintatico.y"
+    {(yyval.cadeia) = (yyvsp[(3) - (3)].cadeia); printf("ID declarado: %s\t Tipo$3: %s\t $$: %s \n", (yyvsp[(1) - (3)].cadeia), (yyvsp[(3) - (3)].cadeia), (yyval.cadeia));}
     break;
 
   case 21:
 /* Line 1792 of yacc.c  */
-#line 74 "sintatico.y"
-    {printf("declaracao de ID\n");}
+#line 79 "sintatico.y"
+    {printf("ID declarado: %s\t Tipo: %s\t $$: %s \n", (yyvsp[(1) - (3)].cadeia), (yyvsp[(3) - (3)].cadeia), (yyval.cadeia));}
     break;
 
   case 22:
 /* Line 1792 of yacc.c  */
-#line 76 "sintatico.y"
+#line 81 "sintatico.y"
     {;}
     break;
 
   case 23:
 /* Line 1792 of yacc.c  */
-#line 77 "sintatico.y"
-    {printf("uso de ID\n");}
+#line 82 "sintatico.y"
+    {printf("ID usado: %s \n", (yyvsp[(1) - (1)].cadeia));}
     break;
 
   case 24:
 /* Line 1792 of yacc.c  */
-#line 78 "sintatico.y"
+#line 83 "sintatico.y"
     {;}
     break;
 
   case 25:
 /* Line 1792 of yacc.c  */
-#line 79 "sintatico.y"
+#line 84 "sintatico.y"
     {;}
     break;
 
   case 26:
 /* Line 1792 of yacc.c  */
-#line 80 "sintatico.y"
+#line 85 "sintatico.y"
     {;}
     break;
 
   case 27:
 /* Line 1792 of yacc.c  */
-#line 82 "sintatico.y"
+#line 87 "sintatico.y"
     {;}
     break;
 
   case 28:
 /* Line 1792 of yacc.c  */
-#line 85 "sintatico.y"
+#line 90 "sintatico.y"
     {;}
     break;
 
   case 29:
 /* Line 1792 of yacc.c  */
-#line 86 "sintatico.y"
+#line 91 "sintatico.y"
     {;}
     break;
 
   case 30:
 /* Line 1792 of yacc.c  */
-#line 89 "sintatico.y"
-    {printf("declaracao de ID\n");}
+#line 94 "sintatico.y"
+    {printf("ID declarado: %s \n", (yyvsp[(1) - (1)].cadeia));}
     break;
 
   case 31:
 /* Line 1792 of yacc.c  */
-#line 90 "sintatico.y"
-    {printf("declaracao de ID\n");}
+#line 95 "sintatico.y"
+    {printf("ID declarado: %s \n", (yyvsp[(1) - (3)].cadeia));}
     break;
 
 
@@ -1811,7 +1811,7 @@ yyreturn:
 
 
 /* Line 2055 of yacc.c  */
-#line 95 "sintatico.y"
+#line 100 "sintatico.y"
 
 int main(int argc, char* argv[]){
 	extern FILE *yyin;

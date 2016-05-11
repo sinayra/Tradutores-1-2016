@@ -30,7 +30,7 @@ RELACAO		("<"|">"|"=")
 {WHILE}			{return WHILE;}
 {DO}			{return DO;}
 {VAR}			{return VAR;}
-{TIPO}			{return TIPO;}
+{TIPO}			{yylval.cadeia= (char *) strdup(yytext); return TIPO;}
 {ID}			{yylval.cadeia= (char *) strdup(yytext); return ID;}
 {NUM}			{return NUM;}
 

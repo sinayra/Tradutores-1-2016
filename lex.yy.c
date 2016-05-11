@@ -809,7 +809,7 @@ YY_RULE_SETUP
 case 9:
 YY_RULE_SETUP
 #line 33 "lexico.l"
-{return TIPO;}
+{yylval.cadeia= (char *) strdup(yytext); return TIPO;}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
