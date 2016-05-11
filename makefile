@@ -1,5 +1,5 @@
 CC 		= gcc
-CFLAGS 	= -Wall
+CFLAGS 	= -Wall -stc=c99
 
 all: flex bison compile
 

@@ -3,6 +3,17 @@
 
 %{
 #include <stdio.h> 
+#include <string.h>
+
+typedef struct{
+	char cadeia[100];
+	char tipo[100];
+}tab_simb;
+
+tab_simb tab[20];
+
+int n_simbolos = 0;
+int n_local = 0;
 %}
 
 %union {
@@ -34,7 +45,7 @@
 %left SOMA SUB
 %left MULT
 
-%type<cadeia> ID TIPO variavel_declaracao
+%type<cadeia> ID TIPO
 
 %%
 /* Regras definindo a GLC e acoes correspondentes */
@@ -75,8 +86,25 @@ variavel_declaracao_lista:	variavel_declaracao PONTO_VIRGULA	{;}
 							|variavel_declaracao PONTO_VIRGULA variavel_declaracao_lista	{;}
 ;
 	
-variavel_declaracao: ID DOIS_PONTOS TIPO	{$$ = $3; printf("ID declarado: %s\t Tipo$3: %s\t $$: %s \n", $1, $3, $$);}
-					| ID VIRGULA variavel_declaracao	{printf("ID declarado: %s\t Tipo: %s\t $$: %s \n", $1, $3, $$);}
+variavel_declaracao:
+					ID VIRGULA variavel_declaracao	
+					{
+						strcpy(tab[n_simbolos].cadeia, $ID);
+						strcpy(tab[n_simbolos].tipo, tab[n_simbolos - 1].tipo);
+
+						n_simbolos++;
+						printf("ID declarado: %s", $ID);
+					}
+					| 
+					ID DOIS_PONTOS TIPO	
+					{
+						strcpy(tab[n_simbolos].cadeia, $ID);
+						strcpy(tab[n_simbolos].tipo, $TIPO);
+
+						n_simbolos++;
+						printf("ID declarado: %s", $ID);
+
+					} 
 ;
 exp:	NUM					{;}
 		| ID				{printf("ID usado: %s \n", $1);}
@@ -117,6 +145,12 @@ int main(int argc, char* argv[]){
 
 	if(erro == 0)
 		fprintf(yyout, "Programa sintaticamente correto");
+
+	int i;
+	printf("\nNome\tTipo\n");
+	for(i = 0; i < n_simbolos; i++){
+		printf("%s\t%s\n", tab[i].cadeia, tab[i].tipo);
+	}
 
 	fclose(yyin);
 	fclose(yyout);
