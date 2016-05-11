@@ -814,7 +814,7 @@ YY_RULE_SETUP
 case 10:
 YY_RULE_SETUP
 #line 34 "lexico.l"
-{return ID;}
+{yylval.cadeia= (char *) strdup(yytext); return ID;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP

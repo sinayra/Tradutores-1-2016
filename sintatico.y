@@ -3,6 +3,9 @@
 %{
 #include <stdio.h> 
 %}
+%union {
+char *cadeia;
+}
 %token PROGRAM
 %token READ
 %token WRITE
@@ -32,7 +35,7 @@
 /* Regras definindo a GLC e acoes correspondentes */
 /* neste nosso exemplo quase todas as acoes estao vazias */
 
-programa:	PROGRAM ID PONTO_VIRGULA bloco_principal PONTO	{;} 
+programa:	PROGRAM ID PONTO_VIRGULA {printf("ID NOME\n");} bloco_principal PONTO 
 ;
 
 bloco_principal:  variavel_declaracao_inicio BLOCO_ABRE componente BLOCO_FECHA	{;}
@@ -54,7 +57,7 @@ repete_estrutura: 	estrutura {;}
 					| estrutura PONTO_VIRGULA repete_estrutura {;}
 ;
 
-estrutura_simples:		ID OP_ATRIB exp			{;}
+estrutura_simples:		ID OP_ATRIB exp			{printf("uso de ID\n");}
 						|func PAR_ABRE argumentos_func PAR_FECHA{;}
 		
 ;
@@ -67,11 +70,11 @@ variavel_declaracao_lista:	variavel_declaracao PONTO_VIRGULA	{;}
 							|variavel_declaracao PONTO_VIRGULA variavel_declaracao_lista	{;}
 ;
 	
-variavel_declaracao: ID DOIS_PONTOS TIPO	{;}
-					| ID VIRGULA variavel_declaracao	{;}
+variavel_declaracao: ID DOIS_PONTOS TIPO	{printf("declaracao de ID\n");}
+					| ID VIRGULA variavel_declaracao	{printf("declaracao de ID\n");}
 ;
 exp:	NUM					{;}
-		| ID				{;}
+		| ID				{printf("uso de ID\n");}
 		| exp SOMA exp		{;}
 		| exp SUB exp		{;}
 		| exp MULT exp		{;}
@@ -83,8 +86,8 @@ func:		READ {;}
 			|WRITE {;}
 ;
 
-argumentos_func:	 ID {;}
-					| ID VIRGULA argumentos_func {;}
+argumentos_func:	 ID {printf("declaracao de ID\n");}
+					| ID VIRGULA argumentos_func {printf("declaracao de ID\n");}
 ;
 
 

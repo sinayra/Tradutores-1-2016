@@ -31,7 +31,7 @@ RELACAO		("<"|">"|"=")
 {DO}			{return DO;}
 {VAR}			{return VAR;}
 {TIPO}			{return TIPO;}
-{ID}			{return ID;}
+{ID}			{yylval.cadeia= (char *) strdup(yytext); return ID;}
 {NUM}			{return NUM;}
 
 (":=") 			{return OP_ATRIB;}

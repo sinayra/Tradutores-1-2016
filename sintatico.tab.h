@@ -73,7 +73,17 @@ extern int yydebug;
 
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef int YYSTYPE;
+typedef union YYSTYPE
+{
+/* Line 2058 of yacc.c  */
+#line 6 "sintatico.y"
+
+char *cadeia;
+
+
+/* Line 2058 of yacc.c  */
+#line 86 "sintatico.tab.h"
+} YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
