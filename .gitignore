@@ -216,3 +216,6 @@ pip-log.txt
 
 gramatica/minipascal-master/
 teste.exe
+sintatico.tab.c
+sintatico.tab.h
+lex.yy.c

@@ -16,9 +16,14 @@ typedef struct{
 TS tab[20];
 
 int n_simbolos = 0;
-
-
 int erro_semantico = 0;
+
+
+int yylex();
+void yyerror(const char *s);
+
+int busca_tabela(char *id);
+void verifica_tabela();
 
 %}
 
@@ -194,9 +199,8 @@ int main(int argc, char* argv[]){
 	erro = yyparse ();
 	
 	if(erro == 0){		/*Se o programa estiver sintaticamente correto, ele checa o semantico*/
-		int i;
 		printf("\nNome\tTipo\n");		/*Imprime tabela de simbolos*/
-		for(i = 0; i < n_simbolos; i++){
+		for(int i = 0; i < n_simbolos; i++){
 			printf("%s\t%s\n", tab[i].cadeia, tab[i].tipo);
 		}
 		
@@ -214,7 +218,7 @@ int main(int argc, char* argv[]){
 	fclose(yyout);
 }
 
-yyerror (s){
+void yyerror (const char *s){
 	extern FILE *yyout;
 	printf ("%s\n", s);
 }

@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include "sintatico.tab.h"
 
+extern char *strdup(const char *s);
+
 %}
 
 %option yylineno

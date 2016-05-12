@@ -1,5 +1,5 @@
 CC 		= gcc
-CFLAGS 	= -Wall -stc=c99
+CFLAGS 	= -std=gnu99
 
 all: flex bison compile
 
@@ -12,5 +12,5 @@ bison:
 		win_bison -d sintatico.y
 		
 compile:	bison flex
-			gcc lex.yy.c sintatico.tab.c -o teste
+			$(CC) $(CFLAGS) lex.yy.c sintatico.tab.c -o compasc
 

@@ -79,13 +79,18 @@ typedef struct{
 TS tab[20];
 
 int n_simbolos = 0;
-
-
 int erro_semantico = 0;
 
 
+int yylex();
+void yyerror(const char *s);
+
+int busca_tabela(char *id);
+void verifica_tabela();
+
+
 /* Line 371 of yacc.c  */
-#line 89 "sintatico.tab.c"
+#line 94 "sintatico.tab.c"
 
 # ifndef YY_NULL
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -151,13 +156,13 @@ extern int yydebug;
 typedef union YYSTYPE
 {
 /* Line 387 of yacc.c  */
-#line 25 "sintatico.y"
+#line 30 "sintatico.y"
 
 	char *cadeia;
 
 
 /* Line 387 of yacc.c  */
-#line 161 "sintatico.tab.c"
+#line 166 "sintatico.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -185,7 +190,7 @@ int yyparse ();
 /* Copy the second part of user declarations.  */
 
 /* Line 390 of yacc.c  */
-#line 189 "sintatico.tab.c"
+#line 194 "sintatico.tab.c"
 
 #ifdef short
 # undef short
@@ -486,10 +491,10 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    60,    60,    60,    63,    66,    67,    70,    71,    73,
-      74,    76,    78,    79,    82,    92,    96,    97,   100,   101,
-     104,   114,   123,   124,   134,   135,   136,   138,   141,   142,
-     145,   146
+       0,    65,    65,    65,    68,    71,    72,    75,    76,    78,
+      79,    81,    83,    84,    87,    97,   101,   102,   105,   106,
+     109,   119,   128,   129,   139,   140,   141,   143,   146,   147,
+     150,   151
 };
 #endif
 
@@ -1422,73 +1427,73 @@ yyreduce:
     {
         case 2:
 /* Line 1792 of yacc.c  */
-#line 60 "sintatico.y"
+#line 65 "sintatico.y"
     {printf("Nome do programa: %s \n", (yyvsp[(2) - (3)].cadeia));}
     break;
 
   case 4:
 /* Line 1792 of yacc.c  */
-#line 63 "sintatico.y"
+#line 68 "sintatico.y"
     {;}
     break;
 
   case 5:
 /* Line 1792 of yacc.c  */
-#line 66 "sintatico.y"
+#line 71 "sintatico.y"
     {;}
     break;
 
   case 6:
 /* Line 1792 of yacc.c  */
-#line 67 "sintatico.y"
+#line 72 "sintatico.y"
     {;}
     break;
 
   case 7:
 /* Line 1792 of yacc.c  */
-#line 70 "sintatico.y"
+#line 75 "sintatico.y"
     {;}
     break;
 
   case 8:
 /* Line 1792 of yacc.c  */
-#line 71 "sintatico.y"
+#line 76 "sintatico.y"
     {;}
     break;
 
   case 9:
 /* Line 1792 of yacc.c  */
-#line 73 "sintatico.y"
+#line 78 "sintatico.y"
     {;}
     break;
 
   case 10:
 /* Line 1792 of yacc.c  */
-#line 74 "sintatico.y"
+#line 79 "sintatico.y"
     {;}
     break;
 
   case 11:
 /* Line 1792 of yacc.c  */
-#line 76 "sintatico.y"
+#line 81 "sintatico.y"
     {;}
     break;
 
   case 12:
 /* Line 1792 of yacc.c  */
-#line 78 "sintatico.y"
+#line 83 "sintatico.y"
     {;}
     break;
 
   case 13:
 /* Line 1792 of yacc.c  */
-#line 79 "sintatico.y"
+#line 84 "sintatico.y"
     {;}
     break;
 
   case 14:
 /* Line 1792 of yacc.c  */
-#line 83 "sintatico.y"
+#line 88 "sintatico.y"
     {
 							if(busca_tabela((yyvsp[(1) - (3)].cadeia)))
 								printf("ID usado: %s \n", (yyvsp[(1) - (3)].cadeia));
@@ -1502,37 +1507,37 @@ yyreduce:
 
   case 15:
 /* Line 1792 of yacc.c  */
-#line 92 "sintatico.y"
+#line 97 "sintatico.y"
     {;}
     break;
 
   case 16:
 /* Line 1792 of yacc.c  */
-#line 96 "sintatico.y"
+#line 101 "sintatico.y"
     {;}
     break;
 
   case 17:
 /* Line 1792 of yacc.c  */
-#line 97 "sintatico.y"
+#line 102 "sintatico.y"
     {;}
     break;
 
   case 18:
 /* Line 1792 of yacc.c  */
-#line 100 "sintatico.y"
+#line 105 "sintatico.y"
     {;}
     break;
 
   case 19:
 /* Line 1792 of yacc.c  */
-#line 101 "sintatico.y"
+#line 106 "sintatico.y"
     {;}
     break;
 
   case 20:
 /* Line 1792 of yacc.c  */
-#line 105 "sintatico.y"
+#line 110 "sintatico.y"
     {
 							strcpy(tab[n_simbolos].cadeia, (yyvsp[(1) - (3)].cadeia));
 							strcpy(tab[n_simbolos].tipo, (yyvsp[(3) - (3)].cadeia));
@@ -1546,7 +1551,7 @@ yyreduce:
 
   case 21:
 /* Line 1792 of yacc.c  */
-#line 115 "sintatico.y"
+#line 120 "sintatico.y"
     {
 							strcpy(tab[n_simbolos].cadeia, (yyvsp[(1) - (3)].cadeia));
 							strcpy(tab[n_simbolos].tipo, tab[n_simbolos - 1].tipo);
@@ -1558,13 +1563,13 @@ yyreduce:
 
   case 22:
 /* Line 1792 of yacc.c  */
-#line 123 "sintatico.y"
+#line 128 "sintatico.y"
     {;}
     break;
 
   case 23:
 /* Line 1792 of yacc.c  */
-#line 125 "sintatico.y"
+#line 130 "sintatico.y"
     {
 			if(busca_tabela((yyvsp[(1) - (1)].cadeia)))
 				printf("ID usado: %s \n", (yyvsp[(1) - (1)].cadeia));
@@ -1578,55 +1583,55 @@ yyreduce:
 
   case 24:
 /* Line 1792 of yacc.c  */
-#line 134 "sintatico.y"
+#line 139 "sintatico.y"
     {;}
     break;
 
   case 25:
 /* Line 1792 of yacc.c  */
-#line 135 "sintatico.y"
+#line 140 "sintatico.y"
     {;}
     break;
 
   case 26:
 /* Line 1792 of yacc.c  */
-#line 136 "sintatico.y"
+#line 141 "sintatico.y"
     {;}
     break;
 
   case 27:
 /* Line 1792 of yacc.c  */
-#line 138 "sintatico.y"
+#line 143 "sintatico.y"
     {;}
     break;
 
   case 28:
 /* Line 1792 of yacc.c  */
-#line 141 "sintatico.y"
+#line 146 "sintatico.y"
     {;}
     break;
 
   case 29:
 /* Line 1792 of yacc.c  */
-#line 142 "sintatico.y"
+#line 147 "sintatico.y"
     {;}
     break;
 
   case 30:
 /* Line 1792 of yacc.c  */
-#line 145 "sintatico.y"
+#line 150 "sintatico.y"
     {printf("ID declarado: %s \n", (yyvsp[(1) - (1)].cadeia));}
     break;
 
   case 31:
 /* Line 1792 of yacc.c  */
-#line 146 "sintatico.y"
+#line 151 "sintatico.y"
     {printf("ID declarado: %s \n", (yyvsp[(1) - (3)].cadeia));}
     break;
 
 
 /* Line 1792 of yacc.c  */
-#line 1630 "sintatico.tab.c"
+#line 1635 "sintatico.tab.c"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1858,7 +1863,7 @@ yyreturn:
 
 
 /* Line 2055 of yacc.c  */
-#line 151 "sintatico.y"
+#line 156 "sintatico.y"
 
 
 int busca_tabela(char *id){		/*Busca simbolo na tabela*/
@@ -1905,9 +1910,8 @@ int main(int argc, char* argv[]){
 	erro = yyparse ();
 	
 	if(erro == 0){		/*Se o programa estiver sintaticamente correto, ele checa o semantico*/
-		int i;
 		printf("\nNome\tTipo\n");		/*Imprime tabela de simbolos*/
-		for(i = 0; i < n_simbolos; i++){
+		for(int i = 0; i < n_simbolos; i++){
 			printf("%s\t%s\n", tab[i].cadeia, tab[i].tipo);
 		}
 		
@@ -1925,7 +1929,7 @@ int main(int argc, char* argv[]){
 	fclose(yyout);
 }
 
-yyerror (s){
+void yyerror (const char *s){
 	extern FILE *yyout;
 	printf ("%s\n", s);
 }
