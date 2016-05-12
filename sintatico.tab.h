@@ -76,7 +76,7 @@ extern int yydebug;
 typedef union YYSTYPE
 {
 /* Line 2058 of yacc.c  */
-#line 19 "sintatico.y"
+#line 25 "sintatico.y"
 
 	char *cadeia;
 

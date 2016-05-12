@@ -4,19 +4,21 @@
 %{
 #include <stdio.h> 
 #include <string.h>
+#include <stdlib.h>
 
 typedef struct{
 	char cadeia[100];
 	char tipo[100];
 	int usado;
-}tab_simb;
+}TS;
 
-tab_simb tab[20];
+TS tab[20];
 
 int n_simbolos = 0;
 
 
 int erro_semantico = 0;
+extern int yylineno;
 
 %}
 
@@ -83,7 +85,7 @@ estrutura_simples:		ID OP_ATRIB exp
 								printf("ID usado: %s \n", $ID);
 							else{
 								erro_semantico = 1;
-								printf("Erro: %s nao declarado\n", $ID);
+								printf("Erro: Linha %d\t %s nao declarado \n", yylineno, $ID);
 							}
 							
 						}
@@ -125,7 +127,7 @@ exp:	NUM					{;}
 				printf("ID usado: %s \n", $ID);
 			else{
 				erro_semantico = 1;
-				printf("Erro: %s nao declarado\n", $ID);
+				printf("Erro: Linha %d\t %s nao declarado \n", yylineno, $ID);
 			}
 			
 		}
@@ -175,8 +177,13 @@ int main(int argc, char* argv[]){
 	int erro;
 
 	++argv; --argc; 	    /* abre arquivo de entrada se houver */
-	if(argc > 0)
-		yyin = fopen(argv[0],"rt");
+	if(argc > 0){
+			yyin = fopen(argv[0],"rt");
+			if(yyin == NULL){
+				printf("Arquivo nao encontrado");
+				exit(EXIT_FAILURE);
+			}
+	}
 	else
 		yyin = stdin;    /* cria arquivo de saida se especificado */
 	if(argc > 1)
@@ -193,12 +200,12 @@ int main(int argc, char* argv[]){
 			printf("%s\t%s\n", tab[i].cadeia, tab[i].tipo);
 		}
 		
-		fprintf(yyout, "\nPrograma sintaticamente correto\n");
+		printf("\nPrograma sintaticamente correto\n");
 		
 		if(erro_semantico == 0)
-			fprintf(yyout, "Programa semanticamente correto\n");
+			printf("Programa semanticamente correto\n");
 		else
-			fprintf(yyout, "semantic error\n");
+			printf("semantic error\n");
 		
 		verifica_tabela();
 	}
@@ -209,5 +216,5 @@ int main(int argc, char* argv[]){
 
 yyerror (s){
 	extern FILE *yyout;
-	fprintf (yyout, "%s\n", s);
+	printf ("%s\n", s);
 }
