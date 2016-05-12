@@ -5,15 +5,10 @@
 #include <stdio.h> 
 #include <string.h>
 #include <stdlib.h>
+#include "lista.h"
 extern int yylineno;
 
-typedef struct{
-	char cadeia[100];
-	char tipo[100];
-	int usado;
-}TS;
-
-TS tab[20];
+key_t* lista = NULL;
 
 int n_simbolos = 0;
 int erro_semantico = 0;
@@ -86,7 +81,7 @@ repete_estrutura: 	estrutura {;}
 
 estrutura_simples:		ID OP_ATRIB exp			
 						{
-							if(busca_tabela($ID))
+							if(buscar_elemento(lista, $ID))
 								printf("ID usado: %s \n", $ID);
 							else{
 								erro_semantico = 1;
@@ -108,27 +103,32 @@ variavel_declaracao_lista:	variavel_declaracao PONTO_VIRGULA	{;}
 	
 variavel_declaracao:	ID DOIS_PONTOS TIPO	
 						{
-							strcpy(tab[n_simbolos].cadeia, $ID);
-							strcpy(tab[n_simbolos].tipo, $TIPO);
-							tab[n_simbolos].usado = 0;
+							TS temp;
+							strcpy(temp.cadeia, $ID);
+							strcpy(temp.tipo, $TIPO);
+							temp.usado = 0;
+							
+							inserir_elemento_no_final(lista, temp);
 
-							n_simbolos++;
 							printf("ID declarado: %s\n", $ID);
-
-						} 
+						}
 						|ID VIRGULA variavel_declaracao	
 						{
-							strcpy(tab[n_simbolos].cadeia, $ID);
-							strcpy(tab[n_simbolos].tipo, tab[n_simbolos - 1].tipo);
+							TS temp1, temp2;
+							
+							temp2 = buscar_elemento_indice(key_t* lista, (get_n_simbolos() - 1));
+							strcpy(temp1.cadeia, $ID);
+							strcpy(temp1.tipo, temp2.tipo);
 
-							n_simbolos++;
+							inserir_elemento_no_final(lista, temp1);
+							
 							printf("ID declarado: %s\n", $ID);
 						}
 ;
 exp:	NUM					{;}
 		| ID				
 		{
-			if(busca_tabela($ID))
+			if(buscar_elemento(lista, $ID))
 				printf("ID usado: %s \n", $ID);
 			else{
 				erro_semantico = 1;
@@ -170,8 +170,9 @@ int busca_tabela(char *id){		/*Busca simbolo na tabela*/
 
 void verifica_tabela(){		/*Verifica se ha simbolos nao utilizados*/
 	int i;
-	for(i = 0; i < n_simbolos; i++){
-		if(tab[i].usado == 0)
+	TS temp;
+	for(i = 0; i < get_n_simbolos(); i++){
+		if()
 			printf("Warning: variavel %s declarada, mas nao utilizada\n", tab[i].cadeia);
 	}
 }
@@ -199,10 +200,7 @@ int main(int argc, char* argv[]){
 	erro = yyparse ();
 	
 	if(erro == 0){		/*Se o programa estiver sintaticamente correto, ele checa o semantico*/
-		printf("\nNome\tTipo\n");		/*Imprime tabela de simbolos*/
-		for(int i = 0; i < n_simbolos; i++){
-			printf("%s\t%s\n", tab[i].cadeia, tab[i].tipo);
-		}
+		imprimir_lista();
 		
 		printf("\nPrograma sintaticamente correto\n");
 		
