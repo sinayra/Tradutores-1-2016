@@ -68,20 +68,20 @@
 #include <stdio.h> 
 #include <string.h>
 #include <stdlib.h>
+extern int yylineno;
 
 typedef struct{
 	char cadeia[100];
 	char tipo[100];
 	int usado;
-}tab_simb;
+}TS;
 
-tab_simb tab[20];
+TS tab[20];
 
 int n_simbolos = 0;
 
 
 int erro_semantico = 0;
-extern int yylineno;
 
 
 /* Line 371 of yacc.c  */

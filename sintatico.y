@@ -5,6 +5,7 @@
 #include <stdio.h> 
 #include <string.h>
 #include <stdlib.h>
+extern int yylineno;
 
 typedef struct{
 	char cadeia[100];
@@ -18,7 +19,6 @@ int n_simbolos = 0;
 
 
 int erro_semantico = 0;
-extern int yylineno;
 
 %}
 
