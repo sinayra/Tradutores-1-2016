@@ -1,12 +1,15 @@
-6) Na gramática do seu sintático, alterar a regra que define comando para incluir um comando de entrada
-e um comando de saída (usar BNF adotada como referência para montar a definição desses comandos). Alterar
-o léxico para levar em conta as novas palavras reservadas.
+6) Na gramÃ¡tica do seu sintÃ¡tico, alterar a regra que define comando para incluir um comando de entrada
+e um comando de saÃ­da (usar BNF adotada como referÃªncia para montar a definiÃ§Ã£o desses comandos). Alterar
+o lÃ©xico para levar em conta as novas palavras reservadas.
 
-7) Na gramática do seu sintático, alterar a regra que define comando para incluir o comando condicional 
-e o de repetição que seu grupo recebeu (usar BNF adotada como referência para montar a definição dos novos comandos). Alterar o léxico para levar em conta as novas
+7) Na gramÃ¡tica do seu sintÃ¡tico, alterar a regra que define comando para incluir o comando condicional 
+e o de repetiÃ§Ã£o que seu grupo recebeu (usar BNF adotada como referÃªncia para montar a definiÃ§Ã£o dos novos comandos). Alterar o lÃ©xico para levar em conta as novas
 palavras reservadas.
 
-8) Até este ponto sua gramática permite escrever um programa com um módulo apenas (o principal). Alterar 
-sua BNF para possibilitar que um programa seja dado por um ou mais módulos (sub-rotinas). A definição de uma sub-rotina é simples: não
-tem parâmetros nem variáveis locais, mas tem um nome (seguindo as mesma regras que um identificador de variáveis). Sendo assim, a 
-chamada a uma sub-rotina deve ser possível usando seu nome como um comando.
+8) AtÃ© este ponto sua gramÃ¡tica permite escrever um programa com um mÃ³dulo apenas (o principal). Alterar 
+sua BNF para possibilitar que um programa seja dado por um ou mais mÃ³dulos (sub-rotinas). A definiÃ§Ã£o de uma sub-rotina Ã© simples: nÃ£o
+tem parÃ¢metros nem variÃ¡veis locais, mas tem um nome (seguindo as mesma regras que um identificador de variÃ¡veis). Sendo assim, a 
+chamada a uma sub-rotina deve ser possÃ­vel usando seu nome como um comando.
+
+-------------SEMÃ‚NTICO-------------
+Mudar de vertozÃ£o pra lista encadeada
