@@ -51,7 +51,7 @@ int n_local = 0;
 /* Regras definindo a GLC e acoes correspondentes */
 /* neste nosso exemplo quase todas as acoes estao vazias */
 
-programa:	PROGRAM ID PONTO_VIRGULA {printf("Nome do programa: %s \n", $2);} bloco_principal PONTO 
+programa:	PROGRAM ID PONTO_VIRGULA {printf("Nome do programa: %s \n", $ID);} bloco_principal PONTO 
 ;
 
 bloco_principal:  variavel_declaracao_inicio BLOCO_ABRE componente BLOCO_FECHA	{;}
@@ -73,7 +73,7 @@ repete_estrutura: 	estrutura {;}
 					| estrutura PONTO_VIRGULA repete_estrutura {;}
 ;
 
-estrutura_simples:		ID OP_ATRIB exp			{printf("ID usado: %s \n", $1);}
+estrutura_simples:		ID OP_ATRIB exp			{printf("ID usado: %s \n", $ID);}
 						|func PAR_ABRE argumentos_func PAR_FECHA{;}
 		
 ;
@@ -86,28 +86,26 @@ variavel_declaracao_lista:	variavel_declaracao PONTO_VIRGULA	{;}
 							|variavel_declaracao PONTO_VIRGULA variavel_declaracao_lista	{;}
 ;
 	
-variavel_declaracao:
-					ID VIRGULA variavel_declaracao	
-					{
-						strcpy(tab[n_simbolos].cadeia, $ID);
-						strcpy(tab[n_simbolos].tipo, tab[n_simbolos - 1].tipo);
+variavel_declaracao:	ID DOIS_PONTOS TIPO	
+						{
+							strcpy(tab[n_simbolos].cadeia, $ID);
+							strcpy(tab[n_simbolos].tipo, $TIPO);
 
-						n_simbolos++;
-						printf("ID declarado: %s", $ID);
-					}
-					| 
-					ID DOIS_PONTOS TIPO	
-					{
-						strcpy(tab[n_simbolos].cadeia, $ID);
-						strcpy(tab[n_simbolos].tipo, $TIPO);
+							n_simbolos++;
+							printf("ID declarado: %s", $ID);
 
-						n_simbolos++;
-						printf("ID declarado: %s", $ID);
+						} 
+						|ID VIRGULA variavel_declaracao	
+						{
+							strcpy(tab[n_simbolos].cadeia, $ID);
+							strcpy(tab[n_simbolos].tipo, tab[n_simbolos - 1].tipo);
 
-					} 
+							n_simbolos++;
+							printf("ID declarado: %s", $ID);
+						}
 ;
 exp:	NUM					{;}
-		| ID				{printf("ID usado: %s \n", $1);}
+		| ID				{printf("ID usado: %s \n", $ID);}
 		| exp SOMA exp		{;}
 		| exp SUB exp		{;}
 		| exp MULT exp		{;}
@@ -119,8 +117,8 @@ func:		READ {;}
 			|WRITE {;}
 ;
 
-argumentos_func:	 ID {printf("ID declarado: %s \n", $1);}
-					| ID VIRGULA argumentos_func {printf("ID declarado: %s \n", $1);}
+argumentos_func:	 ID {printf("ID declarado: %s \n", $ID);}
+					| ID VIRGULA argumentos_func {printf("ID declarado: %s \n", $ID);}
 ;
 
 
