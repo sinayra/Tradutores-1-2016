@@ -8,12 +8,16 @@
 typedef struct{
 	char cadeia[100];
 	char tipo[100];
+	int usado;
 }tab_simb;
 
 tab_simb tab[20];
 
 int n_simbolos = 0;
-int n_local = 0;
+
+
+int erro_semantico = 0;
+
 %}
 
 %union {
@@ -73,7 +77,16 @@ repete_estrutura: 	estrutura {;}
 					| estrutura PONTO_VIRGULA repete_estrutura {;}
 ;
 
-estrutura_simples:		ID OP_ATRIB exp			{printf("ID usado: %s \n", $ID);}
+estrutura_simples:		ID OP_ATRIB exp			
+						{
+							if(busca_tabela($ID))
+								printf("ID usado: %s \n", $ID);
+							else{
+								erro_semantico = 1;
+								printf("Erro: %s nao declarado\n", $ID);
+							}
+							
+						}
 						|func PAR_ABRE argumentos_func PAR_FECHA{;}
 		
 ;
@@ -90,9 +103,10 @@ variavel_declaracao:	ID DOIS_PONTOS TIPO
 						{
 							strcpy(tab[n_simbolos].cadeia, $ID);
 							strcpy(tab[n_simbolos].tipo, $TIPO);
+							tab[n_simbolos].usado = 0;
 
 							n_simbolos++;
-							printf("ID declarado: %s", $ID);
+							printf("ID declarado: %s\n", $ID);
 
 						} 
 						|ID VIRGULA variavel_declaracao	
@@ -101,11 +115,20 @@ variavel_declaracao:	ID DOIS_PONTOS TIPO
 							strcpy(tab[n_simbolos].tipo, tab[n_simbolos - 1].tipo);
 
 							n_simbolos++;
-							printf("ID declarado: %s", $ID);
+							printf("ID declarado: %s\n", $ID);
 						}
 ;
 exp:	NUM					{;}
-		| ID				{printf("ID usado: %s \n", $ID);}
+		| ID				
+		{
+			if(busca_tabela($ID))
+				printf("ID usado: %s \n", $ID);
+			else{
+				erro_semantico = 1;
+				printf("Erro: %s nao declarado\n", $ID);
+			}
+			
+		}
 		| exp SOMA exp		{;}
 		| exp SUB exp		{;}
 		| exp MULT exp		{;}
@@ -124,6 +147,28 @@ argumentos_func:	 ID {printf("ID declarado: %s \n", $ID);}
 
 
 %%
+
+int busca_tabela(char *id){		/*Busca simbolo na tabela*/
+	int i;
+	int finded;
+	
+	for(i = 0; i < n_simbolos; i++){
+		if(!strcmp(tab[i].cadeia, id)){
+			tab[i].usado = 1;
+			return 1;
+		}
+	}
+	return 0;
+}
+
+void verifica_tabela(){		/*Verifica se ha simbolos nao utilizados*/
+	int i;
+	for(i = 0; i < n_simbolos; i++){
+		if(tab[i].usado == 0)
+			printf("Warning: variavel %s declarada, mas nao utilizada\n", tab[i].cadeia);
+	}
+}
+
 int main(int argc, char* argv[]){
 	extern FILE *yyin;
 	extern FILE *yyout;
@@ -140,16 +185,24 @@ int main(int argc, char* argv[]){
 		yyout = stdout;
 
 	erro = yyparse ();
-
-	if(erro == 0)
-		fprintf(yyout, "Programa sintaticamente correto");
-
-	int i;
-	printf("\nNome\tTipo\n");
-	for(i = 0; i < n_simbolos; i++){
-		printf("%s\t%s\n", tab[i].cadeia, tab[i].tipo);
+	
+	if(erro == 0){		/*Se o programa estiver sintaticamente correto, ele checa o semantico*/
+		int i;
+		printf("\nNome\tTipo\n");		/*Imprime tabela de simbolos*/
+		for(i = 0; i < n_simbolos; i++){
+			printf("%s\t%s\n", tab[i].cadeia, tab[i].tipo);
+		}
+		
+		fprintf(yyout, "\nPrograma sintaticamente correto\n");
+		
+		if(erro_semantico == 0)
+			fprintf(yyout, "Programa semanticamente correto\n");
+		else
+			fprintf(yyout, "semantic error\n");
+		
+		verifica_tabela();
 	}
-
+	
 	fclose(yyin);
 	fclose(yyout);
 }
