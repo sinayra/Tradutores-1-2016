@@ -6,11 +6,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include "lista.h"
+
 extern int yylineno;
-
-key_t* lista = NULL;
-
-int n_simbolos = 0;
 int erro_semantico = 0;
 
 
@@ -19,6 +16,7 @@ void yyerror(const char *s);
 
 int busca_tabela(char *id);
 void verifica_tabela();
+int checa_elemento(char *nome);
 
 %}
 
@@ -81,11 +79,9 @@ repete_estrutura: 	estrutura {;}
 
 estrutura_simples:		ID OP_ATRIB exp			
 						{
-							if(buscar_elemento(lista, $ID))
-								printf("ID usado: %s \n", $ID);
-							else{
+							if(!checa_elemento($ID)){
 								erro_semantico = 1;
-								printf("Erro: Linha %d\t %s nao declarado \n", yylineno, $ID);
+								printf("ERRO Linha %d: %s nao declarado \n", yylineno, $ID);
 							}
 							
 						}
@@ -108,31 +104,33 @@ variavel_declaracao:	ID DOIS_PONTOS TIPO
 							strcpy(temp.tipo, $TIPO);
 							temp.usado = 0;
 							
-							inserir_elemento_no_final(lista, temp);
+							inserir_elemento_no_final(temp);
 
 							printf("ID declarado: %s\n", $ID);
+
 						}
 						|ID VIRGULA variavel_declaracao	
 						{
 							TS temp1, temp2;
-							
-							temp2 = buscar_elemento_indice(key_t* lista, (get_n_simbolos() - 1));
+							int index = get_n_simbolos() - 1;
+
+							temp2 = buscar_elemento_indice(index);
+
 							strcpy(temp1.cadeia, $ID);
 							strcpy(temp1.tipo, temp2.tipo);
+							temp1.usado = 0;
 
-							inserir_elemento_no_final(lista, temp1);
-							
+							inserir_elemento_no_final(temp1);
+
 							printf("ID declarado: %s\n", $ID);
 						}
 ;
 exp:	NUM					{;}
 		| ID				
 		{
-			if(buscar_elemento(lista, $ID))
-				printf("ID usado: %s \n", $ID);
-			else{
+			if(!checa_elemento($ID)){
 				erro_semantico = 1;
-				printf("Erro: Linha %d\t %s nao declarado \n", yylineno, $ID);
+				printf("ERRO Linha %d: %s nao declarado \n", yylineno, $ID);
 			}
 			
 		}
@@ -147,33 +145,45 @@ func:		READ {;}
 			|WRITE {;}
 ;
 
-argumentos_func:	 ID {printf("ID declarado: %s \n", $ID);}
-					| ID VIRGULA argumentos_func {printf("ID declarado: %s \n", $ID);}
+argumentos_func:	 ID 
+					{
+						if(!checa_elemento($ID)){
+							erro_semantico = 1;
+							printf("ERRO Linha %d: %s nao declarado \n", yylineno, $ID);
+						}
+					}
+					| ID VIRGULA argumentos_func 
+					{
+						if(!checa_elemento($ID)){
+							erro_semantico = 1;
+							printf("ERRO Linha %d: %s nao declarado \n", yylineno, $ID);
+						}
+					}
 ;
 
 
 
 %%
 
-int busca_tabela(char *id){		/*Busca simbolo na tabela*/
-	int i;
-	int finded;
-	
-	for(i = 0; i < n_simbolos; i++){
-		if(!strcmp(tab[i].cadeia, id)){
-			tab[i].usado = 1;
-			return 1;
+int checa_elemento(char *nome){
+	int index = existe_elemento(nome);
+	if(index >= 0){
+		TS temp = buscar_elemento_indice(index);
+		if(temp.usado == 0){
+			temp.usado = 1;
+			editar_elemento(index, temp);
+			printf("ID usado: %s \n", nome);
 		}
+		return 1;
 	}
 	return 0;
 }
 
 void verifica_tabela(){		/*Verifica se ha simbolos nao utilizados*/
-	int i;
-	TS temp;
-	for(i = 0; i < get_n_simbolos(); i++){
-		if()
-			printf("Warning: variavel %s declarada, mas nao utilizada\n", tab[i].cadeia);
+	for(int i = 0; i < get_n_simbolos(); i++){
+		TS temp = buscar_elemento_indice(i);
+		if(temp.usado == 0)
+			printf("Warning: variavel %s declarada, mas nao utilizada\n", temp.cadeia);
 	}
 }
 
@@ -191,13 +201,14 @@ int main(int argc, char* argv[]){
 			}
 	}
 	else
-		yyin = stdin;    /* cria arquivo de saida se especificado */
+		yyin = stdin;
+
 	if(argc > 1)
 		yyout = fopen(argv[1],"wt");
 	else
 		yyout = stdout;
 
-	erro = yyparse ();
+	erro = yyparse();
 	
 	if(erro == 0){		/*Se o programa estiver sintaticamente correto, ele checa o semantico*/
 		imprimir_lista();
@@ -214,6 +225,7 @@ int main(int argc, char* argv[]){
 	
 	fclose(yyin);
 	fclose(yyout);
+	excluir_TS();
 }
 
 void yyerror (const char *s){

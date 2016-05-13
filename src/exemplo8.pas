@@ -1,7 +1,9 @@
 program Exe8;
 var 
 	x, y: integer;
-	a, b, c: boolean;
+	a, b: boolean;
 begin
-	b := b - a * c
+	b := b - a * c;
+
+	read(x)
 end.
