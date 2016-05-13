@@ -10,6 +10,3 @@ palavras reservadas.
 sua BNF para possibilitar que um programa seja dado por um ou mais módulos (sub-rotinas). A definição de uma sub-rotina é simples: não
 tem parâmetros nem variáveis locais, mas tem um nome (seguindo as mesma regras que um identificador de variáveis). Sendo assim, a 
 chamada a uma sub-rotina deve ser possível usando seu nome como um comando.
-
--------------SEMÂNTICO-------------
-Mudar de vertozão pra lista encadeada
