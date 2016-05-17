@@ -57,18 +57,19 @@ int checa_elemento(char *nome);
 /* Regras definindo a GLC e acoes correspondentes */
 /* neste nosso exemplo quase todas as acoes estao vazias */
 
-programa:	PROGRAM ID PONTO_VIRGULA {
-							TS temp;
-							strcpy(temp.cadeia, $ID);
-							temp.tipo = TIPO_INDEFINIDO;
-							temp.usado = 1;
-							temp.estr = PROGRAMA;
-							
-							inserir_elemento_no_final(temp);
+programa:	PROGRAM ID PONTO_VIRGULA 
+			{
+				TS temp;
+				strcpy(temp.cadeia, $ID);
+				temp.tipo = TIPO_INDEFINIDO;
+				temp.usado = 1;
+				temp.estr = PROGRAMA;
+				
+				inserir_elemento_no_final(temp);
 
-							printf("Nome do programa: %s \n", $ID);
-						}  
-						bloco_principal PONTO 
+				printf("Nome do programa: %s \n", $ID);
+			}  
+			bloco_principal PONTO 
 ;
 
 bloco_principal:  variavel_declaracao_inicio funcao_declaracao_inicio BLOCO_ABRE componente BLOCO_FECHA	{;}
@@ -146,7 +147,7 @@ variavel_declaracao:	ID DOIS_PONTOS TIPO
 ;
 
 funcao_declaracao_inicio:	/*empty*/	{;}
-					| funcao_declaracao_lista  {;}
+							| funcao_declaracao_lista  {;}
 ;
 
 funcao_declaracao_lista:	funcao_declaracao {;}
@@ -165,7 +166,7 @@ funcao_declaracao:	FUNCTION ID PAR_ABRE PAR_FECHA DOIS_PONTOS TIPO PONTO_VIRGULA
 							printf("Declaracao de funcao: %s \n", $ID);
 						} 
 						estrutura PONTO_VIRGULA
-						| PROCEDURE ID PAR_ABRE PAR_FECHA PONTO_VIRGULA
+					| PROCEDURE ID PAR_ABRE PAR_FECHA PONTO_VIRGULA
 						{
 							TS temp;
 							strcpy(temp.cadeia, $ID);
