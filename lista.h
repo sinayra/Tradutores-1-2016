@@ -15,6 +15,7 @@ typedef enum{
 	PROGRAMA,
 	VARIAVEL,
 	FUNCAO,
+	PROCEDIMENTO,
 	ESTRUTURA_INDEFINIDA
 }tipoEstrutura;
 

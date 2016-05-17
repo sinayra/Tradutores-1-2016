@@ -26,6 +26,7 @@ int checa_elemento(char *nome);
 
 %token PROGRAM
 %token FUNCTION
+%token PROCEDURE
 %token READ
 %token WRITE
 %token BLOCO_ABRE
@@ -94,6 +95,14 @@ estrutura_simples:		ID OP_ATRIB exp
 							
 						}
 						| IO PAR_ABRE argumentos_IO PAR_FECHA{;}
+						| ID PAR_ABRE PAR_FECHA
+						{
+							if(!checa_elemento($ID)){
+								erro_semantico = 1;
+								printf("ERRO Linha %d: %s nao declarado \n", yylineno, $ID);
+							}
+							
+						}
 		
 ;
 
@@ -155,6 +164,19 @@ funcao_declaracao:	FUNCTION ID PAR_ABRE PAR_FECHA DOIS_PONTOS TIPO PONTO_VIRGULA
 
 							printf("Declaracao de funcao: %s \n", $ID);
 						} 
+						estrutura PONTO_VIRGULA
+						| PROCEDURE ID PAR_ABRE PAR_FECHA PONTO_VIRGULA
+						{
+							TS temp;
+							strcpy(temp.cadeia, $ID);
+							temp.tipo = TIPO_INDEFINIDO;
+							temp.usado = 0;
+							temp.estr = PROCEDIMENTO;
+
+							inserir_elemento_no_final(temp);
+
+							printf("Declaracao de procedure: %s \n", $ID);
+						}
 						estrutura PONTO_VIRGULA
 ;
 exp:	NUM					{;}

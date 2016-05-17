@@ -23,9 +23,15 @@ begin
 	func2 := d;
 end;
 
+procedure func3();
+begin
+	write(a);
+end;
+
 begin
 	b := b - a * c;
 
 	read(x, y);
 	a := func2();
+	func3();
 end.

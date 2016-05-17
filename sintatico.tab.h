@@ -48,27 +48,28 @@ extern int yydebug;
    enum yytokentype {
      PROGRAM = 258,
      FUNCTION = 259,
-     READ = 260,
-     WRITE = 261,
-     BLOCO_ABRE = 262,
-     BLOCO_FECHA = 263,
-     WHILE = 264,
-     DO = 265,
-     VAR = 266,
-     TIPO = 267,
-     NUM = 268,
-     ID = 269,
-     OP_ATRIB = 270,
-     RELACAO = 271,
-     SOMA = 272,
-     SUB = 273,
-     MULT = 274,
-     PAR_ABRE = 275,
-     PAR_FECHA = 276,
-     VIRGULA = 277,
-     PONTO_VIRGULA = 278,
-     DOIS_PONTOS = 279,
-     PONTO = 280
+     PROCEDURE = 260,
+     READ = 261,
+     WRITE = 262,
+     BLOCO_ABRE = 263,
+     BLOCO_FECHA = 264,
+     WHILE = 265,
+     DO = 266,
+     VAR = 267,
+     TIPO = 268,
+     NUM = 269,
+     ID = 270,
+     OP_ATRIB = 271,
+     RELACAO = 272,
+     SOMA = 273,
+     SUB = 274,
+     MULT = 275,
+     PAR_ABRE = 276,
+     PAR_FECHA = 277,
+     VIRGULA = 278,
+     PONTO_VIRGULA = 279,
+     DOIS_PONTOS = 280,
+     PONTO = 281
    };
 #endif
 
@@ -83,7 +84,7 @@ typedef union YYSTYPE
 
 
 /* Line 2058 of yacc.c  */
-#line 87 "sintatico.tab.h"
+#line 88 "sintatico.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

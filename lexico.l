@@ -12,6 +12,7 @@ PROGRAM		("program")
 WRITE		("write")
 READ		("read")
 FUNCTION	("function")
+PROCEDURE	("procedure")
 BLOCO_ABRE	("begin")
 BLOCO_FECHA ("end")
 WHILE 		("while")
@@ -32,6 +33,7 @@ RELACAO		("<"|">"|"=")
 {READ} 			{return READ;}
 {WRITE} 		{return WRITE;}
 {FUNCTION} 		{return FUNCTION;}
+{PROCEDURE} 	{return PROCEDURE;}
 {BLOCO_ABRE} 	{return BLOCO_ABRE;}
 {BLOCO_FECHA}	{return BLOCO_FECHA;}
 {WHILE}			{return WHILE;}
@@ -55,17 +57,10 @@ RELACAO		("<"|">"|"=")
 {MULT}	 		{return MULT;}
 
 {BRANCO}		{;}
-.			{return yytext[0];}
+.				{return yytext[0];}
 
 
 %%
 int yywrap() {
  return 1;
 }
-
-/*
-main() {
-  printf("Informe um token:\n");
-  yylex();
-}
-*/
