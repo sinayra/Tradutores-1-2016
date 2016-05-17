@@ -47,27 +47,28 @@ extern int yydebug;
       know about them.  */
    enum yytokentype {
      PROGRAM = 258,
-     READ = 259,
-     WRITE = 260,
-     BLOCO_ABRE = 261,
-     BLOCO_FECHA = 262,
-     WHILE = 263,
-     DO = 264,
-     VAR = 265,
-     TIPO = 266,
-     NUM = 267,
-     ID = 268,
-     OP_ATRIB = 269,
-     RELACAO = 270,
-     SOMA = 271,
-     SUB = 272,
-     MULT = 273,
-     PAR_ABRE = 274,
-     PAR_FECHA = 275,
-     VIRGULA = 276,
-     PONTO_VIRGULA = 277,
-     DOIS_PONTOS = 278,
-     PONTO = 279
+     FUNCTION = 259,
+     READ = 260,
+     WRITE = 261,
+     BLOCO_ABRE = 262,
+     BLOCO_FECHA = 263,
+     WHILE = 264,
+     DO = 265,
+     VAR = 266,
+     TIPO = 267,
+     NUM = 268,
+     ID = 269,
+     OP_ATRIB = 270,
+     RELACAO = 271,
+     SOMA = 272,
+     SUB = 273,
+     MULT = 274,
+     PAR_ABRE = 275,
+     PAR_FECHA = 276,
+     VIRGULA = 277,
+     PONTO_VIRGULA = 278,
+     DOIS_PONTOS = 279,
+     PONTO = 280
    };
 #endif
 
@@ -82,7 +83,7 @@ typedef union YYSTYPE
 
 
 /* Line 2058 of yacc.c  */
-#line 86 "sintatico.tab.h"
+#line 87 "sintatico.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

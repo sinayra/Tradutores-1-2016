@@ -11,6 +11,7 @@ extern char *strdup(const char *s);
 PROGRAM		("program")
 WRITE		("write")
 READ		("read")
+FUNCTION	("function")
 BLOCO_ABRE	("begin")
 BLOCO_FECHA ("end")
 WHILE 		("while")
@@ -30,6 +31,7 @@ RELACAO		("<"|">"|"=")
 {PROGRAM}		{return PROGRAM;}
 {READ} 			{return READ;}
 {WRITE} 		{return WRITE;}
+{FUNCTION} 		{return FUNCTION;}
 {BLOCO_ABRE} 	{return BLOCO_ABRE;}
 {BLOCO_FECHA}	{return BLOCO_FECHA;}
 {WHILE}			{return WHILE;}

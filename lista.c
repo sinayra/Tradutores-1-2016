@@ -7,6 +7,16 @@ int get_n_simbolos(){
 	return n_simbolos;
 }
 
+tipoID get_TIPO(char *tipo){
+    if(strcmp("integer", tipo) == 0)
+        return INTEGER;
+    else if(strcmp("boolean", tipo) == 0)
+        return BOOLEAN;
+    else if(strcmp("char", tipo) == 0)
+        return CHAR;
+    return TIPO_INDEFINIDO;
+}
+
 void inserir_elemento_no_final(TS novo_valor) {
     TS *lista_aux;
     
@@ -43,8 +53,9 @@ int existe_elemento(char *valor_procura) {
 TS buscar_elemento_indice(int indice_busca) {
     TS aux;
 
-    strcpy(aux.cadeia, "");
-    strcpy(aux.tipo, "");
+    aux.cadeia[0] = '\0';
+    aux.tipo = TIPO_INDEFINIDO;
+    aux.estr = ESTRUTURA_INDEFINIDA;
     aux.usado = -1;
 
     if(lista && (indice_busca < n_simbolos && indice_busca >= 0))
@@ -55,9 +66,9 @@ TS buscar_elemento_indice(int indice_busca) {
 
 void imprimir_lista() {
     if(lista){
-        printf("\n******TABELA DE SIMBOLOS*****\n\nNome\tTipo\tUsado\n");		/*Imprime tabela de simbolos*/
+        printf("\n******TABELA DE SIMBOLOS*****\n\nNome\tEstr\tTipo\tUsado\n");		/*Imprime tabela de simbolos*/
     	for (int i = 0; i < n_simbolos; i++)
-    		printf("%s\t%s\t%d\n", lista[i].cadeia, lista[i].tipo, lista[i].usado);
+    		printf("%s\t%d\t%d\t%d\n", lista[i].cadeia, lista[i].estr, lista[i].tipo, lista[i].usado);
         printf("\n");
     }
 }

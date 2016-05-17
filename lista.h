@@ -4,9 +4,24 @@
 #include <stdlib.h>
 #include <string.h>
 
+typedef enum{
+	INTEGER,
+	BOOLEAN,
+	CHAR,
+	TIPO_INDEFINIDO
+}tipoID;
+
+typedef enum{
+	PROGRAMA,
+	VARIAVEL,
+	FUNCAO,
+	ESTRUTURA_INDEFINIDA
+}tipoEstrutura;
+
 typedef struct{
 	char cadeia[100];
-	char tipo[100];
+	tipoID tipo;
+	tipoEstrutura estr;
 	int usado;
 }TS;
 
@@ -17,3 +32,4 @@ TS buscar_elemento_indice(int indice_busca);
 int existe_elemento(char *valor_procura);
 void inserir_elemento_no_final(TS novo_valor);
 void excluir_TS();
+tipoID get_TIPO(char *tipo);

@@ -120,27 +120,28 @@ extern int yydebug;
       know about them.  */
    enum yytokentype {
      PROGRAM = 258,
-     READ = 259,
-     WRITE = 260,
-     BLOCO_ABRE = 261,
-     BLOCO_FECHA = 262,
-     WHILE = 263,
-     DO = 264,
-     VAR = 265,
-     TIPO = 266,
-     NUM = 267,
-     ID = 268,
-     OP_ATRIB = 269,
-     RELACAO = 270,
-     SOMA = 271,
-     SUB = 272,
-     MULT = 273,
-     PAR_ABRE = 274,
-     PAR_FECHA = 275,
-     VIRGULA = 276,
-     PONTO_VIRGULA = 277,
-     DOIS_PONTOS = 278,
-     PONTO = 279
+     FUNCTION = 259,
+     READ = 260,
+     WRITE = 261,
+     BLOCO_ABRE = 262,
+     BLOCO_FECHA = 263,
+     WHILE = 264,
+     DO = 265,
+     VAR = 266,
+     TIPO = 267,
+     NUM = 268,
+     ID = 269,
+     OP_ATRIB = 270,
+     RELACAO = 271,
+     SOMA = 272,
+     SUB = 273,
+     MULT = 274,
+     PAR_ABRE = 275,
+     PAR_FECHA = 276,
+     VIRGULA = 277,
+     PONTO_VIRGULA = 278,
+     DOIS_PONTOS = 279,
+     PONTO = 280
    };
 #endif
 
@@ -155,7 +156,7 @@ typedef union YYSTYPE
 
 
 /* Line 387 of yacc.c  */
-#line 159 "sintatico.tab.c"
+#line 160 "sintatico.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -183,7 +184,7 @@ int yyparse ();
 /* Copy the second part of user declarations.  */
 
 /* Line 390 of yacc.c  */
-#line 187 "sintatico.tab.c"
+#line 188 "sintatico.tab.c"
 
 #ifdef short
 # undef short
@@ -403,20 +404,20 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  4
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   51
+#define YYLAST   80
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  25
+#define YYNTOKENS  26
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  17
+#define YYNNTS  20
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  31
+#define YYNRULES  36
 /* YYNRULES -- Number of states.  */
-#define YYNSTATES  62
+#define YYNSTATES  75
 
 /* YYTRANSLATE(YYLEX) -- Bison symbol number corresponding to YYLEX.  */
 #define YYUNDEFTOK  2
-#define YYMAXUTOK   279
+#define YYMAXUTOK   280
 
 #define YYTRANSLATE(YYX)						\
   ((unsigned int) (YYX) <= YYMAXUTOK ? yytranslate[YYX] : YYUNDEFTOK)
@@ -451,7 +452,8 @@ static const yytype_uint8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
        5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
-      15,    16,    17,    18,    19,    20,    21,    22,    23,    24
+      15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
+      25
 };
 
 #if YYDEBUG
@@ -459,35 +461,36 @@ static const yytype_uint8 yytranslate[] =
    YYRHS.  */
 static const yytype_uint8 yyprhs[] =
 {
-       0,     0,     3,     4,    11,    16,    18,    22,    24,    26,
-      28,    33,    37,    39,    43,    47,    52,    53,    56,    59,
-      63,    67,    71,    73,    75,    79,    83,    87,    91,    93,
-      95,    97
+       0,     0,     3,     4,    11,    17,    19,    22,    25,    27,
+      29,    34,    38,    42,    47,    48,    51,    54,    58,    62,
+      66,    67,    69,    71,    74,    75,    86,    88,    90,    94,
+      98,   102,   106,   110,   112,   114,   116
 };
 
 /* YYRHS -- A `-1'-separated list of the rules' RHS.  */
 static const yytype_int8 yyrhs[] =
 {
-      26,     0,    -1,    -1,     3,    13,    22,    27,    28,    24,
-      -1,    35,     6,    29,     7,    -1,    30,    -1,    30,    22,
-      29,    -1,    34,    -1,    31,    -1,    32,    -1,     8,    39,
-       9,    30,    -1,     6,    33,     7,    -1,    30,    -1,    30,
-      22,    33,    -1,    13,    14,    38,    -1,    40,    19,    41,
-      20,    -1,    -1,    10,    36,    -1,    37,    22,    -1,    37,
-      22,    36,    -1,    13,    23,    11,    -1,    13,    21,    37,
-      -1,    12,    -1,    13,    -1,    38,    16,    38,    -1,    38,
-      17,    38,    -1,    38,    18,    38,    -1,    38,    15,    38,
-      -1,     4,    -1,     5,    -1,    13,    -1,    13,    21,    41,
-      -1
+      27,     0,    -1,    -1,     3,    14,    23,    28,    29,    25,
+      -1,    35,    38,     7,    30,     8,    -1,    31,    -1,    30,
+      31,    -1,    34,    23,    -1,    32,    -1,    33,    -1,     9,
+      43,    10,    31,    -1,     7,    30,     8,    -1,    14,    15,
+      42,    -1,    44,    20,    45,    21,    -1,    -1,    11,    36,
+      -1,    37,    23,    -1,    37,    23,    36,    -1,    14,    24,
+      12,    -1,    14,    22,    37,    -1,    -1,    39,    -1,    40,
+      -1,    40,    39,    -1,    -1,     4,    14,    20,    21,    24,
+      12,    23,    41,    31,    23,    -1,    13,    -1,    14,    -1,
+      42,    17,    42,    -1,    42,    18,    42,    -1,    42,    19,
+      42,    -1,    14,    20,    21,    -1,    42,    16,    42,    -1,
+       5,    -1,     6,    -1,    14,    -1,    14,    22,    45,    -1
 };
 
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    58,    58,    58,    61,    64,    65,    68,    69,    71,
-      72,    74,    76,    77,    80,    88,    92,    93,    96,    97,
-     100,   112,   128,   129,   137,   138,   139,   141,   144,   145,
-     148,   155
+       0,    59,    59,    59,    73,    76,    77,    79,    80,    82,
+      83,    85,    88,    96,   100,   101,   104,   105,   108,   121,
+     139,   140,   143,   144,   147,   146,   160,   161,   169,   170,
+     171,   172,   181,   184,   185,   188,   195
 };
 #endif
 
@@ -496,14 +499,16 @@ static const yytype_uint8 yyrline[] =
    First, the terminals, then, starting at YYNTOKENS, nonterminals.  */
 static const char *const yytname[] =
 {
-  "$end", "error", "$undefined", "PROGRAM", "READ", "WRITE", "BLOCO_ABRE",
-  "BLOCO_FECHA", "WHILE", "DO", "VAR", "TIPO", "NUM", "ID", "OP_ATRIB",
-  "RELACAO", "SOMA", "SUB", "MULT", "PAR_ABRE", "PAR_FECHA", "VIRGULA",
-  "PONTO_VIRGULA", "DOIS_PONTOS", "PONTO", "$accept", "programa", "$@1",
-  "bloco_principal", "componente", "estrutura", "estrutura_bloco",
-  "bloco_composto", "repete_estrutura", "estrutura_simples",
+  "$end", "error", "$undefined", "PROGRAM", "FUNCTION", "READ", "WRITE",
+  "BLOCO_ABRE", "BLOCO_FECHA", "WHILE", "DO", "VAR", "TIPO", "NUM", "ID",
+  "OP_ATRIB", "RELACAO", "SOMA", "SUB", "MULT", "PAR_ABRE", "PAR_FECHA",
+  "VIRGULA", "PONTO_VIRGULA", "DOIS_PONTOS", "PONTO", "$accept",
+  "programa", "$@1", "bloco_principal", "componente", "estrutura",
+  "estrutura_bloco", "bloco_composto", "estrutura_simples",
   "variavel_declaracao_inicio", "variavel_declaracao_lista",
-  "variavel_declaracao", "exp", "rel", "func", "argumentos_func", YY_NULL
+  "variavel_declaracao", "funcao_declaracao_inicio",
+  "funcao_declaracao_lista", "funcao_declaracao", "$@2", "exp", "rel",
+  "IO", "argumentos_IO", YY_NULL
 };
 #endif
 
@@ -514,26 +519,26 @@ static const yytype_uint16 yytoknum[] =
 {
        0,   256,   257,   258,   259,   260,   261,   262,   263,   264,
      265,   266,   267,   268,   269,   270,   271,   272,   273,   274,
-     275,   276,   277,   278,   279
+     275,   276,   277,   278,   279,   280
 };
 # endif
 
 /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_uint8 yyr1[] =
 {
-       0,    25,    27,    26,    28,    29,    29,    30,    30,    31,
-      31,    32,    33,    33,    34,    34,    35,    35,    36,    36,
-      37,    37,    38,    38,    38,    38,    38,    39,    40,    40,
-      41,    41
+       0,    26,    28,    27,    29,    30,    30,    31,    31,    32,
+      32,    33,    34,    34,    35,    35,    36,    36,    37,    37,
+      38,    38,    39,    39,    41,    40,    42,    42,    42,    42,
+      42,    42,    43,    44,    44,    45,    45
 };
 
 /* YYR2[YYN] -- Number of symbols composing right hand side of rule YYN.  */
 static const yytype_uint8 yyr2[] =
 {
-       0,     2,     0,     6,     4,     1,     3,     1,     1,     1,
-       4,     3,     1,     3,     3,     4,     0,     2,     2,     3,
-       3,     3,     1,     1,     3,     3,     3,     3,     1,     1,
-       1,     3
+       0,     2,     0,     6,     5,     1,     2,     2,     1,     1,
+       4,     3,     3,     4,     0,     2,     2,     3,     3,     3,
+       0,     1,     1,     2,     0,    10,     1,     1,     3,     3,
+       3,     3,     3,     1,     1,     1,     3
 };
 
 /* YYDEFACT[STATE-NAME] -- Default reduction number in state STATE-NUM.
@@ -541,41 +546,43 @@ static const yytype_uint8 yyr2[] =
    means the default is an error.  */
 static const yytype_uint8 yydefact[] =
 {
-       0,     0,     0,     0,     1,     2,    16,     0,     0,     0,
-       0,    17,     0,     3,     0,     0,     0,    18,    28,    29,
-       0,     0,     0,     0,     5,     8,     9,     7,     0,    21,
-      20,    19,    12,     0,    22,    23,     0,     0,     0,     4,
-       0,     0,     0,    11,     0,     0,     0,     0,     0,    14,
-       6,    30,     0,    13,    27,    24,    25,    26,    10,     0,
-      15,    31
+       0,     0,     0,     0,     1,     2,    14,     0,     0,    20,
+       0,    15,     0,     3,     0,     0,    21,    22,     0,     0,
+      16,     0,     0,    23,    19,    18,    17,     0,    33,    34,
+       0,     0,     0,     0,     5,     8,     9,     0,     0,     0,
+       0,    26,    27,     0,     0,     0,     4,     6,     7,     0,
+       0,    11,     0,     0,     0,     0,     0,     0,    12,    35,
+       0,     0,    31,    32,    28,    29,    30,    10,     0,    13,
+      24,    36,     0,     0,    25
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     2,     6,     8,    23,    24,    25,    26,    33,    27,
-       9,    11,    12,    36,    37,    28,    52
+      -1,     2,     6,     8,    33,    34,    35,    36,    37,     9,
+      11,    12,    15,    16,    17,    72,    43,    44,    38,    60
 };
 
 /* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
    STATE-NUM.  */
-#define YYPACT_NINF -33
+#define YYPACT_NINF -45
 static const yytype_int8 yypact[] =
 {
-       8,     7,     4,     5,   -33,   -33,    16,    17,     9,    23,
-       0,   -33,    10,   -33,    -3,    17,    20,    17,   -33,   -33,
-      -3,    12,    21,    27,    14,   -33,   -33,   -33,    18,   -33,
-     -33,   -33,    19,    31,   -33,   -33,     1,    30,    12,   -33,
-      -3,    29,    -3,   -33,    12,    12,    12,    12,    -3,    -9,
-     -33,    22,    24,   -33,    -9,    28,    28,   -33,   -33,    29,
-     -33,   -33
+      18,     9,    30,    15,   -45,   -45,    31,    27,    19,    39,
+     -16,   -45,    22,   -45,    32,    40,   -45,    39,    27,    36,
+      27,    29,    26,   -45,   -45,   -45,   -45,    33,   -45,   -45,
+      26,    23,    35,     8,   -45,   -45,   -45,    28,    37,    34,
+      20,   -45,    41,   -14,    42,    23,   -45,   -45,   -45,    45,
+      43,   -45,    44,    23,    23,    23,    23,    26,     1,    38,
+      46,    47,   -45,     1,    49,    49,   -45,   -45,    45,   -45,
+     -45,   -45,    26,    48,   -45
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -33,   -33,   -33,   -33,    11,   -20,   -33,   -33,    -2,   -33,
-     -33,    32,    33,   -32,   -33,   -33,   -14
+     -45,   -45,   -45,   -45,    50,   -33,   -45,   -45,   -45,   -45,
+      52,    51,   -45,    56,   -45,   -45,   -44,   -45,   -45,   -15
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]].  What to do in state STATE-NUM.  If
@@ -584,41 +591,48 @@ static const yytype_int8 yypgoto[] =
 #define YYTABLE_NINF -1
 static const yytype_uint8 yytable[] =
 {
-      32,    18,    19,    20,     4,    21,    49,    45,    46,    47,
-      22,     1,    54,    55,    56,    57,    44,    45,    46,    47,
-       3,    15,    32,    16,    34,    35,     7,     5,    58,    14,
-      10,    30,    17,    13,    39,    38,    40,    41,    43,    48,
-      53,    42,    51,    59,    60,    61,    47,     0,    29,    31,
-       0,    50
+      47,    58,    53,    54,    55,    56,    18,    47,    19,    63,
+      64,    65,    66,    28,    29,    30,    46,    31,    54,    55,
+      56,     1,    32,     3,    67,    28,    29,    30,    51,    31,
+       4,    28,    29,    30,    32,    31,    41,    42,     5,    73,
+      32,    10,     7,    14,    13,    20,    21,    22,    25,    27,
+      45,    48,    57,    71,    39,    61,     0,    49,    50,    59,
+      68,    52,     0,     0,     0,    62,     0,    69,    56,    24,
+      70,    74,    26,    23,     0,     0,     0,     0,     0,     0,
+      40
 };
 
 #define yypact_value_is_default(Yystate) \
-  (!!((Yystate) == (-33)))
+  (!!((Yystate) == (-45)))
 
 #define yytable_value_is_error(Yytable_value) \
   YYID (0)
 
 static const yytype_int8 yycheck[] =
 {
-      20,     4,     5,     6,     0,     8,    38,    16,    17,    18,
-      13,     3,    44,    45,    46,    47,    15,    16,    17,    18,
-      13,    21,    42,    23,    12,    13,    10,    22,    48,     6,
-      13,    11,    22,    24,     7,    14,    22,    19,     7,     9,
-      42,    22,    13,    21,    20,    59,    18,    -1,    15,    17,
-      -1,    40
+      33,    45,    16,    17,    18,    19,    22,    40,    24,    53,
+      54,    55,    56,     5,     6,     7,     8,     9,    17,    18,
+      19,     3,    14,    14,    57,     5,     6,     7,     8,     9,
+       0,     5,     6,     7,    14,     9,    13,    14,    23,    72,
+      14,    14,    11,     4,    25,    23,    14,     7,    12,    20,
+      15,    23,    10,    68,    21,    12,    -1,    20,    24,    14,
+      22,    20,    -1,    -1,    -1,    21,    -1,    21,    19,    18,
+      23,    23,    20,    17,    -1,    -1,    -1,    -1,    -1,    -1,
+      30
 };
 
 /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
    symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
-       0,     3,    26,    13,     0,    22,    27,    10,    28,    35,
-      13,    36,    37,    24,     6,    21,    23,    22,     4,     5,
-       6,     8,    13,    29,    30,    31,    32,    34,    40,    37,
-      11,    36,    30,    33,    12,    13,    38,    39,    14,     7,
-      22,    19,    22,     7,    15,    16,    17,    18,     9,    38,
-      29,    13,    41,    33,    38,    38,    38,    38,    30,    21,
-      20,    41
+       0,     3,    27,    14,     0,    23,    28,    11,    29,    35,
+      14,    36,    37,    25,     4,    38,    39,    40,    22,    24,
+      23,    14,     7,    39,    37,    12,    36,    20,     5,     6,
+       7,     9,    14,    30,    31,    32,    33,    34,    44,    21,
+      30,    13,    14,    42,    43,    15,     8,    31,    23,    20,
+      24,     8,    20,    16,    17,    18,    19,    10,    42,    14,
+      45,    12,    21,    42,    42,    42,    42,    31,    22,    21,
+      23,    45,    41,    31,    23
 };
 
 #define yyerrok		(yyerrstatus = 0)
@@ -1420,73 +1434,71 @@ yyreduce:
     {
         case 2:
 /* Line 1792 of yacc.c  */
-#line 58 "sintatico.y"
-    {printf("Nome do programa: %s \n", (yyvsp[(2) - (3)].cadeia));}
+#line 59 "sintatico.y"
+    {
+							TS temp;
+							strcpy(temp.cadeia, (yyvsp[(2) - (3)].cadeia));
+							temp.tipo = TIPO_INDEFINIDO;
+							temp.usado = 1;
+							temp.estr = PROGRAMA;
+							
+							inserir_elemento_no_final(temp);
+
+							printf("Nome do programa: %s \n", (yyvsp[(2) - (3)].cadeia));
+						}
     break;
 
   case 4:
 /* Line 1792 of yacc.c  */
-#line 61 "sintatico.y"
+#line 73 "sintatico.y"
     {;}
     break;
 
   case 5:
 /* Line 1792 of yacc.c  */
-#line 64 "sintatico.y"
+#line 76 "sintatico.y"
     {;}
     break;
 
   case 6:
 /* Line 1792 of yacc.c  */
-#line 65 "sintatico.y"
+#line 77 "sintatico.y"
     {;}
     break;
 
   case 7:
 /* Line 1792 of yacc.c  */
-#line 68 "sintatico.y"
+#line 79 "sintatico.y"
     {;}
     break;
 
   case 8:
 /* Line 1792 of yacc.c  */
-#line 69 "sintatico.y"
+#line 80 "sintatico.y"
     {;}
     break;
 
   case 9:
 /* Line 1792 of yacc.c  */
-#line 71 "sintatico.y"
+#line 82 "sintatico.y"
     {;}
     break;
 
   case 10:
 /* Line 1792 of yacc.c  */
-#line 72 "sintatico.y"
+#line 83 "sintatico.y"
     {;}
     break;
 
   case 11:
 /* Line 1792 of yacc.c  */
-#line 74 "sintatico.y"
+#line 85 "sintatico.y"
     {;}
     break;
 
   case 12:
 /* Line 1792 of yacc.c  */
-#line 76 "sintatico.y"
-    {;}
-    break;
-
-  case 13:
-/* Line 1792 of yacc.c  */
-#line 77 "sintatico.y"
-    {;}
-    break;
-
-  case 14:
-/* Line 1792 of yacc.c  */
-#line 81 "sintatico.y"
+#line 89 "sintatico.y"
     {
 							if(!checa_elemento((yyvsp[(1) - (3)].cadeia))){
 								erro_semantico = 1;
@@ -1496,44 +1508,45 @@ yyreduce:
 						}
     break;
 
-  case 15:
-/* Line 1792 of yacc.c  */
-#line 88 "sintatico.y"
-    {;}
-    break;
-
-  case 16:
-/* Line 1792 of yacc.c  */
-#line 92 "sintatico.y"
-    {;}
-    break;
-
-  case 17:
-/* Line 1792 of yacc.c  */
-#line 93 "sintatico.y"
-    {;}
-    break;
-
-  case 18:
+  case 13:
 /* Line 1792 of yacc.c  */
 #line 96 "sintatico.y"
     {;}
     break;
 
-  case 19:
+  case 14:
 /* Line 1792 of yacc.c  */
-#line 97 "sintatico.y"
+#line 100 "sintatico.y"
     {;}
     break;
 
-  case 20:
+  case 15:
 /* Line 1792 of yacc.c  */
 #line 101 "sintatico.y"
+    {;}
+    break;
+
+  case 16:
+/* Line 1792 of yacc.c  */
+#line 104 "sintatico.y"
+    {;}
+    break;
+
+  case 17:
+/* Line 1792 of yacc.c  */
+#line 105 "sintatico.y"
+    {;}
+    break;
+
+  case 18:
+/* Line 1792 of yacc.c  */
+#line 109 "sintatico.y"
     {
 							TS temp;
 							strcpy(temp.cadeia, (yyvsp[(1) - (3)].cadeia));
-							strcpy(temp.tipo, (yyvsp[(3) - (3)].cadeia));
+							temp.tipo = get_TIPO((yyvsp[(3) - (3)].cadeia));
 							temp.usado = 0;
+							temp.estr = VARIAVEL;
 							
 							inserir_elemento_no_final(temp);
 
@@ -1542,9 +1555,9 @@ yyreduce:
 						}
     break;
 
-  case 21:
+  case 19:
 /* Line 1792 of yacc.c  */
-#line 113 "sintatico.y"
+#line 122 "sintatico.y"
     {
 							TS temp1, temp2;
 							int index = get_n_simbolos() - 1;
@@ -1552,8 +1565,9 @@ yyreduce:
 							temp2 = buscar_elemento_indice(index);
 
 							strcpy(temp1.cadeia, (yyvsp[(1) - (3)].cadeia));
-							strcpy(temp1.tipo, temp2.tipo);
+							temp1.tipo = temp2.tipo;
 							temp1.usado = 0;
+							temp1.estr = VARIAVEL;
 
 							inserir_elemento_no_final(temp1);
 
@@ -1561,15 +1575,55 @@ yyreduce:
 						}
     break;
 
+  case 20:
+/* Line 1792 of yacc.c  */
+#line 139 "sintatico.y"
+    {;}
+    break;
+
+  case 21:
+/* Line 1792 of yacc.c  */
+#line 140 "sintatico.y"
+    {;}
+    break;
+
   case 22:
 /* Line 1792 of yacc.c  */
-#line 128 "sintatico.y"
+#line 143 "sintatico.y"
     {;}
     break;
 
   case 23:
 /* Line 1792 of yacc.c  */
-#line 130 "sintatico.y"
+#line 144 "sintatico.y"
+    {;}
+    break;
+
+  case 24:
+/* Line 1792 of yacc.c  */
+#line 147 "sintatico.y"
+    {
+							TS temp;
+							strcpy(temp.cadeia, (yyvsp[(2) - (7)].cadeia));
+							temp.tipo = get_TIPO((yyvsp[(6) - (7)].cadeia));
+							temp.usado = 0;
+							temp.estr = FUNCAO;
+
+							inserir_elemento_no_final(temp);
+
+							printf("Declaracao de funcao: %s \n", (yyvsp[(2) - (7)].cadeia));
+						}
+    break;
+
+  case 26:
+/* Line 1792 of yacc.c  */
+#line 160 "sintatico.y"
+    {;}
+    break;
+
+  case 27:
+/* Line 1792 of yacc.c  */
+#line 162 "sintatico.y"
     {
 			if(!checa_elemento((yyvsp[(1) - (1)].cadeia))){
 				erro_semantico = 1;
@@ -1579,67 +1633,79 @@ yyreduce:
 		}
     break;
 
-  case 24:
-/* Line 1792 of yacc.c  */
-#line 137 "sintatico.y"
-    {;}
-    break;
-
-  case 25:
-/* Line 1792 of yacc.c  */
-#line 138 "sintatico.y"
-    {;}
-    break;
-
-  case 26:
-/* Line 1792 of yacc.c  */
-#line 139 "sintatico.y"
-    {;}
-    break;
-
-  case 27:
-/* Line 1792 of yacc.c  */
-#line 141 "sintatico.y"
-    {;}
-    break;
-
   case 28:
 /* Line 1792 of yacc.c  */
-#line 144 "sintatico.y"
+#line 169 "sintatico.y"
     {;}
     break;
 
   case 29:
 /* Line 1792 of yacc.c  */
-#line 145 "sintatico.y"
+#line 170 "sintatico.y"
     {;}
     break;
 
   case 30:
 /* Line 1792 of yacc.c  */
-#line 149 "sintatico.y"
-    {
-						if(!checa_elemento((yyvsp[(1) - (1)].cadeia))){
-							erro_semantico = 1;
-							printf("ERRO Linha %d: %s nao declarado \n", yylineno, (yyvsp[(1) - (1)].cadeia));
-						}
-					}
+#line 171 "sintatico.y"
+    {;}
     break;
 
   case 31:
 /* Line 1792 of yacc.c  */
-#line 156 "sintatico.y"
+#line 173 "sintatico.y"
     {
-						if(!checa_elemento((yyvsp[(1) - (3)].cadeia))){
-							erro_semantico = 1;
-							printf("ERRO Linha %d: %s nao declarado \n", yylineno, (yyvsp[(1) - (3)].cadeia));
-						}
+			if(!checa_elemento((yyvsp[(1) - (3)].cadeia))){
+				erro_semantico = 1;
+				printf("ERRO Linha %d: %s nao declarado \n", yylineno, (yyvsp[(1) - (3)].cadeia));
+			}
+			
+		}
+    break;
+
+  case 32:
+/* Line 1792 of yacc.c  */
+#line 181 "sintatico.y"
+    {;}
+    break;
+
+  case 33:
+/* Line 1792 of yacc.c  */
+#line 184 "sintatico.y"
+    {;}
+    break;
+
+  case 34:
+/* Line 1792 of yacc.c  */
+#line 185 "sintatico.y"
+    {;}
+    break;
+
+  case 35:
+/* Line 1792 of yacc.c  */
+#line 189 "sintatico.y"
+    {
+					if(!checa_elemento((yyvsp[(1) - (1)].cadeia))){
+						erro_semantico = 1;
+						printf("ERRO Linha %d: %s nao declarado \n", yylineno, (yyvsp[(1) - (1)].cadeia));
 					}
+				}
+    break;
+
+  case 36:
+/* Line 1792 of yacc.c  */
+#line 196 "sintatico.y"
+    {
+					if(!checa_elemento((yyvsp[(1) - (3)].cadeia))){
+						erro_semantico = 1;
+						printf("ERRO Linha %d: %s nao declarado \n", yylineno, (yyvsp[(1) - (3)].cadeia));
+					}
+				}
     break;
 
 
 /* Line 1792 of yacc.c  */
-#line 1643 "sintatico.tab.c"
+#line 1709 "sintatico.tab.c"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1871,7 +1937,7 @@ yyreturn:
 
 
 /* Line 2055 of yacc.c  */
-#line 166 "sintatico.y"
+#line 206 "sintatico.y"
 
 
 int checa_elemento(char *nome){
