@@ -6,14 +6,17 @@
 #include <string.h>
 #include <stdlib.h>
 #include "lista.h"
+#include "code.h"
 
+//Funcoes do bison
 extern int yylineno;
-int erro_semantico = 0;
-
-
+extern FILE *yyin;
+extern FILE *yyout;
 int yylex();
 void yyerror(const char *s);
 
+//Funcoes do sintatico.y
+int erro_semantico = 0;
 int busca_tabela(char *id);
 void verifica_tabela();
 int checa_elemento(char *nome);
@@ -22,6 +25,7 @@ int checa_elemento(char *nome);
 
 %union {
 	char *cadeia;
+	int valor;
 }
 
 %token PROGRAM
@@ -52,6 +56,7 @@ int checa_elemento(char *nome);
 %left MULT
 
 %type<cadeia> ID TIPO
+%type<valor> NUM
 
 %%
 /* Regras definindo a GLC e acoes correspondentes */
@@ -95,7 +100,11 @@ estrutura_simples:		ID OP_ATRIB exp
 							}
 							
 						}
-						| IO PAR_ABRE argumentos_IO PAR_FECHA{;}
+						| READ PAR_ABRE argumentos_I PAR_FECHA{;}
+						| WRITE PAR_ABRE argumentos_O PAR_FECHA 
+						{
+							emitRO(yyout, "OUT",ac,0,0,"write ac");
+						}
 						| ID PAR_ABRE PAR_FECHA
 						{
 							if(!checa_elemento($ID)){
@@ -180,7 +189,7 @@ funcao_declaracao:	FUNCTION ID PAR_ABRE PAR_FECHA DOIS_PONTOS TIPO PONTO_VIRGULA
 						}
 						estrutura PONTO_VIRGULA
 ;
-exp:	NUM					{;}
+exp:	NUM	{;}
 		| ID				
 		{
 			if(!checa_elemento($ID)){
@@ -204,18 +213,39 @@ exp:	NUM					{;}
 rel:	exp RELACAO exp	{;}
 ;
 
-IO:	READ {;}
-	|WRITE {;}
-;
-
-argumentos_IO:	ID 
+argumentos_O:	ID
 				{
 					if(!checa_elemento($ID)){
 						erro_semantico = 1;
 						printf("ERRO Linha %d: %s nao declarado \n", yylineno, $ID);
 					}
 				}
-				| ID VIRGULA argumentos_IO 
+				| NUM 
+				{
+					printf("valor de num: %d \n", $NUM);
+					emitRM(yyout, "LDC",ac,$NUM,0,"load const");
+				}
+				| ID VIRGULA argumentos_O 
+				{
+					if(!checa_elemento($ID)){
+						erro_semantico = 1;
+						printf("ERRO Linha %d: %s nao declarado \n", yylineno, $ID);
+					}
+				}
+				| NUM VIRGULA argumentos_O 
+				{
+					emitRM(yyout, "LDC",ac,$NUM,0,"load const");
+				}
+;
+
+argumentos_I:	ID 
+				{
+					if(!checa_elemento($ID)){
+						erro_semantico = 1;
+						printf("ERRO Linha %d: %s nao declarado \n", yylineno, $ID);
+					}
+				}
+				| ID VIRGULA argumentos_I 
 				{
 					if(!checa_elemento($ID)){
 						erro_semantico = 1;
@@ -223,7 +253,6 @@ argumentos_IO:	ID
 					}
 				}
 ;
-
 
 
 %%
@@ -251,8 +280,6 @@ void verifica_tabela(){		/*Verifica se ha simbolos nao utilizados*/
 }
 
 int main(int argc, char* argv[]){
-	extern FILE *yyin;
-	extern FILE *yyout;
 	int erro;
 
 	++argv; --argc; 	    /* abre arquivo de entrada se houver */
@@ -269,9 +296,12 @@ int main(int argc, char* argv[]){
 	if(argc > 1)
 		yyout = fopen(argv[1],"wt");
 	else
-		yyout = stdout;
+		yyout = fopen("a.out", "wt");
 
+	emitRM(yyout, "LD",mp,0,ac,"load maxaddress from location 0");
+	emitRM(yyout, "ST",ac,0,ac,"clear location 0");
 	erro = yyparse();
+	emitRO(yyout, "HALT",0,0,0,"");
 	
 	if(erro == 0){		/*Se o programa estiver sintaticamente correto, ele checa o semantico*/
 		imprimir_lista();

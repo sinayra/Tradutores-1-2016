@@ -385,8 +385,8 @@ struct yy_trans_info
 static yyconst flex_int16_t yy_accept[87] =
     {   0,
         0,    0,   28,   26,   25,   25,   15,   16,   24,   22,
-       17,   23,   20,   26,   19,   18,   21,   12,   12,   12,
-       12,   12,   12,   12,   12,   12,   12,   12,    0,    0,
+       17,   23,   20,   13,   19,   18,   21,   12,   12,   12,
+       12,   12,   12,   12,   12,   12,   12,   12,   13,    0,
        14,   12,   12,   12,   12,    9,   12,   12,   12,   12,
        12,   12,   12,   12,   13,   12,   12,   12,    7,   12,
        12,   12,   12,   10,   12,   12,   12,   12,   11,   12,
@@ -524,11 +524,12 @@ char *yytext;
 #line 1 "lexico.l"
 #line 2 "lexico.l"
 #include <stdio.h>
+#include <stdlib.h> 
 #include "sintatico.tab.h"
 
 extern char *strdup(const char *s);
 
-#line 532 "lex.yy.c"
+#line 533 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -710,9 +711,9 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 31 "lexico.l"
+#line 32 "lexico.l"
 
-#line 716 "lex.yy.c"
+#line 717 "lex.yy.c"
 
 	if ( !(yy_init) )
 		{
@@ -807,141 +808,141 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 32 "lexico.l"
+#line 33 "lexico.l"
 {return PROGRAM;}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 33 "lexico.l"
+#line 34 "lexico.l"
 {return READ;}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 34 "lexico.l"
+#line 35 "lexico.l"
 {return WRITE;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 35 "lexico.l"
+#line 36 "lexico.l"
 {return FUNCTION;}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 36 "lexico.l"
+#line 37 "lexico.l"
 {return PROCEDURE;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 37 "lexico.l"
+#line 38 "lexico.l"
 {return BLOCO_ABRE;}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 38 "lexico.l"
+#line 39 "lexico.l"
 {return BLOCO_FECHA;}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 39 "lexico.l"
+#line 40 "lexico.l"
 {return WHILE;}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 40 "lexico.l"
+#line 41 "lexico.l"
 {return DO;}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 41 "lexico.l"
+#line 42 "lexico.l"
 {return VAR;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 42 "lexico.l"
-{yylval.cadeia= (char *) strdup(yytext); return TIPO;}
+#line 43 "lexico.l"
+{yylval.cadeia = (char *) strdup(yytext); return TIPO;}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 43 "lexico.l"
-{yylval.cadeia= (char *) strdup(yytext); return ID;}
+#line 44 "lexico.l"
+{yylval.cadeia = (char *) strdup(yytext); return ID;}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 44 "lexico.l"
-{return NUM;}
+#line 45 "lexico.l"
+{yylval.valor = atoi(yytext); return NUM;}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 46 "lexico.l"
+#line 47 "lexico.l"
 {return OP_ATRIB;}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 47 "lexico.l"
+#line 48 "lexico.l"
 {return PAR_ABRE;}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 48 "lexico.l"
+#line 49 "lexico.l"
 {return PAR_FECHA;}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 49 "lexico.l"
+#line 50 "lexico.l"
 {return VIRGULA;}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 50 "lexico.l"
+#line 51 "lexico.l"
 {return PONTO_VIRGULA;}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 51 "lexico.l"
+#line 52 "lexico.l"
 {return DOIS_PONTOS;}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 52 "lexico.l"
+#line 53 "lexico.l"
 {return PONTO;}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 54 "lexico.l"
+#line 55 "lexico.l"
 {return RELACAO;}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 55 "lexico.l"
+#line 56 "lexico.l"
 {return SOMA;}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 56 "lexico.l"
+#line 57 "lexico.l"
 {return SUB;}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 57 "lexico.l"
+#line 58 "lexico.l"
 {return MULT;}
 	YY_BREAK
 case 25:
 /* rule 25 can match eol */
 YY_RULE_SETUP
-#line 59 "lexico.l"
+#line 60 "lexico.l"
 {;}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 60 "lexico.l"
+#line 61 "lexico.l"
 {return yytext[0];}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 63 "lexico.l"
+#line 64 "lexico.l"
 ECHO;
 	YY_BREAK
-#line 945 "lex.yy.c"
+#line 946 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1947,7 +1948,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 62 "lexico.l"
+#line 63 "lexico.l"
 
 
 int yywrap() {

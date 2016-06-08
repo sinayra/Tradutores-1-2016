@@ -1,5 +1,6 @@
 %{
 #include <stdio.h>
+#include <stdlib.h> 
 #include "sintatico.tab.h"
 
 extern char *strdup(const char *s);
@@ -20,7 +21,7 @@ DO 			("do")
 VAR			("var")
 TIPO		("integer"|"boolean"|"char")
 ID			[a-zA-Z][a-zA-Z0-9]*	
-NUM 		("+"|"-")?[0-9]+(".")[0-9]+
+NUM 		("+"|"-")?[0-9]+((".")[0-9]+)?
 BRANCO		(" "|"\t"|"\r"|"\n")
 SOMA		("+")
 SUB			("-")
@@ -39,9 +40,9 @@ RELACAO		("<"|">"|"=")
 {WHILE}			{return WHILE;}
 {DO}			{return DO;}
 {VAR}			{return VAR;}
-{TIPO}			{yylval.cadeia= (char *) strdup(yytext); return TIPO;}
-{ID}			{yylval.cadeia= (char *) strdup(yytext); return ID;}
-{NUM}			{return NUM;}
+{TIPO}			{yylval.cadeia = (char *) strdup(yytext); return TIPO;}
+{ID}			{yylval.cadeia = (char *) strdup(yytext); return ID;}
+{NUM}			{yylval.valor = atoi(yytext); return NUM;}
 
 (":=") 			{return OP_ATRIB;}
 ("(") 			{return PAR_ABRE;}

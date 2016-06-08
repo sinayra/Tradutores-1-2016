@@ -1,1 +1,11 @@
-﻿
+﻿(1) comando de saída (escrita) para os seguintes casos:
+(a) constante (ex.: imprima 2), vide exemplo acima para solução
+(b) identificador de variável (ex.: imprima a)
+Obs.: para que isso seja possível, é necessária a atualização da tabela de símbolos: alteração do registro para incluir campo para a localização de memória que será atribuída ao identificador de variável. Também será necessário alterar a rotina de inserção na TS para fazer a atribuição correta a tal campo (manter variável inteira e incrementá-la após a inserção de um novo identificador de variável, mas não de procedimento). Além disso, será preciso construir uma rotina nova para recuperar essa localização de memória antes de um acesso à memória para armazenamento de valor ou recuperação para carregamento em registrador.
+(c) expressão aritmética (ex.: imprima 2+a)
+(2) comando de atribuição (ex. a:=2+b)
+As considerações anteriores sobre constante, identificador, tratamento da TS e expressão aritmética aplicam-se também a esse caso.
+(3) comando de entrada (leia) para receber da entrada-padrão um valor a ser atribuído a um identificador de variável. Ex.: leia a
+Obs.: o valor deverá ser armazenado na memória, na localização de memória que consta na TS.
+(4) comando de controle (condicional e repetição)
+em breve...
