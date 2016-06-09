@@ -203,17 +203,32 @@ funcao_declaracao:	FUNCTION ID PAR_ABRE PAR_FECHA DOIS_PONTOS TIPO PONTO_VIRGULA
 exp:	NUM	{ $$ = $NUM;}
 		| ID				
 		{
-			if(checa_elemento($ID) < 0){
+			int index = checa_elemento($ID);
+			if(index < 0){
 				erro_semantico = 1;
 				printf("ERRO Linha %d: %s nao declarado \n", yylineno, $ID);
 			}
+			else{
+				TS aux = buscar_elemento_indice(index);
+				$$ = aux.valorInt;
+			}
 			
 		}
-		| exp SOMA exp		{;}
-		| exp SUB exp		{;}
-		| exp MULT exp		{;}
+		| exp SOMA exp		
+		{
+			$$ = $1 + $3;
+		}
+		| exp SUB exp		
+		{
+			$$ = $1 - $3;
+		}
+		| exp MULT exp		
+		{
+			$$ = $1 * $3;
+		}
 		| ID PAR_ABRE PAR_FECHA
 		{
+			//este e o caso de funcoes sem argumentos
 			if(checa_elemento($ID) < 0){
 				erro_semantico = 1;
 				printf("ERRO Linha %d: %s nao declarado \n", yylineno, $ID);

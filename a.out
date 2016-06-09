@@ -1,8 +1,6 @@
-************ Codigo intermediario para: Exe10 ************
+************ Codigo intermediario para: Exe11 ************
   0:     LD  6,0(0) 	load maxaddress from location 0
   1:     ST  0,0(0) 	clear location 0
-  2:    LDC  0,5(0) 	load const
+  2:    LDC  0,18(0) 	load const
   3:    OUT  0,0,0 	write ac
-  4:    LDC  0,2(0) 	load const
-  5:    OUT  0,0,0 	write ac
-  6:   HALT  0,0,0 	
+  4:   HALT  0,0,0 	

@@ -499,8 +499,8 @@ static const yytype_uint16 yyrline[] =
        0,    66,    66,    65,    85,    88,    89,    91,    92,    94,
       95,    97,   100,   114,   115,   119,   130,   131,   134,   135,
      138,   151,   169,   170,   173,   174,   177,   176,   190,   189,
-     203,   204,   212,   213,   214,   215,   224,   227,   239,   243,
-     250,   256,   263
+     203,   204,   217,   221,   225,   229,   239,   242,   254,   258,
+     265,   271,   278
 };
 #endif
 
@@ -1692,9 +1692,14 @@ yyreduce:
 /* Line 1792 of yacc.c  */
 #line 205 "sintatico.y"
     {
-			if(checa_elemento((yyvsp[(1) - (1)].cadeia)) < 0){
+			int index = checa_elemento((yyvsp[(1) - (1)].cadeia));
+			if(index < 0){
 				erro_semantico = 1;
 				printf("ERRO Linha %d: %s nao declarado \n", yylineno, (yyvsp[(1) - (1)].cadeia));
+			}
+			else{
+				TS aux = buscar_elemento_indice(index);
+				(yyval.valor) = aux.valorInt;
 			}
 			
 		}
@@ -1702,26 +1707,33 @@ yyreduce:
 
   case 32:
 /* Line 1792 of yacc.c  */
-#line 212 "sintatico.y"
-    {;}
+#line 218 "sintatico.y"
+    {
+			(yyval.valor) = (yyvsp[(1) - (3)].valor) + (yyvsp[(3) - (3)].valor);
+		}
     break;
 
   case 33:
 /* Line 1792 of yacc.c  */
-#line 213 "sintatico.y"
-    {;}
+#line 222 "sintatico.y"
+    {
+			(yyval.valor) = (yyvsp[(1) - (3)].valor) - (yyvsp[(3) - (3)].valor);
+		}
     break;
 
   case 34:
 /* Line 1792 of yacc.c  */
-#line 214 "sintatico.y"
-    {;}
+#line 226 "sintatico.y"
+    {
+			(yyval.valor) = (yyvsp[(1) - (3)].valor) * (yyvsp[(3) - (3)].valor);
+		}
     break;
 
   case 35:
 /* Line 1792 of yacc.c  */
-#line 216 "sintatico.y"
+#line 230 "sintatico.y"
     {
+			//este e o caso de funcoes sem argumentos
 			if(checa_elemento((yyvsp[(1) - (3)].cadeia)) < 0){
 				erro_semantico = 1;
 				printf("ERRO Linha %d: %s nao declarado \n", yylineno, (yyvsp[(1) - (3)].cadeia));
@@ -1732,13 +1744,13 @@ yyreduce:
 
   case 36:
 /* Line 1792 of yacc.c  */
-#line 224 "sintatico.y"
+#line 239 "sintatico.y"
     {;}
     break;
 
   case 37:
 /* Line 1792 of yacc.c  */
-#line 228 "sintatico.y"
+#line 243 "sintatico.y"
     {
 					int index = checa_elemento((yyvsp[(1) - (1)].cadeia));
 					if(index < 0){
@@ -1754,7 +1766,7 @@ yyreduce:
 
   case 38:
 /* Line 1792 of yacc.c  */
-#line 240 "sintatico.y"
+#line 255 "sintatico.y"
     {
 					emitRM(yyout, "LDC",ac,(yyvsp[(1) - (1)].valor),0,"load const");
 				}
@@ -1762,7 +1774,7 @@ yyreduce:
 
   case 39:
 /* Line 1792 of yacc.c  */
-#line 244 "sintatico.y"
+#line 259 "sintatico.y"
     {
 					if(!checa_elemento((yyvsp[(1) - (3)].cadeia))){
 						erro_semantico = 1;
@@ -1773,7 +1785,7 @@ yyreduce:
 
   case 40:
 /* Line 1792 of yacc.c  */
-#line 251 "sintatico.y"
+#line 266 "sintatico.y"
     {
 					emitRM(yyout, "LDC",ac,(yyvsp[(1) - (3)].valor),0,"load const");
 				}
@@ -1781,7 +1793,7 @@ yyreduce:
 
   case 41:
 /* Line 1792 of yacc.c  */
-#line 257 "sintatico.y"
+#line 272 "sintatico.y"
     {
 					if(!checa_elemento((yyvsp[(1) - (1)].cadeia))){
 						erro_semantico = 1;
@@ -1792,7 +1804,7 @@ yyreduce:
 
   case 42:
 /* Line 1792 of yacc.c  */
-#line 264 "sintatico.y"
+#line 279 "sintatico.y"
     {
 					if(!checa_elemento((yyvsp[(1) - (3)].cadeia))){
 						erro_semantico = 1;
@@ -1803,7 +1815,7 @@ yyreduce:
 
 
 /* Line 1792 of yacc.c  */
-#line 1807 "sintatico.tab.c"
+#line 1819 "sintatico.tab.c"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2035,7 +2047,7 @@ yyreturn:
 
 
 /* Line 2055 of yacc.c  */
-#line 273 "sintatico.y"
+#line 288 "sintatico.y"
 
 
 int checa_elemento(char *nome){
