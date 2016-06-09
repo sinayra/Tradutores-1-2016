@@ -6,5 +6,6 @@ var
 begin
 	a := 2;
 	b := 5;
+	write(b);
 	write(a);
 end.

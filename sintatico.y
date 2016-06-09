@@ -56,7 +56,7 @@ int checa_elemento(char *nome);
 %left MULT
 
 %type<cadeia> ID TIPO
-%type<valor> NUM
+%type<valor> NUM exp
 
 %%
 /* Regras definindo a GLC e acoes correspondentes */
@@ -64,6 +64,7 @@ int checa_elemento(char *nome);
 
 programa:	PROGRAM ID PONTO_VIRGULA 
 			{
+				char comentario[100] =  "Codigo intermediario para: ";
 				TS temp;
 				strcpy(temp.cadeia, $ID);
 				temp.tipo = TIPO_INDEFINIDO;
@@ -72,7 +73,11 @@ programa:	PROGRAM ID PONTO_VIRGULA
 				
 				inserir_elemento_no_final(temp);
 
-				printf("Nome do programa: %s \n", $ID);
+				strcat(comentario, $ID);
+				emitComment(yyout, comentario );
+
+				emitRM(yyout, "LD",mp,0,ac,"load maxaddress from location 0");
+				emitRM(yyout, "ST",ac,0,ac,"clear location 0");
 			}  
 			bloco_principal PONTO 
 ;
@@ -94,9 +99,15 @@ bloco_composto:	BLOCO_ABRE componente BLOCO_FECHA {;}
 
 estrutura_simples:		ID OP_ATRIB exp			
 						{
-							if(!checa_elemento($ID)){
+							int index = checa_elemento($ID);
+							if(index < 0){
 								erro_semantico = 1;
 								printf("ERRO Linha %d: %s nao declarado \n", yylineno, $ID);
+							}
+							else{
+								TS aux = buscar_elemento_indice(index);
+								aux.valorInt = $exp;
+								editar_elemento(index, aux);
 							}
 							
 						}
@@ -134,7 +145,7 @@ variavel_declaracao:	ID DOIS_PONTOS TIPO
 							
 							inserir_elemento_no_final(temp);
 
-							printf("ID declarado: %s\n", $ID);
+							//printf("ID declarado: %s\n", $ID);
 
 						}
 						|ID VIRGULA variavel_declaracao	
@@ -151,7 +162,7 @@ variavel_declaracao:	ID DOIS_PONTOS TIPO
 
 							inserir_elemento_no_final(temp1);
 
-							printf("ID declarado: %s\n", $ID);
+							//printf("ID declarado: %s\n", $ID);
 						}
 ;
 
@@ -172,7 +183,7 @@ funcao_declaracao:	FUNCTION ID PAR_ABRE PAR_FECHA DOIS_PONTOS TIPO PONTO_VIRGULA
 
 							inserir_elemento_no_final(temp);
 
-							printf("Declaracao de funcao: %s \n", $ID);
+							//printf("Declaracao de funcao: %s \n", $ID);
 						} 
 						estrutura PONTO_VIRGULA
 					| PROCEDURE ID PAR_ABRE PAR_FECHA PONTO_VIRGULA
@@ -185,14 +196,14 @@ funcao_declaracao:	FUNCTION ID PAR_ABRE PAR_FECHA DOIS_PONTOS TIPO PONTO_VIRGULA
 
 							inserir_elemento_no_final(temp);
 
-							printf("Declaracao de procedure: %s \n", $ID);
+							//printf("Declaracao de procedure: %s \n", $ID);
 						}
 						estrutura PONTO_VIRGULA
 ;
-exp:	NUM	{;}
+exp:	NUM	{ $$ = $NUM;}
 		| ID				
 		{
-			if(!checa_elemento($ID)){
+			if(checa_elemento($ID) < 0){
 				erro_semantico = 1;
 				printf("ERRO Linha %d: %s nao declarado \n", yylineno, $ID);
 			}
@@ -203,7 +214,7 @@ exp:	NUM	{;}
 		| exp MULT exp		{;}
 		| ID PAR_ABRE PAR_FECHA
 		{
-			if(!checa_elemento($ID)){
+			if(checa_elemento($ID) < 0){
 				erro_semantico = 1;
 				printf("ERRO Linha %d: %s nao declarado \n", yylineno, $ID);
 			}
@@ -215,14 +226,18 @@ rel:	exp RELACAO exp	{;}
 
 argumentos_O:	ID
 				{
-					if(!checa_elemento($ID)){
+					int index = checa_elemento($ID);
+					if(index < 0){
 						erro_semantico = 1;
 						printf("ERRO Linha %d: %s nao declarado \n", yylineno, $ID);
+					}
+					else{
+						TS aux = buscar_elemento_indice(index);
+						emitRM(yyout, "LDC",ac,aux.valorInt,0,"load const");
 					}
 				}
 				| NUM 
 				{
-					printf("valor de num: %d \n", $NUM);
 					emitRM(yyout, "LDC",ac,$NUM,0,"load const");
 				}
 				| ID VIRGULA argumentos_O 
@@ -264,11 +279,11 @@ int checa_elemento(char *nome){
 		if(temp.usado == 0){
 			temp.usado = 1;
 			editar_elemento(index, temp);
-			printf("ID usado: %s \n", nome);
+			//printf("ID usado: %s \n", nome);
 		}
-		return 1;
+		return index;
 	}
-	return 0;
+	return -1;
 }
 
 void verifica_tabela(){		/*Verifica se ha simbolos nao utilizados*/
@@ -298,9 +313,9 @@ int main(int argc, char* argv[]){
 	else
 		yyout = fopen("a.out", "wt");
 
-	emitRM(yyout, "LD",mp,0,ac,"load maxaddress from location 0");
-	emitRM(yyout, "ST",ac,0,ac,"clear location 0");
+	
 	erro = yyparse();
+	//para encerrar programa
 	emitRO(yyout, "HALT",0,0,0,"");
 	
 	if(erro == 0){		/*Se o programa estiver sintaticamente correto, ele checa o semantico*/

@@ -1,6 +1,6 @@
 #include "code.h"
 
-int TraceCode = 0;
+int TraceCode = 1;
 
 /* TM location number for current instruction emission */
 static int emitLoc = 0 ;
@@ -9,6 +9,14 @@ static int emitLoc = 0 ;
    For use in conjunction with emitSkip,
    emitBackup, and emitRestore */
 static int highEmitLoc = 0;
+
+/* Procedure emitComment prints a comment line 
+ * with comment c in the code file
+ */
+void emitComment(FILE *out, char * c ){ 
+  if (TraceCode) 
+    fprintf(out,"************ %s ************\n",c);
+}
 
 /* Procedure emitRM emits a register-to-memory
  * TM instruction

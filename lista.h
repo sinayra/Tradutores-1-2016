@@ -24,6 +24,7 @@ typedef struct{
 	tipoID tipo;
 	tipoEstrutura estr;
 	int usado;
+	int valorInt;
 }TS;
 
 int get_n_simbolos();

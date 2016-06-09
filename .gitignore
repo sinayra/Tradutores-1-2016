@@ -218,4 +218,5 @@ gramatica/minipascal-master/
 sintatico.tab.c
 sintatico.tab.h
 lex.yy.c
-*.exe
+compasc.exe
+a.out
