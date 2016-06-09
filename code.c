@@ -15,7 +15,7 @@ static int highEmitLoc = 0;
  */
 void emitComment(FILE *out, char * c ){ 
   if (TraceCode) 
-    fprintf(out,"************ %s ************\n",c);
+    fprintf(out,"\n************ %s ************\n\n",c);
 }
 
 /* Procedure emitRM emits a register-to-memory

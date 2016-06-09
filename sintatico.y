@@ -239,32 +239,14 @@ exp:	NUM	{ $$ = $NUM;}
 rel:	exp RELACAO exp	{;}
 ;
 
-argumentos_O:	ID
+argumentos_O:	exp
 				{
-					int index = checa_elemento($ID);
-					if(index < 0){
-						erro_semantico = 1;
-						printf("ERRO Linha %d: %s nao declarado \n", yylineno, $ID);
-					}
-					else{
-						TS aux = buscar_elemento_indice(index);
-						emitRM(yyout, "LDC",ac,aux.valorInt,0,"load const");
-					}
+					emitRM(yyout, "LDC",ac,$exp,0,"load const");
 				}
-				| NUM 
+
+				| exp VIRGULA argumentos_O 
 				{
-					emitRM(yyout, "LDC",ac,$NUM,0,"load const");
-				}
-				| ID VIRGULA argumentos_O 
-				{
-					if(!checa_elemento($ID)){
-						erro_semantico = 1;
-						printf("ERRO Linha %d: %s nao declarado \n", yylineno, $ID);
-					}
-				}
-				| NUM VIRGULA argumentos_O 
-				{
-					emitRM(yyout, "LDC",ac,$NUM,0,"load const");
+					emitRM(yyout, "LDC",ac,$exp,0,"load const");
 				}
 ;
 
