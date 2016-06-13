@@ -20,7 +20,7 @@ DO 			("do")
 VAR			("var")
 TIPO		("integer"|"boolean"|"char")
 ID			[a-zA-Z][a-zA-Z0-9]*	
-NUM 		("+"|"-")?[0-9]+(".")[0-9]+
+NUM 		("+"|"-")?[0-9]+((".")[0-9]+)?
 BRANCO		(" "|"\t"|"\r"|"\n")
 SOMA		("+")
 SUB			("-")
@@ -41,7 +41,7 @@ RELACAO		("<"|">"|"=")
 {VAR}			{return VAR;}
 {TIPO}			{yylval.cadeia= (char *) strdup(yytext); return TIPO;}
 {ID}			{yylval.cadeia= (char *) strdup(yytext); return ID;}
-{NUM}			{return NUM;}
+{NUM}			{yylval.valor = atoi(yytext); return NUM;}
 
 (":=") 			{return OP_ATRIB;}
 ("(") 			{return PAR_ABRE;}

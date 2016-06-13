@@ -1,0 +1,16 @@
+
+************ Codigo intermediario para: Exe10 ************
+
+  0:     LD  6,0(0) 	load maxaddress from location 0
+  1:     ST  0,0(0) 	clear location 0
+  2:    LDC  0,2(0) 	carrega NUM em ac
+  3:     ST  0,2(5) 	armazena na memoria index o valor de ac
+  4:    LDC  0,5(0) 	carrega NUM em ac
+  5:     ST  0,1(5) 	armazena na memoria index o valor de ac
+  6:     LD  0,2(5) 	carrega posicao de memoria index em ac
+  7:     LD  0,2(5) 	carrega posicao de memoria index em ac
+  8:    OUT  0,0,0 	write ac
+  9:     LD  0,1(5) 	carrega posicao de memoria index em ac
+ 10:     LD  0,1(5) 	carrega posicao de memoria index em ac
+ 11:    OUT  0,0,0 	write ac
+ 12:   HALT  0,0,0 	

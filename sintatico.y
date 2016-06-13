@@ -6,14 +6,17 @@
 #include <string.h>
 #include <stdlib.h>
 #include "lista.h"
+#include "code.h"
 
+//Funcoes do bison
 extern int yylineno;
-int erro_semantico = 0;
-
-
+extern FILE *yyin;
+extern FILE *yyout;
 int yylex();
 void yyerror(const char *s);
 
+//Funcoes do sintatico.y
+int erro_semantico = 0;
 int busca_tabela(char *id);
 void verifica_tabela();
 int checa_elemento(char *nome);
@@ -22,6 +25,7 @@ int checa_elemento(char *nome);
 
 %union {
 	char *cadeia;
+	int valor;
 }
 
 %token PROGRAM
@@ -51,7 +55,8 @@ int checa_elemento(char *nome);
 %left SOMA SUB
 %left MULT
 
-%type<cadeia> ID TIPO
+%type<cadeia> ID TIPO exp
+%type<valor> NUM
 
 %%
 /* Regras definindo a GLC e acoes correspondentes */
@@ -59,6 +64,7 @@ int checa_elemento(char *nome);
 
 programa:	PROGRAM ID PONTO_VIRGULA 
 			{
+				char comentario[100] =  "Codigo intermediario para: ";
 				TS temp;
 				strcpy(temp.cadeia, $ID);
 				temp.tipo = TIPO_INDEFINIDO;
@@ -67,7 +73,11 @@ programa:	PROGRAM ID PONTO_VIRGULA
 				
 				inserir_elemento_no_final(temp);
 
-				printf("Nome do programa: %s \n", $ID);
+				strcat(comentario, $ID);
+				emitComment(yyout, comentario );
+
+				emitRM(yyout, "LD",mp,0,ac,"load maxaddress from location 0");
+				emitRM(yyout, "ST",ac,0,ac,"clear location 0");
 			}  
 			bloco_principal PONTO 
 ;
@@ -89,16 +99,30 @@ bloco_composto:	BLOCO_ABRE componente BLOCO_FECHA {;}
 
 estrutura_simples:		ID OP_ATRIB exp			
 						{
-							if(!checa_elemento($ID)){
+							int index = checa_elemento($ID);
+							if(index < 0){
 								erro_semantico = 1;
 								printf("ERRO Linha %d: %s nao declarado \n", yylineno, $ID);
 							}
+							else{
+								
+								emitRM(yyout, "ST",ac,index,gp,"armazena na memoria index o valor de ac");
+
+								TS aux = buscar_elemento_indice(index);
+								aux.valorInt = ac;
+								editar_elemento(index, aux);
+							}
 							
 						}
-						| IO PAR_ABRE argumentos_IO PAR_FECHA{;}
+						| READ PAR_ABRE argumentos_I PAR_FECHA {;}
+						| WRITE PAR_ABRE argumentos_O PAR_FECHA 
+						{
+							emitRO(yyout, "OUT",ac,0,0,"write ac");
+						}
 						| ID PAR_ABRE PAR_FECHA
 						{
-							if(!checa_elemento($ID)){
+							int index = checa_elemento($ID);
+							if(index < 0){
 								erro_semantico = 1;
 								printf("ERRO Linha %d: %s nao declarado \n", yylineno, $ID);
 							}
@@ -125,7 +149,7 @@ variavel_declaracao:	ID DOIS_PONTOS TIPO
 							
 							inserir_elemento_no_final(temp);
 
-							printf("ID declarado: %s\n", $ID);
+							//printf("ID declarado: %s\n", $ID);
 
 						}
 						|ID VIRGULA variavel_declaracao	
@@ -180,12 +204,19 @@ funcao_declaracao:	FUNCTION ID PAR_ABRE PAR_FECHA DOIS_PONTOS TIPO PONTO_VIRGULA
 						}
 						estrutura PONTO_VIRGULA
 ;
-exp:	NUM					{;}
+exp:	NUM					
+		{
+			emitRM(yyout, "LDC",ac,$NUM,0,"carrega NUM em ac");
+		}
 		| ID				
 		{
-			if(!checa_elemento($ID)){
+			int index = checa_elemento($ID);
+			if(index < 0){
 				erro_semantico = 1;
 				printf("ERRO Linha %d: %s nao declarado \n", yylineno, $ID);
+			}
+			else{
+				emitRM(yyout, "LD",ac,index,gp,"carrega posicao de memoria index em ac");
 			}
 			
 		}
@@ -204,20 +235,31 @@ exp:	NUM					{;}
 rel:	exp RELACAO exp	{;}
 ;
 
-IO:	READ {;}
-	|WRITE {;}
+argumentos_O:	exp 
+				{
+					int index = checa_elemento($exp);
+					if(index < 0){
+						erro_semantico = 1;
+						printf("ERRO Linha %d: %s nao declarado \n", yylineno, $exp);
+					}
+					else{
+						emitRM(yyout, "LD",ac,index,gp,"carrega posicao de memoria index em ac");
+					}
+				}
+				| exp VIRGULA argumentos_O {;}
 ;
 
-argumentos_IO:	ID 
+argumentos_I:	ID 
 				{
-					if(!checa_elemento($ID)){
+					int index = checa_elemento($ID);
+					if(index < 0){
 						erro_semantico = 1;
 						printf("ERRO Linha %d: %s nao declarado \n", yylineno, $ID);
 					}
 				}
-				| ID VIRGULA argumentos_IO 
+				| ID VIRGULA argumentos_I 
 				{
-					if(!checa_elemento($ID)){
+					if(checa_elemento($ID) < 0){
 						erro_semantico = 1;
 						printf("ERRO Linha %d: %s nao declarado \n", yylineno, $ID);
 					}
@@ -235,11 +277,11 @@ int checa_elemento(char *nome){
 		if(temp.usado == 0){
 			temp.usado = 1;
 			editar_elemento(index, temp);
-			printf("ID usado: %s \n", nome);
+			//printf("ID usado: %s \n", nome);
 		}
-		return 1;
+		return index;
 	}
-	return 0;
+	return -1;
 }
 
 void verifica_tabela(){		/*Verifica se ha simbolos nao utilizados*/
@@ -269,12 +311,14 @@ int main(int argc, char* argv[]){
 	if(argc > 1)
 		yyout = fopen(argv[1],"wt");
 	else
-		yyout = stdout;
+		yyout = fopen("a.out","wt");
 
 	erro = yyparse();
+	//para encerrar programa
+	emitRO(yyout, "HALT",0,0,0,"");
 	
 	if(erro == 0){		/*Se o programa estiver sintaticamente correto, ele checa o semantico*/
-		imprimir_lista();
+		//imprimir_lista();
 		
 		printf("\nPrograma sintaticamente correto\n");
 		

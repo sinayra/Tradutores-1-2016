@@ -385,8 +385,8 @@ struct yy_trans_info
 static yyconst flex_int16_t yy_accept[87] =
     {   0,
         0,    0,   28,   26,   25,   25,   15,   16,   24,   22,
-       17,   23,   20,   26,   19,   18,   21,   12,   12,   12,
-       12,   12,   12,   12,   12,   12,   12,   12,    0,    0,
+       17,   23,   20,   13,   19,   18,   21,   12,   12,   12,
+       12,   12,   12,   12,   12,   12,   12,   12,   13,    0,
        14,   12,   12,   12,   12,    9,   12,   12,   12,   12,
        12,   12,   12,   12,   13,   12,   12,   12,    7,   12,
        12,   12,   12,   10,   12,   12,   12,   12,   11,   12,
@@ -868,7 +868,7 @@ YY_RULE_SETUP
 case 13:
 YY_RULE_SETUP
 #line 44 "lexico.l"
-{return NUM;}
+{yylval.valor = atoi(yytext); return NUM;}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
