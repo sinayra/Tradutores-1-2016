@@ -55,8 +55,8 @@ int checa_elemento(char *nome);
 %left SOMA SUB
 %left MULT
 
-%type<cadeia> ID TIPO
-%type<valor> NUM exp
+%type<cadeia> ID TIPO exp
+%type<valor> NUM
 
 %%
 /* Regras definindo a GLC e acoes correspondentes */
@@ -105,20 +105,21 @@ estrutura_simples:		ID OP_ATRIB exp
 								printf("ERRO Linha %d: %s nao declarado \n", yylineno, $ID);
 							}
 							else{
-								TS aux = buscar_elemento_indice(index);
-								aux.valorInt = $exp;
+
 								editar_elemento(index, aux);
 							}
 							
 						}
-						| READ PAR_ABRE argumentos_I PAR_FECHA{;}
+						| READ PAR_ABRE argumentos_I PAR_FECHA {;}
+
 						| WRITE PAR_ABRE argumentos_O PAR_FECHA 
 						{
 							emitRO(yyout, "OUT",ac,0,0,"write ac");
 						}
 						| ID PAR_ABRE PAR_FECHA
 						{
-							if(!checa_elemento($ID)){
+							int index = checa_elemento($ID);
+							if(index < 0){
 								erro_semantico = 1;
 								printf("ERRO Linha %d: %s nao declarado \n", yylineno, $ID);
 							}
@@ -200,7 +201,10 @@ funcao_declaracao:	FUNCTION ID PAR_ABRE PAR_FECHA DOIS_PONTOS TIPO PONTO_VIRGULA
 						}
 						estrutura PONTO_VIRGULA
 ;
-exp:	NUM	{ $$ = $NUM;}
+exp:	NUM					
+		{
+			emitRM(yyout, "LDC",ac,$NUM,0,"carrega NUM em ac");
+		}
 		| ID				
 		{
 			int index = checa_elemento($ID);
@@ -209,8 +213,7 @@ exp:	NUM	{ $$ = $NUM;}
 				printf("ERRO Linha %d: %s nao declarado \n", yylineno, $ID);
 			}
 			else{
-				TS aux = buscar_elemento_indice(index);
-				$$ = aux.valorInt;
+				emitRM(yyout, "LD",ac,index,gp,"carrega posicao de memoria index em ac");
 			}
 			
 		}
@@ -239,27 +242,32 @@ exp:	NUM	{ $$ = $NUM;}
 rel:	exp RELACAO exp	{;}
 ;
 
-argumentos_O:	exp
-				{
-					emitRM(yyout, "LDC",ac,$exp,0,"load const");
-				}
 
-				| exp VIRGULA argumentos_O 
+argumentos_O:	exp 
 				{
-					emitRM(yyout, "LDC",ac,$exp,0,"load const");
+					int index = checa_elemento($exp);
+					if(index < 0){
+						erro_semantico = 1;
+						printf("ERRO Linha %d: %s nao declarado \n", yylineno, $exp);
+					}
+					else{
+						emitRM(yyout, "LD",ac,index,gp,"carrega posicao de memoria index em ac");
+					}
 				}
+				| exp VIRGULA argumentos_O {;}
 ;
 
 argumentos_I:	ID 
 				{
-					if(!checa_elemento($ID)){
+					int index = checa_elemento($ID);
+					if(index < 0){
 						erro_semantico = 1;
 						printf("ERRO Linha %d: %s nao declarado \n", yylineno, $ID);
 					}
 				}
 				| ID VIRGULA argumentos_I 
 				{
-					if(!checa_elemento($ID)){
+					if(checa_elemento($ID) < 0){
 						erro_semantico = 1;
 						printf("ERRO Linha %d: %s nao declarado \n", yylineno, $ID);
 					}
@@ -308,7 +316,7 @@ int main(int argc, char* argv[]){
 	if(argc > 1)
 		yyout = fopen(argv[1],"wt");
 	else
-		yyout = fopen("a.out", "wt");
+		yyout = fopen("a.out","wt");
 
 	
 	erro = yyparse();
@@ -316,7 +324,7 @@ int main(int argc, char* argv[]){
 	emitRO(yyout, "HALT",0,0,0,"");
 	
 	if(erro == 0){		/*Se o programa estiver sintaticamente correto, ele checa o semantico*/
-		imprimir_lista();
+		//imprimir_lista();
 		
 		printf("\nPrograma sintaticamente correto\n");
 		

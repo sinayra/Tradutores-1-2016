@@ -22,4 +22,3 @@ compile:
 
 clean:
 		del *.o
-
