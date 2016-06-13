@@ -5,10 +5,7 @@ var
 
 begin
 	a := 2;
-	b := a;
-	write(b);
+	b := 5;
+	write(a);
 
-	a := a + b;
-	b := a;
-	write(b);
 end.
