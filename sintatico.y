@@ -6,7 +6,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "lista.h"
-#include "code.h"
+#include "cgen.h"
 
 //Funcoes do bison
 extern int yylineno;
@@ -64,7 +64,7 @@ int checa_elemento(char *nome);
 
 programa:	PROGRAM ID PONTO_VIRGULA 
 			{
-				char comentario[100] =  "Codigo intermediario para: ";
+				
 				TS temp;
 				strcpy(temp.cadeia, $ID);
 				temp.tipo = TIPO_INDEFINIDO;
@@ -73,11 +73,6 @@ programa:	PROGRAM ID PONTO_VIRGULA
 				
 				inserir_elemento_no_final(temp);
 
-				strcat(comentario, $ID);
-				emitComment(yyout, comentario );
-
-				emitRM(yyout, "LD",mp,0,ac,"load maxaddress from location 0");
-				emitRM(yyout, "ST",ac,0,ac,"clear location 0");
 			}  
 			bloco_principal PONTO 
 ;
@@ -105,19 +100,14 @@ estrutura_simples:		ID OP_ATRIB exp
 								printf("ERRO Linha %d: %s nao declarado \n", yylineno, $ID);
 							}
 							else{
-								
-								emitRM(yyout, "ST",ac,index,gp,"armazena na memoria index o valor de ac");
-
-								TS aux = buscar_elemento_indice(index);
-								aux.valorInt = ac;
-								editar_elemento(index, aux);
+								montador(yyout, INSTR_STORE_MEMORIA, index);
 							}
 							
 						}
 						| READ PAR_ABRE argumentos_I PAR_FECHA {;}
 						| WRITE PAR_ABRE argumentos_O PAR_FECHA 
 						{
-							emitRO(yyout, "OUT",ac,0,0,"write ac");
+							montador(yyout, INSTR_WRITE, -1);
 						}
 						| ID PAR_ABRE PAR_FECHA
 						{
@@ -166,7 +156,7 @@ variavel_declaracao:	ID DOIS_PONTOS TIPO
 
 							inserir_elemento_no_final(temp1);
 
-							printf("ID declarado: %s\n", $ID);
+							//printf("ID declarado: %s\n", $ID);
 						}
 ;
 
@@ -187,7 +177,7 @@ funcao_declaracao:	FUNCTION ID PAR_ABRE PAR_FECHA DOIS_PONTOS TIPO PONTO_VIRGULA
 
 							inserir_elemento_no_final(temp);
 
-							printf("Declaracao de funcao: %s \n", $ID);
+							//printf("Declaracao de funcao: %s \n", $ID);
 						} 
 						estrutura PONTO_VIRGULA
 					| PROCEDURE ID PAR_ABRE PAR_FECHA PONTO_VIRGULA
@@ -200,13 +190,13 @@ funcao_declaracao:	FUNCTION ID PAR_ABRE PAR_FECHA DOIS_PONTOS TIPO PONTO_VIRGULA
 
 							inserir_elemento_no_final(temp);
 
-							printf("Declaracao de procedure: %s \n", $ID);
+							//printf("Declaracao de procedure: %s \n", $ID);
 						}
 						estrutura PONTO_VIRGULA
 ;
 exp:	NUM					
 		{
-			emitRM(yyout, "LDC",ac,$NUM,0,"carrega NUM em ac");
+			montador(yyout, INSTR_LOAD_CTE, $NUM);
 		}
 		| ID				
 		{
@@ -216,7 +206,7 @@ exp:	NUM
 				printf("ERRO Linha %d: %s nao declarado \n", yylineno, $ID);
 			}
 			else{
-				emitRM(yyout, "LD",ac,index,gp,"carrega posicao de memoria index em ac");
+				montador(yyout, INSTR_LOAD_MEMORIA, index);
 			}
 			
 		}
@@ -243,7 +233,7 @@ argumentos_O:	exp
 						printf("ERRO Linha %d: %s nao declarado \n", yylineno, $exp);
 					}
 					else{
-						emitRM(yyout, "LD",ac,index,gp,"carrega posicao de memoria index em ac");
+						montador(yyout, INSTR_LOAD_MEMORIA, index);
 					}
 				}
 				| exp VIRGULA argumentos_O {;}
@@ -313,9 +303,9 @@ int main(int argc, char* argv[]){
 	else
 		yyout = fopen("a.out","wt");
 
-	erro = yyparse();
-	//para encerrar programa
-	emitRO(yyout, "HALT",0,0,0,"");
+	montador(yyout, INSTR_INICIO, -1);
+	erro = yyparse();	
+	montador(yyout, INSTR_FIM, -1);
 	
 	if(erro == 0){		/*Se o programa estiver sintaticamente correto, ele checa o semantico*/
 		//imprimir_lista();

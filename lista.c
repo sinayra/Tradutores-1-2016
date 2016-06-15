@@ -66,9 +66,9 @@ TS buscar_elemento_indice(int indice_busca) {
 
 void imprimir_lista() {
     if(lista){
-        printf("\n******TABELA DE SIMBOLOS*****\n\nNome\tEstr\tTipo\tUsado\tValorInt\n");		/*Imprime tabela de simbolos*/
+        printf("\n******TABELA DE SIMBOLOS*****\n\nNome\tEstr\tTipo\tUsado\n");		/*Imprime tabela de simbolos*/
     	for (int i = 0; i < n_simbolos; i++)
-    		printf("%s\t%d\t%d\t%d\t%d\n", lista[i].cadeia, lista[i].estr, lista[i].tipo, lista[i].usado, lista[i].valorInt);
+    		printf("%s\t%d\t%d\t%d\n", lista[i].cadeia, lista[i].estr, lista[i].tipo, lista[i].usado);
         printf("\n");
     }
 }
