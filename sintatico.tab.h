@@ -78,14 +78,18 @@ extern int yydebug;
 typedef union YYSTYPE
 {
 /* Line 2058 of yacc.c  */
-#line 26 "sintatico.y"
+#line 27 "sintatico.y"
 
 	char *cadeia;
 	int valor;
+	struct tipoExp{
+		int val;
+		int isNum;
+	}tipoExp;
 
 
 /* Line 2058 of yacc.c  */
-#line 89 "sintatico.tab.h"
+#line 93 "sintatico.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

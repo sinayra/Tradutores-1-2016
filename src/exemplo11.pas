@@ -4,7 +4,7 @@ var
 	a, b: integer;
 
 begin
-	a := 2 + 3 * 5;
-	b := a + 1;
-	write(b);
+	a := 3 + 2 + 5;
+	b := 2 + 5;
+	write(a, b);
 end.

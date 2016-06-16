@@ -8,6 +8,7 @@
 #include "lista.h"
 #include "cgen.h"
 
+
 //Funcoes do bison
 extern int yylineno;
 extern FILE *yyin;
@@ -26,6 +27,10 @@ int checa_elemento(char *nome);
 %union {
 	char *cadeia;
 	int valor;
+	struct tipoExp{
+		int val;
+		int isNum;
+	}tipoExp;
 }
 
 %token PROGRAM
@@ -55,7 +60,8 @@ int checa_elemento(char *nome);
 %left SOMA SUB
 %left MULT
 
-%type<cadeia> ID TIPO exp
+%type<cadeia> ID TIPO
+%type<tipoExp> exp
 %type<valor> NUM
 
 %%
@@ -100,15 +106,12 @@ estrutura_simples:		ID OP_ATRIB exp
 								printf("ERRO Linha %d: %s nao declarado \n", yylineno, $ID);
 							}
 							else{
-								montador(yyout, INSTR_STORE_MEMORIA, index);
+								montador(yyout, INSTR_STORE_MEMORIA, index, ac);
 							}
 							
 						}
 						| READ PAR_ABRE argumentos_I PAR_FECHA {;}
-						| WRITE PAR_ABRE argumentos_O PAR_FECHA 
-						{
-							montador(yyout, INSTR_WRITE, -1);
-						}
+						| WRITE PAR_ABRE argumentos_O PAR_FECHA {;}
 						| ID PAR_ABRE PAR_FECHA
 						{
 							int index = checa_elemento($ID);
@@ -196,7 +199,11 @@ funcao_declaracao:	FUNCTION ID PAR_ABRE PAR_FECHA DOIS_PONTOS TIPO PONTO_VIRGULA
 ;
 exp:	NUM					
 		{
-			montador(yyout, INSTR_LOAD_CTE, $NUM);
+			montador(yyout, INSTR_LOAD_CTE, $NUM, ac);
+			montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
+
+			$$.val = $NUM;
+			$$.isNum = 1;
 		}
 		| ID				
 		{
@@ -206,11 +213,19 @@ exp:	NUM
 				printf("ERRO Linha %d: %s nao declarado \n", yylineno, $ID);
 			}
 			else{
-				montador(yyout, INSTR_LOAD_MEMORIA, index);
+				montador(yyout, INSTR_LOAD_MEMORIA, index, ac);
+				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
+
+				$$.val = index;
+				$$.isNum = 0;
 			}
 			
 		}
-		| exp SOMA exp		{;}
+		| exp SOMA exp		
+		{
+			montador(yyout, INSTR_TEMP_ACS, -1, -1);
+			montador(yyout, INSTR_ADD, -1, -1);	
+		}
 		| exp SUB exp		{;}
 		| exp MULT exp		{;}
 		| ID PAR_ABRE PAR_FECHA
@@ -226,17 +241,35 @@ rel:	exp RELACAO exp	{;}
 ;
 
 argumentos_O:	exp 
-				{
-					int index = checa_elemento($exp);
-					if(index < 0){
-						erro_semantico = 1;
-						printf("ERRO Linha %d: %s nao declarado \n", yylineno, $exp);
+				{	
+					if(!$exp.isNum){
+						int index = $exp.val;
+						if(index < 0){
+							erro_semantico = 1;
+							printf("ERRO Linha %d: %s nao declarado \n", yylineno, $exp);
+						}
+						else{
+							montador(yyout, INSTR_LOAD_MEMORIA, index, ac);
+							montador(yyout, INSTR_WRITE, index, ac);
+						}
 					}
-					else{
-						montador(yyout, INSTR_LOAD_MEMORIA, index);
-					}
+
 				}
-				| exp VIRGULA argumentos_O {;}
+				| exp VIRGULA argumentos_O
+				{	
+					if(!$exp.isNum){
+						int index = $exp.val;
+						if(index < 0){
+							erro_semantico = 1;
+							printf("ERRO Linha %d: %s nao declarado \n", yylineno, $exp);
+						}
+						else{
+							montador(yyout, INSTR_LOAD_MEMORIA, index, ac);
+							montador(yyout, INSTR_WRITE, index, ac);
+						}
+					}
+
+				}
 ;
 
 argumentos_I:	ID 
@@ -303,9 +336,9 @@ int main(int argc, char* argv[]){
 	else
 		yyout = fopen("a.out","wt");
 
-	montador(yyout, INSTR_INICIO, -1);
+	montador(yyout, INSTR_INICIO, -1, ac);
 	erro = yyparse();	
-	montador(yyout, INSTR_FIM, -1);
+	montador(yyout, INSTR_FIM, -1, ac);
 	
 	if(erro == 0){		/*Se o programa estiver sintaticamente correto, ele checa o semantico*/
 		//imprimir_lista();

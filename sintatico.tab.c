@@ -71,6 +71,7 @@
 #include "lista.h"
 #include "cgen.h"
 
+
 //Funcoes do bison
 extern int yylineno;
 extern FILE *yyin;
@@ -86,7 +87,7 @@ int checa_elemento(char *nome);
 
 
 /* Line 371 of yacc.c  */
-#line 90 "sintatico.tab.c"
+#line 91 "sintatico.tab.c"
 
 # ifndef YY_NULL
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -154,14 +155,18 @@ extern int yydebug;
 typedef union YYSTYPE
 {
 /* Line 387 of yacc.c  */
-#line 26 "sintatico.y"
+#line 27 "sintatico.y"
 
 	char *cadeia;
 	int valor;
+	struct tipoExp{
+		int val;
+		int isNum;
+	}tipoExp;
 
 
 /* Line 387 of yacc.c  */
-#line 165 "sintatico.tab.c"
+#line 170 "sintatico.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -189,7 +194,7 @@ int yyparse ();
 /* Copy the second part of user declarations.  */
 
 /* Line 390 of yacc.c  */
-#line 193 "sintatico.tab.c"
+#line 198 "sintatico.tab.c"
 
 #ifdef short
 # undef short
@@ -494,13 +499,13 @@ static const yytype_int8 yyrhs[] =
 };
 
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
-static const yytype_uint8 yyrline[] =
+static const yytype_uint16 yyrline[] =
 {
-       0,    66,    66,    65,    80,    83,    84,    86,    87,    89,
-      90,    92,    95,   107,   108,   112,   124,   125,   128,   129,
-     132,   145,   163,   164,   167,   168,   171,   170,   184,   183,
-     197,   201,   213,   214,   215,   216,   225,   228,   239,   242,
-     250
+       0,    72,    72,    71,    86,    89,    90,    92,    93,    95,
+      96,    98,   101,   113,   114,   115,   127,   128,   131,   132,
+     135,   148,   166,   167,   170,   171,   174,   173,   187,   186,
+     200,   208,   224,   229,   230,   231,   240,   243,   258,   275,
+     283
 };
 #endif
 
@@ -1453,7 +1458,7 @@ yyreduce:
     {
         case 2:
 /* Line 1792 of yacc.c  */
-#line 66 "sintatico.y"
+#line 72 "sintatico.y"
     {
 				
 				TS temp;
@@ -1469,55 +1474,55 @@ yyreduce:
 
   case 4:
 /* Line 1792 of yacc.c  */
-#line 80 "sintatico.y"
+#line 86 "sintatico.y"
     {;}
     break;
 
   case 5:
 /* Line 1792 of yacc.c  */
-#line 83 "sintatico.y"
+#line 89 "sintatico.y"
     {;}
     break;
 
   case 6:
 /* Line 1792 of yacc.c  */
-#line 84 "sintatico.y"
+#line 90 "sintatico.y"
     {;}
     break;
 
   case 7:
 /* Line 1792 of yacc.c  */
-#line 86 "sintatico.y"
+#line 92 "sintatico.y"
     {;}
     break;
 
   case 8:
 /* Line 1792 of yacc.c  */
-#line 87 "sintatico.y"
+#line 93 "sintatico.y"
     {;}
     break;
 
   case 9:
 /* Line 1792 of yacc.c  */
-#line 89 "sintatico.y"
+#line 95 "sintatico.y"
     {;}
     break;
 
   case 10:
 /* Line 1792 of yacc.c  */
-#line 90 "sintatico.y"
+#line 96 "sintatico.y"
     {;}
     break;
 
   case 11:
 /* Line 1792 of yacc.c  */
-#line 92 "sintatico.y"
+#line 98 "sintatico.y"
     {;}
     break;
 
   case 12:
 /* Line 1792 of yacc.c  */
-#line 96 "sintatico.y"
+#line 102 "sintatico.y"
     {
 							int index = checa_elemento((yyvsp[(1) - (3)].cadeia));
 							if(index < 0){
@@ -1525,7 +1530,7 @@ yyreduce:
 								printf("ERRO Linha %d: %s nao declarado \n", yylineno, (yyvsp[(1) - (3)].cadeia));
 							}
 							else{
-								montador(yyout, INSTR_STORE_MEMORIA, index);
+								montador(yyout, INSTR_STORE_MEMORIA, index, ac);
 							}
 							
 						}
@@ -1533,21 +1538,19 @@ yyreduce:
 
   case 13:
 /* Line 1792 of yacc.c  */
-#line 107 "sintatico.y"
+#line 113 "sintatico.y"
     {;}
     break;
 
   case 14:
 /* Line 1792 of yacc.c  */
-#line 109 "sintatico.y"
-    {
-							montador(yyout, INSTR_WRITE, -1);
-						}
+#line 114 "sintatico.y"
+    {;}
     break;
 
   case 15:
 /* Line 1792 of yacc.c  */
-#line 113 "sintatico.y"
+#line 116 "sintatico.y"
     {
 							int index = checa_elemento((yyvsp[(1) - (3)].cadeia));
 							if(index < 0){
@@ -1560,31 +1563,31 @@ yyreduce:
 
   case 16:
 /* Line 1792 of yacc.c  */
-#line 124 "sintatico.y"
+#line 127 "sintatico.y"
     {;}
     break;
 
   case 17:
 /* Line 1792 of yacc.c  */
-#line 125 "sintatico.y"
+#line 128 "sintatico.y"
     {;}
     break;
 
   case 18:
 /* Line 1792 of yacc.c  */
-#line 128 "sintatico.y"
+#line 131 "sintatico.y"
     {;}
     break;
 
   case 19:
 /* Line 1792 of yacc.c  */
-#line 129 "sintatico.y"
+#line 132 "sintatico.y"
     {;}
     break;
 
   case 20:
 /* Line 1792 of yacc.c  */
-#line 133 "sintatico.y"
+#line 136 "sintatico.y"
     {
 							TS temp;
 							strcpy(temp.cadeia, (yyvsp[(1) - (3)].cadeia));
@@ -1601,7 +1604,7 @@ yyreduce:
 
   case 21:
 /* Line 1792 of yacc.c  */
-#line 146 "sintatico.y"
+#line 149 "sintatico.y"
     {
 							TS temp1, temp2;
 							int index = get_n_simbolos() - 1;
@@ -1621,31 +1624,31 @@ yyreduce:
 
   case 22:
 /* Line 1792 of yacc.c  */
-#line 163 "sintatico.y"
+#line 166 "sintatico.y"
     {;}
     break;
 
   case 23:
 /* Line 1792 of yacc.c  */
-#line 164 "sintatico.y"
+#line 167 "sintatico.y"
     {;}
     break;
 
   case 24:
 /* Line 1792 of yacc.c  */
-#line 167 "sintatico.y"
+#line 170 "sintatico.y"
     {;}
     break;
 
   case 25:
 /* Line 1792 of yacc.c  */
-#line 168 "sintatico.y"
+#line 171 "sintatico.y"
     {;}
     break;
 
   case 26:
 /* Line 1792 of yacc.c  */
-#line 171 "sintatico.y"
+#line 174 "sintatico.y"
     {
 							TS temp;
 							strcpy(temp.cadeia, (yyvsp[(2) - (7)].cadeia));
@@ -1661,7 +1664,7 @@ yyreduce:
 
   case 28:
 /* Line 1792 of yacc.c  */
-#line 184 "sintatico.y"
+#line 187 "sintatico.y"
     {
 							TS temp;
 							strcpy(temp.cadeia, (yyvsp[(2) - (5)].cadeia));
@@ -1677,15 +1680,19 @@ yyreduce:
 
   case 30:
 /* Line 1792 of yacc.c  */
-#line 198 "sintatico.y"
+#line 201 "sintatico.y"
     {
-			montador(yyout, INSTR_LOAD_CTE, (yyvsp[(1) - (1)].valor));
+			montador(yyout, INSTR_LOAD_CTE, (yyvsp[(1) - (1)].valor), ac);
+			montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
+
+			(yyval.tipoExp).val = (yyvsp[(1) - (1)].valor);
+			(yyval.tipoExp).isNum = 1;
 		}
     break;
 
   case 31:
 /* Line 1792 of yacc.c  */
-#line 202 "sintatico.y"
+#line 209 "sintatico.y"
     {
 			int index = checa_elemento((yyvsp[(1) - (1)].cadeia));
 			if(index < 0){
@@ -1693,7 +1700,11 @@ yyreduce:
 				printf("ERRO Linha %d: %s nao declarado \n", yylineno, (yyvsp[(1) - (1)].cadeia));
 			}
 			else{
-				montador(yyout, INSTR_LOAD_MEMORIA, index);
+				montador(yyout, INSTR_LOAD_MEMORIA, index, ac);
+				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
+
+				(yyval.tipoExp).val = index;
+				(yyval.tipoExp).isNum = 0;
 			}
 			
 		}
@@ -1701,25 +1712,28 @@ yyreduce:
 
   case 32:
 /* Line 1792 of yacc.c  */
-#line 213 "sintatico.y"
-    {;}
+#line 225 "sintatico.y"
+    {
+			montador(yyout, INSTR_TEMP_ACS, -1, -1);
+			montador(yyout, INSTR_ADD, -1, -1);	
+		}
     break;
 
   case 33:
 /* Line 1792 of yacc.c  */
-#line 214 "sintatico.y"
+#line 229 "sintatico.y"
     {;}
     break;
 
   case 34:
 /* Line 1792 of yacc.c  */
-#line 215 "sintatico.y"
+#line 230 "sintatico.y"
     {;}
     break;
 
   case 35:
 /* Line 1792 of yacc.c  */
-#line 217 "sintatico.y"
+#line 232 "sintatico.y"
     {
 			if(!checa_elemento((yyvsp[(1) - (3)].cadeia))){
 				erro_semantico = 1;
@@ -1731,34 +1745,51 @@ yyreduce:
 
   case 36:
 /* Line 1792 of yacc.c  */
-#line 225 "sintatico.y"
+#line 240 "sintatico.y"
     {;}
     break;
 
   case 37:
 /* Line 1792 of yacc.c  */
-#line 229 "sintatico.y"
-    {
-					int index = checa_elemento((yyvsp[(1) - (1)].cadeia));
-					if(index < 0){
-						erro_semantico = 1;
-						printf("ERRO Linha %d: %s nao declarado \n", yylineno, (yyvsp[(1) - (1)].cadeia));
+#line 244 "sintatico.y"
+    {	
+					if(!(yyvsp[(1) - (1)].tipoExp).isNum){
+						int index = (yyvsp[(1) - (1)].tipoExp).val;
+						if(index < 0){
+							erro_semantico = 1;
+							printf("ERRO Linha %d: %s nao declarado \n", yylineno, (yyvsp[(1) - (1)].tipoExp));
+						}
+						else{
+							montador(yyout, INSTR_LOAD_MEMORIA, index, ac);
+							montador(yyout, INSTR_WRITE, index, ac);
+						}
 					}
-					else{
-						montador(yyout, INSTR_LOAD_MEMORIA, index);
-					}
+
 				}
     break;
 
   case 38:
 /* Line 1792 of yacc.c  */
-#line 239 "sintatico.y"
-    {;}
+#line 259 "sintatico.y"
+    {	
+					if(!(yyvsp[(1) - (3)].tipoExp).isNum){
+						int index = (yyvsp[(1) - (3)].tipoExp).val;
+						if(index < 0){
+							erro_semantico = 1;
+							printf("ERRO Linha %d: %s nao declarado \n", yylineno, (yyvsp[(1) - (3)].tipoExp));
+						}
+						else{
+							montador(yyout, INSTR_LOAD_MEMORIA, index, ac);
+							montador(yyout, INSTR_WRITE, index, ac);
+						}
+					}
+
+				}
     break;
 
   case 39:
 /* Line 1792 of yacc.c  */
-#line 243 "sintatico.y"
+#line 276 "sintatico.y"
     {
 					int index = checa_elemento((yyvsp[(1) - (1)].cadeia));
 					if(index < 0){
@@ -1770,7 +1801,7 @@ yyreduce:
 
   case 40:
 /* Line 1792 of yacc.c  */
-#line 251 "sintatico.y"
+#line 284 "sintatico.y"
     {
 					if(checa_elemento((yyvsp[(1) - (3)].cadeia)) < 0){
 						erro_semantico = 1;
@@ -1781,7 +1812,7 @@ yyreduce:
 
 
 /* Line 1792 of yacc.c  */
-#line 1785 "sintatico.tab.c"
+#line 1816 "sintatico.tab.c"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2013,7 +2044,7 @@ yyreturn:
 
 
 /* Line 2055 of yacc.c  */
-#line 261 "sintatico.y"
+#line 294 "sintatico.y"
 
 
 int checa_elemento(char *nome){
@@ -2059,9 +2090,9 @@ int main(int argc, char* argv[]){
 	else
 		yyout = fopen("a.out","wt");
 
-	montador(yyout, INSTR_INICIO, -1);
+	montador(yyout, INSTR_INICIO, -1, ac);
 	erro = yyparse();	
-	montador(yyout, INSTR_FIM, -1);
+	montador(yyout, INSTR_FIM, -1, ac);
 	
 	if(erro == 0){		/*Se o programa estiver sintaticamente correto, ele checa o semantico*/
 		//imprimir_lista();

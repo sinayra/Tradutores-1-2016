@@ -26,7 +26,7 @@ void emitComment(FILE *out, char * c ){
  * s = the base register
  * c = a comment to be printed if TraceCode is TRUE
  */
-
+ //Lida com operações tipo M/I
 void emitRM(FILE *out, char * op, int r, int d, int s, char *c){ 
 	fprintf(out,"%3d:  %5s  %d,%d(%d) ",emitLoc++,op,r,d,s);
 
@@ -46,6 +46,7 @@ void emitRM(FILE *out, char * op, int r, int d, int s, char *c){
  * t = 2nd source register
  * c = a comment to be printed if TraceCode is TRUE
  */
+ //Lida com operações tipo R
 void emitRO(FILE *out, char *op, int r, int s, int t, char *c){ 
 	fprintf(out,"%3d:  %5s  %d,%d,%d ",emitLoc++,op,r,s,t);
   	if (TraceCode) 

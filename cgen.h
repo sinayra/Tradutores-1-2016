@@ -9,9 +9,15 @@ typedef enum{
 	INSTR_READ,
 	INSTR_STORE_MEMORIA,
 	INSTR_LOAD_MEMORIA,
+	INSTR_STORE_MEMORIA_TEMP,
 	INSTR_LOAD_CTE,
+	INSTR_ADD,
+	INSTR_TEMP_ACS,
 	INSTR_INVALIDA
 }tipoInstr;
 
+
+
+
 //Escreve no arquivo de saída o código intermediário
-void montador(FILE *out, tipoInstr tipo, int valor);
+void montador(FILE *out, tipoInstr tipo, int valor, int reg);
