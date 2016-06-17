@@ -17,6 +17,9 @@ PROCEDURE	("procedure")
 BLOCO_ABRE	("begin")
 BLOCO_FECHA ("end")
 WHILE 		("while")
+IF			("if")
+THEN		("then")
+ELSE		("else")
 DO 			("do")
 VAR			("var")
 TIPO		("integer"|"boolean"|"char")
@@ -38,6 +41,9 @@ RELACAO		("<"|">"|"=")
 {BLOCO_ABRE} 	{return BLOCO_ABRE;}
 {BLOCO_FECHA}	{return BLOCO_FECHA;}
 {WHILE}			{return WHILE;}
+{IF}			{return IF;}
+{THEN}			{return THEN;}
+{ELSE}			{return ELSE;}
 {DO}			{return DO;}
 {VAR}			{return VAR;}
 {TIPO}			{yylval.cadeia = (char *) strdup(yytext); return TIPO;}

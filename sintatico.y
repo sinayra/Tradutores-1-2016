@@ -41,6 +41,9 @@ int checa_elemento(char *nome);
 %token BLOCO_ABRE
 %token BLOCO_FECHA
 %token WHILE
+%token IF
+%token THEN
+%token ELSE
 %token DO
 %token VAR
 %token TIPO
@@ -228,7 +231,8 @@ exp:	NUM
 		}
 		| exp SUB exp		{;}
 		| exp MULT exp		{;}
-		| ID PAR_ABRE PAR_FECHA
+		| PAR_ABRE exp PAR_FECHA	{;}
+		| ID PAR_ABRE PAR_FECHA				/*Para funções sem argumentos*/
 		{
 			if(!checa_elemento($ID)){
 				erro_semantico = 1;

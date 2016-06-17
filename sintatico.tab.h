@@ -54,22 +54,25 @@ extern int yydebug;
      BLOCO_ABRE = 263,
      BLOCO_FECHA = 264,
      WHILE = 265,
-     DO = 266,
-     VAR = 267,
-     TIPO = 268,
-     NUM = 269,
-     ID = 270,
-     OP_ATRIB = 271,
-     RELACAO = 272,
-     SOMA = 273,
-     SUB = 274,
-     MULT = 275,
-     PAR_ABRE = 276,
-     PAR_FECHA = 277,
-     VIRGULA = 278,
-     PONTO_VIRGULA = 279,
-     DOIS_PONTOS = 280,
-     PONTO = 281
+     IF = 266,
+     THEN = 267,
+     ELSE = 268,
+     DO = 269,
+     VAR = 270,
+     TIPO = 271,
+     NUM = 272,
+     ID = 273,
+     OP_ATRIB = 274,
+     RELACAO = 275,
+     SOMA = 276,
+     SUB = 277,
+     MULT = 278,
+     PAR_ABRE = 279,
+     PAR_FECHA = 280,
+     VIRGULA = 281,
+     PONTO_VIRGULA = 282,
+     DOIS_PONTOS = 283,
+     PONTO = 284
    };
 #endif
 
@@ -89,7 +92,7 @@ typedef union YYSTYPE
 
 
 /* Line 2058 of yacc.c  */
-#line 93 "sintatico.tab.h"
+#line 96 "sintatico.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
