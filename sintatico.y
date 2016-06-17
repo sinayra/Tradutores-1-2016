@@ -255,7 +255,7 @@ argumentos_O:	exp
 					}
 
 				}
-				| exp VIRGULA argumentos_O
+				| argumentos_O VIRGULA exp
 				{	
 					if(!$exp.isNum){
 						int index = $exp.val;
