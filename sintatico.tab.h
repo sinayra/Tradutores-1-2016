@@ -46,33 +46,34 @@ extern int yydebug;
    /* Put the tokens into the symbol table, so that GDB and other debuggers
       know about them.  */
    enum yytokentype {
-     PROGRAM = 258,
-     FUNCTION = 259,
-     PROCEDURE = 260,
-     READ = 261,
-     WRITE = 262,
-     BLOCO_ABRE = 263,
-     BLOCO_FECHA = 264,
-     WHILE = 265,
-     IF = 266,
-     THEN = 267,
-     ELSE = 268,
-     DO = 269,
-     VAR = 270,
-     TIPO = 271,
-     NUM = 272,
-     ID = 273,
-     OP_ATRIB = 274,
-     RELACAO = 275,
-     SOMA = 276,
-     SUB = 277,
-     MULT = 278,
-     PAR_ABRE = 279,
-     PAR_FECHA = 280,
-     VIRGULA = 281,
-     PONTO_VIRGULA = 282,
-     DOIS_PONTOS = 283,
-     PONTO = 284
+     IF_CONFLICT = 258,
+     ELSE = 259,
+     PROGRAM = 260,
+     FUNCTION = 261,
+     PROCEDURE = 262,
+     READ = 263,
+     WRITE = 264,
+     BLOCO_ABRE = 265,
+     BLOCO_FECHA = 266,
+     WHILE = 267,
+     IF = 268,
+     THEN = 269,
+     DO = 270,
+     VAR = 271,
+     TIPO = 272,
+     NUM = 273,
+     ID = 274,
+     OP_ATRIB = 275,
+     RELACAO = 276,
+     SOMA = 277,
+     SUB = 278,
+     MULT = 279,
+     PAR_ABRE = 280,
+     PAR_FECHA = 281,
+     VIRGULA = 282,
+     PONTO_VIRGULA = 283,
+     DOIS_PONTOS = 284,
+     PONTO = 285
    };
 #endif
 
@@ -92,7 +93,7 @@ typedef union YYSTYPE
 
 
 /* Line 2058 of yacc.c  */
-#line 96 "sintatico.tab.h"
+#line 97 "sintatico.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

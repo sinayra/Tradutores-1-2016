@@ -33,6 +33,9 @@ int checa_elemento(char *nome);
 	}tipoExp;
 }
 
+%nonassoc IF_CONFLICT	/*Estruturas para eliminar a ambiguidade do IF THEN ELSE*/
+%nonassoc ELSE
+
 %token PROGRAM
 %token FUNCTION
 %token PROCEDURE
@@ -96,8 +99,11 @@ estrutura: 	estrutura_simples PONTO_VIRGULA{;}
 			|estrutura_bloco {;}
 ;
 estrutura_bloco: bloco_composto {;}
-				|WHILE rel DO estrutura {;}
+				|WHILE rel DO estrutura	{;}
+				|IF rel THEN estrutura %prec IF_CONFLICT	{;}  /*Utilizada estrutura %prec e %nonassoc para eliminar o conflito shift/reduce */
+				|IF rel THEN estrutura ELSE estrutura	{;}
 ;
+
 bloco_composto:	BLOCO_ABRE componente BLOCO_FECHA {;}
 ;
 
