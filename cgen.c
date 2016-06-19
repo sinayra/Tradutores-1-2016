@@ -52,6 +52,14 @@ void montador(FILE *out, tipoInstr tipo, int valor, int reg){
 			memOffset++;
 			emitRM(out, "LD",ac1,memOffset,mp,"passa valor do topo da pilha para ac1");
 		break;
+		
+		case INSTR_READ:
+			emitComment(out, "READ");
+			emitRO(out, "IN", reg, 0, 0, "le valor para o registrador");
+			emitRM(out, "ST", reg, valor, gp, "armazena na memoria index o valor de reg");
+			
+			
+		break;
 
 		case INSTR_ADD:
 			emitComment(out, "ADD");

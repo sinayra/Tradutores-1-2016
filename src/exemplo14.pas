@@ -4,9 +4,10 @@ var
 	a, b: integer;
 
 begin
-	read(a);
-	write(a);
+	read(a,b);
+	write(a,b);
 	
 	b := a + 2;
-	write(b);
+	write(b);	
 end.
+

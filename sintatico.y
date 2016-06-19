@@ -289,12 +289,23 @@ argumentos_I:	ID
 						erro_semantico = 1;
 						printf("ERRO Linha %d: %s nao declarado \n", yylineno, $ID);
 					}
+					else{
+						montador(yyout, INSTR_READ, index, ac);
+						
+					
+					}
 				}
-				| ID VIRGULA argumentos_I 
+				| argumentos_I VIRGULA ID  
 				{
-					if(checa_elemento($ID) < 0){
+					
+					int index = checa_elemento($ID);
+				
+					if(index < 0){
 						erro_semantico = 1;
 						printf("ERRO Linha %d: %s nao declarado \n", yylineno, $ID);
+					}
+					else{
+						montador(yyout, INSTR_READ, index, ac);
 					}
 				}
 ;
