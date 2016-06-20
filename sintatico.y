@@ -442,9 +442,35 @@ rel:	 exp REL_MENOR exp
 			setLinhaAtual($$.fim + 2); //+ duas instruções quando for dar jump
 			escreverComentario(yyout, "Fim de =");
 		}
-		|exp REL_MAIOR_IGUAL exp {;}
-		|exp REL_MENOR_IGUAL exp {;}
-		|exp REL_DIF exp {;}
+		|exp REL_MAIOR_IGUAL exp 
+		{
+			$$.inicio = getLinhaAtual();
+			escreverComentario(yyout, "Processo de relacao >=");
+			processa_relacao($1.isNum, $1.val, $3.isNum, $3.val,INSTR_REL_MAIOR_IGUAL);
+			$$.fim = getLinhaAtual();
+			setLinhaAtual($$.fim + 2);
+			escreverComentario(yyout, "Fim de >=");
+		
+		}
+		|exp REL_MENOR_IGUAL exp 
+		{
+			$$.inicio = getLinhaAtual();
+			escreverComentario(yyout, "Processo de relacao <=");
+			processa_relacao($1.isNum, $1.val, $3.isNum, $3.val,INSTR_REL_MENOR_IGUAL);
+			$$.fim = getLinhaAtual();
+			setLinhaAtual($$.fim + 2);
+			escreverComentario(yyout, "Fim de <=");
+		
+		}
+		|exp REL_DIF exp 
+		{
+			$$.inicio = getLinhaAtual();
+			escreverComentario(yyout, "Processo de relacao <>");
+			processa_relacao($1.isNum, $1.val, $3.isNum, $3.val,INSTR_REL_DIF);
+			$$.fim = getLinhaAtual();
+			setLinhaAtual($$.fim + 2);
+			escreverComentario(yyout, "Fim de <>");
+		}
 		|exp AND exp {;}
 		|exp OR exp {;}
 		|exp {;}

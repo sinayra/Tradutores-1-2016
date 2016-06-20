@@ -91,11 +91,23 @@ void montador(FILE *out, tipoInstr tipo, int valor, int reg){
 			emitRO(out, "SUB",ac,ac1,ac,"op - entre ac e ac1");
 			emitRM(out, "JLT",ac,4,pc,"a - b < 0 ? Se sim, pule para armazenar true");
 		break;
+		
+		case INSTR_REL_MENOR_IGUAL:
+			emitComment(out, "RELACAO: MENOR IGUAL");
+			emitRO(out, "SUB",ac,ac1,ac,"op - entre ac e ac1");
+			emitRM(out, "JLE",ac,4,pc,"a - b <= 0 ? Se sim, pule para armazenar true");
+		break;
 
 		case INSTR_REL_MAIOR:
 			emitComment(out, "RELACAO: MAIOR");
 			emitRO(out, "SUB",ac,ac1,ac,"op - entre ac e ac1");
 			emitRM(out, "JGT",ac,4,pc,"a - b > 0 ? Se sim, pule para armazenar true");
+		break;
+		
+		case INSTR_REL_MAIOR_IGUAL:
+			emitComment(out, "RELACAO: MAIOR IGUAL");
+			emitRO(out, "SUB", ac, ac1, ac, "op - entre ac e ac1");
+			emitRM(out, "JGE", ac, 4, pc, "a-b>=0 ? Se sim, pula para armazenar true");
 		break;
 
 		case INSTR_REL_IGUAL:
@@ -104,6 +116,12 @@ void montador(FILE *out, tipoInstr tipo, int valor, int reg){
 			emitRM(out, "JEQ",ac,4,pc,"a - b == 0 ? Se sim, pule para armazenar true");
 		break;
 
+		case INSTR_REL_DIF:
+			emitComment(out, "RELACAO: DIFERENTE");
+			emitRO(out, "SUB",ac,ac1,ac,"op - entre ac e ac1");
+			emitRM(out, "JNE",ac,4,pc,"a - b != 0 ? Se sim, pule para armazenar true");
+		break;
+		
 		case INSTR_STORE_REL:
 			emitComment(out, "STORE RESULTADO DA RELACAO");
 

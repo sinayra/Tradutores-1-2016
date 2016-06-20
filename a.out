@@ -14,7 +14,7 @@
   4:     IN  0,0,0 	* le valor para o registrador
   5:     ST  0,1(5) 	* armazena na memoria index o valor de reg
 
-*** Processo de relacao = ***
+*** Processo de relacao <> ***
 
 
 *** LOAD ***
@@ -38,10 +38,10 @@
  10:     LD  0,-1(6) 	* carrega posicao de memoria index em reg
  11:     LD  1,0(6) 	* passa valor do topo da pilha para ac1
 
-*** RELACAO: IGUAL ***
+*** RELACAO: DIFERENTE ***
 
  12:    SUB  0,1,0 	* op - entre ac e ac1
- 13:    JEQ  0,4(7) 	* a - b == 0 ? Se sim, pule para armazenar true
+ 13:    JNE  0,4(7) 	* a - b != 0 ? Se sim, pule para armazenar true
 
 *** STORE RESULTADO DA RELACAO ***
 
@@ -52,24 +52,32 @@
  18:    LDC  0,1(0) 	* true
  19:     ST  0,0(6) 	* armazena true no topo
 
-*** Fim de = ***
+*** Fim de <> ***
 
+
+*** LOAD ***
+
+ 22:     LD  0,1(5) 	* carrega posicao de memoria index em reg
 
 *** WRITE ***
 
- 22:     LD  0,1(5) 	* carrega posicao de memoria index em reg
- 23:    OUT  0,0,0 	* write ac
+ 23:     LD  0,1(5) 	* carrega posicao de memoria index em reg
+ 24:    OUT  0,0,0 	* write ac
 
 *** JUMP se o valor da relacao for false ***
 
  20:     LD  0,0(6) 	* 
- 21:    JEQ  0,2(7) 	* Pula para o else
+ 21:    JEQ  0,3(7) 	* Pula para o else
+
+*** LOAD ***
+
+ 25:     LD  0,2(5) 	* carrega posicao de memoria index em reg
 
 *** WRITE ***
 
- 24:     LD  0,2(5) 	* carrega posicao de memoria index em reg
- 25:    OUT  0,0,0 	* write ac
+ 26:     LD  0,2(5) 	* carrega posicao de memoria index em reg
+ 27:    OUT  0,0,0 	* write ac
 
 *** FIM ***
 
- 26:   HALT  0,0,0 	* 
+ 28:   HALT  0,0,0 	* 
