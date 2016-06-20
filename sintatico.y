@@ -64,9 +64,16 @@ int checa_elemento(char *nome);
 %token REL_MENOR
 %token REL_MAIOR
 %token REL_IGUAL
+%token REL_MENOR_IGUAL
+%token REL_MAIOR_IGUAL
+%token REL_DIF
 %token SOMA
 %token SUB
 %token MULT
+%token DIV
+%token AND
+%token OR
+%token NOT
 %token PAR_ABRE
 %token PAR_FECHA
 %token VIRGULA
@@ -74,7 +81,8 @@ int checa_elemento(char *nome);
 %token DOIS_PONTOS
 %token PONTO
 %left SOMA SUB
-%left MULT
+%left MULT DIV
+%left NOT
 
 %type<cadeia> ID TIPO
 %type<tipoExp> exp
@@ -288,6 +296,7 @@ exp:	NUM
 			}
 			
 		}
+		| NOT exp {;}
 		| exp SOMA exp		
 		{
 			escreverComentario(yyout, "Processo de adicao");
@@ -366,7 +375,8 @@ exp:	NUM
 			escreverComentario(yyout, "Fim de multiplicacao");
 			$$.arit = 1;
 		}
-		| PAR_ABRE exp PAR_FECHA	{;}
+		| exp DIV exp {;}
+		| PAR_ABRE rel PAR_FECHA	{;}
 		| ID PAR_ABRE PAR_FECHA				/*Para funções sem argumentos*/
 		{
 			if(checa_elemento($ID) == -1){
@@ -469,6 +479,12 @@ rel:	 exp REL_MENOR exp
 			setLinhaAtual($$.fim + 2); //+ duas instruções quando for dar jump
 			escreverComentario(yyout, "Fim de =");
 		}
+		|exp REL_MAIOR_IGUAL exp {;}
+		|exp REL_MENOR_IGUAL exp {;}
+		|exp REL_DIF exp {;}
+		|exp AND exp {;}
+		|exp OR exp {;}
+		|exp {;}
 ;
 
 argumentos_O:	ID 
@@ -479,7 +495,6 @@ argumentos_O:	ID
 						printf("ERRO Linha %d: %s nao declarado \n", yylineno, $ID);
 					}
 					else{
-						montador(yyout, INSTR_LOAD_MEMORIA, index, ac);
 						montador(yyout, INSTR_WRITE, index, ac);
 					}
 					
@@ -493,7 +508,6 @@ argumentos_O:	ID
 						printf("ERRO Linha %d: %s nao declarado \n", yylineno, $ID);
 					}
 					else{
-						montador(yyout, INSTR_LOAD_MEMORIA, index, ac);
 						montador(yyout, INSTR_WRITE, index, ac);
 					}
 					
@@ -509,8 +523,6 @@ argumentos_I:	ID
 					}
 					else{
 						montador(yyout, INSTR_READ, index, ac);
-						
-					
 					}
 				}
 				| argumentos_I VIRGULA ID  
