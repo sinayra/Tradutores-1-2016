@@ -24,3 +24,5 @@
 void emitRM(FILE *out, char * op, int r, int d, int s, char *c);
 void emitRO(FILE *out, char *op, int r, int s, int t, char *c);
 void emitComment(FILE *out, char * c );
+int getEmitLoc();
+void setEmitLoc(int i);

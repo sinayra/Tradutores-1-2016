@@ -6,7 +6,7 @@ var
 begin
 	read(a);
 	write(a);
-
+	
 	b := a + 2;
 	write(b);
 end.

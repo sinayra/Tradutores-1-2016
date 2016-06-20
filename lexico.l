@@ -17,6 +17,9 @@ PROCEDURE	("procedure")
 BLOCO_ABRE	("begin")
 BLOCO_FECHA ("end")
 WHILE 		("while")
+IF			("if")
+THEN		("then")
+ELSE		("else")
 DO 			("do")
 VAR			("var")
 TIPO		("integer"|"boolean"|"char")
@@ -26,7 +29,9 @@ BRANCO		(" "|"\t"|"\r"|"\n")
 SOMA		("+")
 SUB			("-")
 MULT		("*")
-RELACAO		("<"|">"|"=")
+REL_MENOR	("<")
+REL_MAIOR	(">")
+REL_IGUAL	("=")
 
 
 %%
@@ -38,6 +43,9 @@ RELACAO		("<"|">"|"=")
 {BLOCO_ABRE} 	{return BLOCO_ABRE;}
 {BLOCO_FECHA}	{return BLOCO_FECHA;}
 {WHILE}			{return WHILE;}
+{IF}			{return IF;}
+{THEN}			{return THEN;}
+{ELSE}			{return ELSE;}
 {DO}			{return DO;}
 {VAR}			{return VAR;}
 {TIPO}			{yylval.cadeia = (char *) strdup(yytext); return TIPO;}
@@ -52,7 +60,9 @@ RELACAO		("<"|">"|"=")
 (":")			{return DOIS_PONTOS;}
 (".")			{return PONTO;}
 
-{RELACAO} 		{return RELACAO;}
+{REL_MENOR} 		{return REL_MENOR;}
+{REL_MAIOR} 		{return REL_MAIOR;}
+{REL_IGUAL} 		{return REL_IGUAL;}
 {SOMA}	 		{return SOMA;}
 {SUB}	 		{return SUB;}
 {MULT}	 		{return MULT;}
