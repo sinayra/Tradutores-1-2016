@@ -20,7 +20,9 @@ void yyerror(const char *s);
 int linha_fim_estr, linha_fimif;
 int erro_semantico = 0;
 int busca_tabela(char *id);
+
 void verifica_tabela();
+void processa_relacao(int isNum1, int val1, int isNum2, int val2, tipoInstr tipo);
 int checa_elemento(char *nome);
 
 %}
@@ -415,28 +417,7 @@ rel:	 exp REL_MENOR exp
 		{
 			$$.inicio = getLinhaAtual();
 			escreverComentario(yyout, "*** Processo de relacao < ***");
-			if($1.isNum){
-				montador(yyout, INSTR_LOAD_CTE, $1.val, ac);
-				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
-			}
-			else{
-				montador(yyout, INSTR_LOAD_MEMORIA, $1.val, ac);
-				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
-			}
-
-			if($3.isNum){
-				montador(yyout, INSTR_LOAD_CTE, $3.val, ac);
-				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
-			}
-			else{
-				montador(yyout, INSTR_LOAD_MEMORIA, $3.val, ac);
-				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
-			}
-
-			montador(yyout, INSTR_TEMP_ACS, -1, -1);
-			montador(yyout, INSTR_REL_MENOR, -1, -1);	
-
-			montador(yyout, INSTR_STORE_REL, -1, -1);
+			processa_relacao($1.isNum, $1.val, $3.isNum, $3.val,INSTR_REL_MENOR);
 			$$.fim = getLinhaAtual();
 			setLinhaAtual($$.fim + 2); //+ duas instruções quando for dar jump
 
@@ -446,29 +427,7 @@ rel:	 exp REL_MENOR exp
 		{
 			$$.inicio = getLinhaAtual();
 			escreverComentario(yyout, "Processo de relacao >");
-			if($1.isNum){
-				montador(yyout, INSTR_LOAD_CTE, $1.val, ac);
-				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
-			}
-			else{
-				montador(yyout, INSTR_LOAD_MEMORIA, $1.val, ac);
-				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
-			}
-
-			if($3.isNum){
-				montador(yyout, INSTR_LOAD_CTE, $3.val, ac);
-				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
-			}
-			else{
-				montador(yyout, INSTR_LOAD_MEMORIA, $3.val, ac);
-				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
-			}
-
-
-			montador(yyout, INSTR_TEMP_ACS, -1, -1);
-			montador(yyout, INSTR_REL_MAIOR, -1, -1);	
-
-			montador(yyout, INSTR_STORE_REL, -1, -1);
+			processa_relacao($1.isNum, $1.val, $3.isNum, $3.val,INSTR_REL_MAIOR);
 			$$.fim = getLinhaAtual();
 			setLinhaAtual($$.fim + 2); //+ duas instruções quando for dar jump
 
@@ -478,28 +437,7 @@ rel:	 exp REL_MENOR exp
 		{
 			$$.inicio = getLinhaAtual();
 			escreverComentario(yyout, "Processo de relacao =");
-			if($1.isNum){
-				montador(yyout, INSTR_LOAD_CTE, $1.val, ac);
-				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
-			}
-			else{
-				montador(yyout, INSTR_LOAD_MEMORIA, $1.val, ac);
-				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
-			}
-
-			if($3.isNum){
-				montador(yyout, INSTR_LOAD_CTE, $3.val, ac);
-				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
-			}
-			else{
-				montador(yyout, INSTR_LOAD_MEMORIA, $3.val, ac);
-				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
-			}
-
-			montador(yyout, INSTR_TEMP_ACS, -1, -1);
-			montador(yyout, INSTR_REL_IGUAL, -1, -1);	
-
-			montador(yyout, INSTR_STORE_REL, -1, -1);
+			processa_relacao($1.isNum, $1.val, $3.isNum, $3.val,INSTR_REL_IGUAL);
 			$$.fim = getLinhaAtual();
 			setLinhaAtual($$.fim + 2); //+ duas instruções quando for dar jump
 			escreverComentario(yyout, "Fim de =");
@@ -570,6 +508,32 @@ argumentos_I:	ID
 
 
 %%
+
+void processa_relacao(int isNum1, int val1, int isNum2, int val2, tipoInstr tipo){
+		if(isNum1){
+			montador(yyout, INSTR_LOAD_CTE, val1, ac);
+			montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
+		}
+		else{
+			montador(yyout, INSTR_LOAD_MEMORIA, val1, ac);
+			montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
+		}
+
+		if(isNum2){
+			montador(yyout, INSTR_LOAD_CTE, val2, ac);
+			montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
+		}
+		else{
+			montador(yyout, INSTR_LOAD_MEMORIA, val2, ac);
+			montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
+		}
+		
+		montador(yyout, INSTR_TEMP_ACS, -1, -1);
+		montador(yyout, tipo, -1, -1);	
+
+		montador(yyout, INSTR_STORE_REL, -1, -1);
+
+}
 
 int checa_elemento(char *nome){
 	int index = existe_elemento(nome);

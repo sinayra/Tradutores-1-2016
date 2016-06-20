@@ -1,4 +1,4 @@
-program Exe12;
+program Exe21;
 
 var 
 	a, b: integer;
@@ -9,11 +9,7 @@ begin
 	
 	if a < 10 then
 	begin
-		if b < 20 then
-		begin
-			a := a + b;
-			write(b);
-		end
+		write(b);
 	end
 	else
 	begin
