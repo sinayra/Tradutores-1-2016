@@ -15,7 +15,7 @@ static int highEmitLoc = 0;
  */
 void emitComment(FILE *out, char * c ){ 
   if (TraceCode) 
-    fprintf(out,"\n************ %s ************\n\n",c);
+    fprintf(out,"\n*** %s ***\n\n",c);
 }
 
 /* Procedure emitRM emits a register-to-memory
@@ -57,3 +57,11 @@ void emitRO(FILE *out, char *op, int r, int s, int t, char *c){
   if (highEmitLoc < emitLoc) 
   	highEmitLoc = emitLoc;
 } /* emitRO */
+
+int getEmitLoc(){
+  return emitLoc;
+}
+
+void setEmitLoc(int i){
+  emitLoc = i;
+}

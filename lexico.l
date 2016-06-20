@@ -29,7 +29,9 @@ BRANCO		(" "|"\t"|"\r"|"\n")
 SOMA		("+")
 SUB			("-")
 MULT		("*")
-RELACAO		("<"|">"|"=")
+REL_MENOR	("<")
+REL_MAIOR	(">")
+REL_IGUAL	("=")
 
 
 %%
@@ -58,7 +60,9 @@ RELACAO		("<"|">"|"=")
 (":")			{return DOIS_PONTOS;}
 (".")			{return PONTO;}
 
-{RELACAO} 		{return RELACAO;}
+{REL_MENOR} 		{return REL_MENOR;}
+{REL_MAIOR} 		{return REL_MAIOR;}
+{REL_IGUAL} 		{return REL_IGUAL;}
 {SOMA}	 		{return SOMA;}
 {SUB}	 		{return SUB;}
 {MULT}	 		{return MULT;}

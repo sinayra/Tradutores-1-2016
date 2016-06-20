@@ -215,6 +215,7 @@ pip-log.txt
 .mr.developer.cfg
 
 gramatica/minipascal-master/
+
 sintatico.tab.c
 sintatico.tab.h
 lex.yy.c
