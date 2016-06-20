@@ -92,28 +92,28 @@
 
 ************ LOAD ************
 
- 28:     LD  0,1(5) 	* carrega posicao de memoria index em reg
+ 28:     LD  0,2(5) 	* carrega posicao de memoria index em reg
+
+************ WRITE ************
+
+ 29:     LD  0,2(5) 	* carrega posicao de memoria index em reg
+ 30:    OUT  0,0,0 	* write ac
+
+************ LOAD ************
+
+ 31:     LD  0,1(5) 	* carrega posicao de memoria index em reg
 
 ************ STORE ************
 
- 29:     ST  0,-3(6) 	* armazena na memoria index o valor de reg
+ 32:     ST  0,-3(6) 	* armazena na memoria index o valor de reg
 
 ************ LOAD ************
 
- 30:     LD  0,1(5) 	* carrega posicao de memoria index em reg
+ 33:     LD  0,1(5) 	* carrega posicao de memoria index em reg
 
 ************ WRITE ************
 
- 31:     LD  0,1(5) 	* carrega posicao de memoria index em reg
- 32:    OUT  0,0,0 	* write ac
-
-************ LOAD ************
-
- 33:     LD  0,2(5) 	* carrega posicao de memoria index em reg
-
-************ WRITE ************
-
- 34:     LD  0,2(5) 	* carrega posicao de memoria index em reg
+ 34:     LD  0,1(5) 	* carrega posicao de memoria index em reg
  35:    OUT  0,0,0 	* write ac
 
 ************ FIM ************
