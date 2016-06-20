@@ -17,6 +17,7 @@ int yylex();
 void yyerror(const char *s);
 
 //Funcoes do sintatico.y
+int linha_fim_estr, linha_fimif;
 int erro_semantico = 0;
 int busca_tabela(char *id);
 void verifica_tabela();
@@ -27,10 +28,17 @@ int checa_elemento(char *nome);
 %union {
 	char *cadeia;
 	int valor;
+
 	struct tipoExp{
 		int val;
 		int isNum;
+		int arit;
 	}tipoExp;
+
+	struct tipoRel{
+		int inicio;
+		int fim;
+	}tipoRel;
 }
 
 %nonassoc IF_CONFLICT	/*Estruturas para eliminar a ambiguidade do IF THEN ELSE*/
@@ -53,7 +61,9 @@ int checa_elemento(char *nome);
 %token NUM
 %token ID
 %token OP_ATRIB
-%token RELACAO
+%token REL_MENOR
+%token REL_MAIOR
+%token REL_IGUAL
 %token SOMA
 %token SUB
 %token MULT
@@ -68,7 +78,8 @@ int checa_elemento(char *nome);
 
 %type<cadeia> ID TIPO
 %type<tipoExp> exp
-%type<valor> NUM
+%type<tipoRel> rel
+%type<valor> NUM estrutura
 
 %%
 /* Regras definindo a GLC e acoes correspondentes */
@@ -95,28 +106,78 @@ bloco_principal:  variavel_declaracao_inicio funcao_declaracao_inicio BLOCO_ABRE
 componente:	estrutura {;}
 			|componente estrutura{;}
 ;
-estrutura: 	estrutura_simples PONTO_VIRGULA{;}
-			|estrutura_bloco {;}
+estrutura: 	estrutura_simples PONTO_VIRGULA {$$ = getLinhaAtual();}
+			|estrutura_bloco {$$ = getLinhaAtual();}
 ;
 estrutura_bloco: bloco_composto {;}
-				|WHILE rel DO estrutura	{;}
-				|IF rel THEN estrutura %prec IF_CONFLICT	{;}  /*Utilizada estrutura %prec e %nonassoc para eliminar o conflito shift/reduce */
-				|IF rel THEN estrutura ELSE estrutura	{;}
-;
+				|WHILE rel DO estrutura	
+				{
+					int linhaaux;
+					setLinhaAtual($rel.fim);
+
+					linhaaux = ($estrutura - 1 + 2) - ($rel.fim + 1); //(PC+4 + 2 intruções do jump de volta pro while) - 2 instruções de linha_rel
+					montador(yyout, INSTR_JUMP_REL_FALSE, linhaaux, -1);
+
+					setLinhaAtual($estrutura);
+					linhaaux = $rel.inicio - ($estrutura + 2); //+2 instruções pro jump no final
+					montador(yyout, INSTR_JUMP, linhaaux, -1);
+				}
+				|IF rel THEN estrutura %prec IF_CONFLICT
+				{
+					int linhaaux;
+					setLinhaAtual($rel.fim);
+
+					linhaaux = ($estrutura - 1) - ($rel.fim + 1); //(PC+4) - 2 instruções de linha_rel
+					montador(yyout, INSTR_JUMP_REL_FALSE, linhaaux, -1);
+
+					setLinhaAtual($estrutura);
+				}
+				|IF rel THEN estrutura ELSE 
+				{
+					setLinhaAtual($4 + 2); //mais duas instruções do jump
+				} 
+				estrutura 
+				{
+					int linhaaux, linhatual_aux;
+					linhatual_aux = getLinhaAtual();
+
+					setLinhaAtual($rel.fim);
+					linhaaux = ($4 - 1 + 2) - ($rel.fim + 1); //(PC-4 + 2 instruções de jump) - 2 instruções de linha_rel
+					montador(yyout, INSTR_JUMP_REL_FALSE, linhaaux, -1);
+
+					setLinhaAtual($4);
+
+					linhaaux = (linhatual_aux - 1) - $4; //(PC+4) - 2 instruções de linha_rel
+					montador(yyout, INSTR_JUMP, linhaaux, -1);
+
+					setLinhaAtual(linhatual_aux);
+				}
 
 bloco_composto:	BLOCO_ABRE componente BLOCO_FECHA {;}
 ;
 
 estrutura_simples:		ID OP_ATRIB exp			
 						{
+							escreverComentario(yyout, "Processo de atribuicao");
 							int index = checa_elemento($ID);
 							if(index < 0){
 								erro_semantico = 1;
 								printf("ERRO Linha %d: %s nao declarado \n", yylineno, $ID);
 							}
 							else{
+								if(!$exp.arit){
+									if($exp.isNum){
+										montador(yyout, INSTR_LOAD_CTE, $exp.val, ac);
+									}
+									else{
+										montador(yyout, INSTR_LOAD_MEMORIA, $exp.val, ac);
+										
+									}
+								}
+								montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
 								montador(yyout, INSTR_STORE_MEMORIA, index, ac);
 							}
+							escreverComentario(yyout, "Fim de adicao");
 							
 						}
 						| READ PAR_ABRE argumentos_I PAR_FECHA {;}
@@ -208,11 +269,10 @@ funcao_declaracao:	FUNCTION ID PAR_ABRE PAR_FECHA DOIS_PONTOS TIPO PONTO_VIRGULA
 ;
 exp:	NUM					
 		{
-			montador(yyout, INSTR_LOAD_CTE, $NUM, ac);
-			montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
 
 			$$.val = $NUM;
 			$$.isNum = 1;
+			$$.arit = 0;
 		}
 		| ID				
 		{
@@ -222,63 +282,221 @@ exp:	NUM
 				printf("ERRO Linha %d: %s nao declarado \n", yylineno, $ID);
 			}
 			else{
-				montador(yyout, INSTR_LOAD_MEMORIA, index, ac);
-				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
-
 				$$.val = index;
 				$$.isNum = 0;
+				$$.arit = 0;
 			}
 			
 		}
 		| exp SOMA exp		
 		{
+			escreverComentario(yyout, "Processo de adicao");
+			if($1.isNum){
+				montador(yyout, INSTR_LOAD_CTE, $1.val, ac);
+				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
+			}
+			else{
+				montador(yyout, INSTR_LOAD_MEMORIA, $1.val, ac);
+				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
+			}
+
+			if($3.isNum){
+				montador(yyout, INSTR_LOAD_CTE, $3.val, ac);
+				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
+			}
+			else{
+				montador(yyout, INSTR_LOAD_MEMORIA, $3.val, ac);
+				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
+			}
+
 			montador(yyout, INSTR_TEMP_ACS, -1, -1);
 			montador(yyout, INSTR_ADD, -1, -1);	
+			escreverComentario(yyout, "Fim de adicao");
+			$$.arit = 1;
 		}
-		| exp SUB exp		{;}
-		| exp MULT exp		{;}
+		| exp SUB exp		
+		{
+			escreverComentario(yyout, "Processo de subtracao");
+			if($1.isNum){
+				montador(yyout, INSTR_LOAD_CTE, $1.val, ac);
+				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
+			}
+			else{
+				montador(yyout, INSTR_LOAD_MEMORIA, $1.val, ac);
+				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
+			}
+
+			if($3.isNum){
+				montador(yyout, INSTR_LOAD_CTE, $3.val, ac);
+				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
+			}
+			else{
+				montador(yyout, INSTR_LOAD_MEMORIA, $3.val, ac);
+				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
+			}
+
+			montador(yyout, INSTR_TEMP_ACS, -1, -1);
+			montador(yyout, INSTR_SUB, -1, -1);	
+			escreverComentario(yyout, "Fim de subtracao");
+			$$.arit = 1;
+		}
+		| exp MULT exp		
+		{
+			escreverComentario(yyout, "Processo de multiplicacao");
+			if($1.isNum){
+				montador(yyout, INSTR_LOAD_CTE, $1.val, ac);
+				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
+			}
+			else{
+				montador(yyout, INSTR_LOAD_MEMORIA, $1.val, ac);
+				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
+			}
+
+			if($3.isNum){
+				montador(yyout, INSTR_LOAD_CTE, $3.val, ac);
+				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
+			}
+			else{
+				montador(yyout, INSTR_LOAD_MEMORIA, $3.val, ac);
+				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
+			}
+
+			montador(yyout, INSTR_TEMP_ACS, -1, -1);
+			montador(yyout, INSTR_MULT, -1, -1);	
+			escreverComentario(yyout, "Fim de multiplicacao");
+			$$.arit = 1;
+		}
 		| PAR_ABRE exp PAR_FECHA	{;}
 		| ID PAR_ABRE PAR_FECHA				/*Para funções sem argumentos*/
 		{
-			if(!checa_elemento($ID)){
+			if(checa_elemento($ID) == -1){
 				erro_semantico = 1;
 				printf("ERRO Linha %d: %s nao declarado \n", yylineno, $ID);
 			}
 			
 		}
 ;
-rel:	exp RELACAO exp	{;}
+rel:	 exp REL_MENOR exp	
+		{
+			$$.inicio = getLinhaAtual();
+			escreverComentario(yyout, "*** Processo de relacao < ***");
+			if($1.isNum){
+				montador(yyout, INSTR_LOAD_CTE, $1.val, ac);
+				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
+			}
+			else{
+				montador(yyout, INSTR_LOAD_MEMORIA, $1.val, ac);
+				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
+			}
+
+			if($3.isNum){
+				montador(yyout, INSTR_LOAD_CTE, $3.val, ac);
+				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
+			}
+			else{
+				montador(yyout, INSTR_LOAD_MEMORIA, $3.val, ac);
+				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
+			}
+
+			montador(yyout, INSTR_TEMP_ACS, -1, -1);
+			montador(yyout, INSTR_REL_MENOR, -1, -1);	
+
+			montador(yyout, INSTR_STORE_REL, -1, -1);
+			$$.fim = getLinhaAtual();
+			setLinhaAtual($$.fim + 2); //+ duas instruções quando for dar jump
+
+			escreverComentario(yyout, "Fim de <");
+		}
+		|exp REL_MAIOR exp
+		{
+			$$.inicio = getLinhaAtual();
+			escreverComentario(yyout, "Processo de relacao >");
+			if($1.isNum){
+				montador(yyout, INSTR_LOAD_CTE, $1.val, ac);
+				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
+			}
+			else{
+				montador(yyout, INSTR_LOAD_MEMORIA, $1.val, ac);
+				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
+			}
+
+			if($3.isNum){
+				montador(yyout, INSTR_LOAD_CTE, $3.val, ac);
+				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
+			}
+			else{
+				montador(yyout, INSTR_LOAD_MEMORIA, $3.val, ac);
+				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
+			}
+
+
+			montador(yyout, INSTR_TEMP_ACS, -1, -1);
+			montador(yyout, INSTR_REL_MAIOR, -1, -1);	
+
+			montador(yyout, INSTR_STORE_REL, -1, -1);
+			$$.fim = getLinhaAtual();
+			setLinhaAtual($$.fim + 2); //+ duas instruções quando for dar jump
+
+			escreverComentario(yyout, "Fim de >");
+		}
+		|exp REL_IGUAL exp
+		{
+			$$.inicio = getLinhaAtual();
+			escreverComentario(yyout, "Processo de relacao =");
+			if($1.isNum){
+				montador(yyout, INSTR_LOAD_CTE, $1.val, ac);
+				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
+			}
+			else{
+				montador(yyout, INSTR_LOAD_MEMORIA, $1.val, ac);
+				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
+			}
+
+			if($3.isNum){
+				montador(yyout, INSTR_LOAD_CTE, $3.val, ac);
+				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
+			}
+			else{
+				montador(yyout, INSTR_LOAD_MEMORIA, $3.val, ac);
+				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
+			}
+
+			montador(yyout, INSTR_TEMP_ACS, -1, -1);
+			montador(yyout, INSTR_REL_IGUAL, -1, -1);	
+
+			montador(yyout, INSTR_STORE_REL, -1, -1);
+			$$.fim = getLinhaAtual();
+			setLinhaAtual($$.fim + 2); //+ duas instruções quando for dar jump
+			escreverComentario(yyout, "Fim de =");
+		}
 ;
 
-argumentos_O:	exp 
+argumentos_O:	ID 
 				{	
-					if(!$exp.isNum){
-						int index = $exp.val;
-						if(index < 0){
-							erro_semantico = 1;
-							printf("ERRO Linha %d: %s nao declarado \n", yylineno, $exp);
-						}
-						else{
-							montador(yyout, INSTR_LOAD_MEMORIA, index, ac);
-							montador(yyout, INSTR_WRITE, index, ac);
-						}
+					int index = checa_elemento($ID);
+					if(index < 0){
+						erro_semantico = 1;
+						printf("ERRO Linha %d: %s nao declarado \n", yylineno, $ID);
 					}
+					else{
+						montador(yyout, INSTR_LOAD_MEMORIA, index, ac);
+						montador(yyout, INSTR_WRITE, index, ac);
+					}
+					
 
 				}
-				| argumentos_O VIRGULA exp
+				| argumentos_O VIRGULA ID
 				{	
-					if(!$exp.isNum){
-						int index = $exp.val;
-						if(index < 0){
-							erro_semantico = 1;
-							printf("ERRO Linha %d: %s nao declarado \n", yylineno, $exp);
-						}
-						else{
-							montador(yyout, INSTR_LOAD_MEMORIA, index, ac);
-							montador(yyout, INSTR_WRITE, index, ac);
-						}
+					int index = checa_elemento($ID);
+					if(index < 0){
+						erro_semantico = 1;
+						printf("ERRO Linha %d: %s nao declarado \n", yylineno, $ID);
 					}
-
+					else{
+						montador(yyout, INSTR_LOAD_MEMORIA, index, ac);
+						montador(yyout, INSTR_WRITE, index, ac);
+					}
+					
 				}
 ;
 
@@ -368,8 +586,6 @@ int main(int argc, char* argv[]){
 		
 		if(erro_semantico == 0)
 			printf("Programa semanticamente correto\n");
-		else
-			printf("semantic error\n");
 		
 		verifica_tabela();
 	}
@@ -381,5 +597,5 @@ int main(int argc, char* argv[]){
 
 void yyerror (const char *s){
 	extern FILE *yyout;
-	printf ("%s\n", s);
+	printf ("%s in line %d\n", s, yylineno);
 }
