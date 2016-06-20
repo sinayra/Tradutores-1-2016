@@ -15,6 +15,12 @@ begin
 			write(b);
 		end
 	end
+	else
+	begin
+		b := b + b;
+		write(b);
+	end
+
 
 	write(a);
 end.
