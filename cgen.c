@@ -18,19 +18,19 @@ void montador(FILE *out, tipoInstr tipo, int valor, int reg){
 
 		case INSTR_STORE_MEMORIA:
 			emitComment(out, "STORE" );
-			emitRM(out, "ST",reg,valor,gp,"carrega em gp");
+			emitRM(out, "ST",reg,valor,gp,"carrega endereco de memoria valor de gp em reg");
 			memOffset++;
 		break;
 
 		case INSTR_STORE_MEMORIA_TEMP:
 			emitComment(out, "STORE TEMPORARIO" );
-			emitRM(out, "ST",reg,memOffset,mp,"carrega em mp");
+			emitRM(out, "ST",reg,memOffset,mp,"carrega endereco de memoria valor de mp em reg");
 			memOffset--;
 		break;
 
 		case INSTR_LOAD_MEMORIA:
 			emitComment(out, "LOAD" );
-			emitRM(out, "LD",reg,valor,gp,"carrega posicao de memoria index em reg");
+			emitRM(out, "LD",reg,valor,gp,"carrega para reg o que tem no endereco de memoria valor que esta no gp");
 		break;
 
 		case INSTR_LOAD_CTE:
@@ -39,68 +39,67 @@ void montador(FILE *out, tipoInstr tipo, int valor, int reg){
 		break;
 
 		case INSTR_WRITE:
-			reg = ac;
 			emitComment(out, "WRITE");
-			emitRM(out, "LD",reg,valor,gp,"carrega posicao de memoria index em reg");
-			emitRO(out, "OUT",reg,0,0,"write ac");
+			emitRM(out, "LD",ac,valor,gp,"carrega em ac o que tem no endereco de memoria valor de gp");
+			emitRO(out, "OUT",ac,0,0,"write ac");
 		break;
 
 		case INSTR_TEMP_ACS:
 			emitComment(out, "PASSA VALOR PARA AC0 E AC1");
 
 			memOffset++;
-			emitRM(out, "LD",ac,memOffset,mp,"carrega posicao de memoria index em reg");
+			emitRM(out, "LD",ac,memOffset,mp,"carrega em ac o que tem no endereco de memoria valor de mp");
 			memOffset++;
-			emitRM(out, "LD",ac1,memOffset,mp,"passa valor do topo da pilha para ac1");
+			emitRM(out, "LD",ac1,memOffset,mp,"carrega em ac1 o que tem no endereco de memoria valor de mp");
 		break;
 		
 		case INSTR_READ:
 			emitComment(out, "READ");
 			emitRO(out, "IN", reg, 0, 0, "le valor para o registrador");
-			emitRM(out, "ST", reg, valor, gp, "armazena na memoria index o valor de reg");
+			emitRM(out, "ST", reg, valor, gp, "armazena valor de reg para endereco de memoria valor de gp");
 			
 			
 		break;
 
 		case INSTR_ADD:
 			emitComment(out, "ADICAO");
-			emitRO(out, "ADD",ac,ac1,ac,"op + entre ac e ac1");
-			emitRM(out, "ST",ac,memOffset,mp,"armazena valor da soma na memoria");
+			emitRO(out, "ADD",ac,ac1,ac,"ac = ac1 + ac");
+			emitRM(out, "ST",ac,memOffset,mp,"armazena valor da soma na memoria mp");
 		break;
 
 		case INSTR_SUB:
 			emitComment(out, "SUBTRACAO");
-			emitRO(out, "SUB",ac,ac1,ac,"op + entre ac e ac1");
-			emitRM(out, "ST",ac,memOffset,mp,"armazena valor da soma na memoria");
+			emitRO(out, "SUB",ac,ac1,ac,"ac = ac1 - ac");
+			emitRM(out, "ST",ac,memOffset,mp,"armazena valor da subtracao na memoria mp");
 		break;
 
 		case INSTR_MULT:
 			emitComment(out, "MULTIPLICACAO");
-			emitRO(out, "MUL",ac,ac1,ac,"op + entre ac e ac1");
-			emitRM(out, "ST",ac,memOffset,mp,"armazena valor da soma na memoria");
+			emitRO(out, "MUL",ac,ac1,ac,"ac = ac1 * ac");
+			emitRM(out, "ST",ac,memOffset,mp,"armazena valor da multiplicacao na memoria mp");
 		break;
 
 		case INSTR_DIV:
 			emitComment(out, "DIVISAO");
-			emitRO(out, "DIV",ac,ac1,ac,"op + entre ac e ac1");
-			emitRM(out, "ST",ac,memOffset,mp,"armazena valor da soma na memoria");
+			emitRO(out, "DIV",ac,ac1,ac,"ac = ac1 / ac");
+			emitRM(out, "ST",ac,memOffset,mp,"armazena valor da divisao na memoria mp");
 		break;
 
 		case INSTR_REL_MENOR:
 			emitComment(out, "RELACAO: MENOR");
-			emitRO(out, "SUB",ac,ac1,ac,"op - entre ac e ac1");
+			emitRO(out, "SUB",ac,ac1,ac,"");
 			emitRM(out, "JLT",ac,4,pc,"a - b < 0 ? Se sim, pule para armazenar true");
 		break;
 
 		case INSTR_REL_MAIOR:
 			emitComment(out, "RELACAO: MAIOR");
-			emitRO(out, "SUB",ac,ac1,ac,"op - entre ac e ac1");
+			emitRO(out, "SUB",ac,ac1,ac,"");
 			emitRM(out, "JGT",ac,4,pc,"a - b > 0 ? Se sim, pule para armazenar true");
 		break;
 
 		case INSTR_REL_IGUAL:
 			emitComment(out, "RELACAO: IGUAL");
-			emitRO(out, "SUB",ac,ac1,ac,"op - entre ac e ac1");
+			emitRO(out, "SUB",ac,ac1,ac,"");
 			emitRM(out, "JEQ",ac,4,pc,"a - b == 0 ? Se sim, pule para armazenar true");
 		break;
 
