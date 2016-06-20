@@ -7,51 +7,57 @@
 *** READ ***
 
   2:     IN  0,0,0 	* le valor para o registrador
-  3:     ST  0,2(5) 	* armazena na memoria index o valor de reg
+  3:     ST  0,1(5) 	* armazena na memoria index o valor de reg
 
+<<<<<<< HEAD
 *** READ ***
 
   4:     IN  0,0,0 	* le valor para o registrador
   5:     ST  0,1(5) 	* armazena na memoria index o valor de reg
 
 *** Processo de relacao <> ***
+=======
+*** Processo de divisao ***
+>>>>>>> 34f62a1febd0df6b1bc5b48e95e419ab80ad1aa3
 
 
 *** LOAD ***
 
-  6:     LD  0,2(5) 	* carrega posicao de memoria index em reg
+  4:     LD  0,1(5) 	* carrega posicao de memoria index em reg
 
 *** STORE TEMPORARIO ***
 
-  7:     ST  0,0(6) 	* carrega em mp
+  5:     ST  0,0(6) 	* carrega em mp
 
 *** LOAD CONSTANTE ***
 
-  8:    LDC  0,10(0) 	* carrega NUM em reg
+  6:    LDC  0,2(0) 	* carrega NUM em reg
 
 *** STORE TEMPORARIO ***
 
-  9:     ST  0,-1(6) 	* carrega em mp
+  7:     ST  0,-1(6) 	* carrega em mp
 
 *** PASSA VALOR PARA AC0 E AC1 ***
 
- 10:     LD  0,-1(6) 	* carrega posicao de memoria index em reg
- 11:     LD  1,0(6) 	* passa valor do topo da pilha para ac1
+  8:     LD  0,-1(6) 	* carrega posicao de memoria index em reg
+  9:     LD  1,0(6) 	* passa valor do topo da pilha para ac1
 
+<<<<<<< HEAD
 *** RELACAO: DIFERENTE ***
 
  12:    SUB  0,1,0 	* op - entre ac e ac1
  13:    JNE  0,4(7) 	* a - b != 0 ? Se sim, pule para armazenar true
+=======
+*** DIVISAO ***
 
-*** STORE RESULTADO DA RELACAO ***
+ 10:    DIV  0,1,0 	* op + entre ac e ac1
+ 11:     ST  0,0(6) 	* armazena valor da soma na memoria
+>>>>>>> 34f62a1febd0df6b1bc5b48e95e419ab80ad1aa3
 
- 14:    LDC  0,0(0) 	* false
- 15:     ST  0,0(6) 	* armazena false no topo
- 16:    LDC  0,0(0) 	* 
- 17:    JEQ  0,2(7) 	* Pula para o if
- 18:    LDC  0,1(0) 	* true
- 19:     ST  0,0(6) 	* armazena true no topo
+*** Fim de divisao ***
 
+
+<<<<<<< HEAD
 *** Fim de <> ***
 
 
@@ -63,9 +69,25 @@
 
  23:     LD  0,1(5) 	* carrega posicao de memoria index em reg
  24:    OUT  0,0,0 	* write ac
+=======
+*** Processo de atribuicao ***
 
-*** JUMP se o valor da relacao for false ***
 
+*** STORE TEMPORARIO ***
+
+ 12:     ST  0,0(6) 	* carrega em mp
+>>>>>>> 34f62a1febd0df6b1bc5b48e95e419ab80ad1aa3
+
+*** STORE ***
+
+ 13:     ST  0,1(5) 	* carrega em gp
+
+*** Fim de adicao ***
+
+
+*** LOAD ***
+
+<<<<<<< HEAD
  20:     LD  0,0(6) 	* 
  21:    JEQ  0,3(7) 	* Pula para o else
 
@@ -81,3 +103,15 @@
 *** FIM ***
 
  28:   HALT  0,0,0 	* 
+=======
+ 14:     LD  0,1(5) 	* carrega posicao de memoria index em reg
+
+*** WRITE ***
+
+ 15:     LD  0,1(5) 	* carrega posicao de memoria index em reg
+ 16:    OUT  0,0,0 	* write ac
+
+*** FIM ***
+
+ 17:   HALT  0,0,0 	* 
+>>>>>>> 34f62a1febd0df6b1bc5b48e95e419ab80ad1aa3
