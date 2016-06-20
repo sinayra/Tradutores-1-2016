@@ -377,7 +377,32 @@ exp:	NUM
 			escreverComentario(yyout, "Fim de multiplicacao");
 			$$.arit = 1;
 		}
-		| exp DIV exp {;}
+		| exp DIV exp 
+		{
+			escreverComentario(yyout, "Processo de divisao");
+			if($1.isNum){
+				montador(yyout, INSTR_LOAD_CTE, $1.val, ac);
+				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
+			}
+			else{
+				montador(yyout, INSTR_LOAD_MEMORIA, $1.val, ac);
+				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
+			}
+
+			if($3.isNum){
+				montador(yyout, INSTR_LOAD_CTE, $3.val, ac);
+				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
+			}
+			else{
+				montador(yyout, INSTR_LOAD_MEMORIA, $3.val, ac);
+				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
+			}
+
+			montador(yyout, INSTR_TEMP_ACS, -1, -1);
+			montador(yyout, INSTR_DIV, -1, -1);	
+			escreverComentario(yyout, "Fim de divisao");
+			$$.arit = 1;
+		}
 		| PAR_ABRE rel PAR_FECHA	{;}
 		| ID PAR_ABRE PAR_FECHA				/*Para funções sem argumentos*/
 		{
@@ -433,6 +458,7 @@ argumentos_O:	ID
 						printf("ERRO Linha %d: %s nao declarado \n", yylineno, $ID);
 					}
 					else{
+						montador(yyout, INSTR_LOAD_MEMORIA, index, ac);
 						montador(yyout, INSTR_WRITE, index, ac);
 					}
 					
@@ -446,6 +472,7 @@ argumentos_O:	ID
 						printf("ERRO Linha %d: %s nao declarado \n", yylineno, $ID);
 					}
 					else{
+						montador(yyout, INSTR_LOAD_MEMORIA, index, ac);
 						montador(yyout, INSTR_WRITE, index, ac);
 					}
 					

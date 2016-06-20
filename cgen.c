@@ -80,6 +80,12 @@ void montador(FILE *out, tipoInstr tipo, int valor, int reg){
 			emitRM(out, "ST",ac,memOffset,mp,"armazena valor da soma na memoria");
 		break;
 
+		case INSTR_DIV:
+			emitComment(out, "DIVISAO");
+			emitRO(out, "DIV",ac,ac1,ac,"op + entre ac e ac1");
+			emitRM(out, "ST",ac,memOffset,mp,"armazena valor da soma na memoria");
+		break;
+
 		case INSTR_REL_MENOR:
 			emitComment(out, "RELACAO: MENOR");
 			emitRO(out, "SUB",ac,ac1,ac,"op - entre ac e ac1");
