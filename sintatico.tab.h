@@ -64,16 +64,25 @@ extern int yydebug;
      NUM = 273,
      ID = 274,
      OP_ATRIB = 275,
-     RELACAO = 276,
-     SOMA = 277,
-     SUB = 278,
-     MULT = 279,
-     PAR_ABRE = 280,
-     PAR_FECHA = 281,
-     VIRGULA = 282,
-     PONTO_VIRGULA = 283,
-     DOIS_PONTOS = 284,
-     PONTO = 285
+     REL_MENOR = 276,
+     REL_MAIOR = 277,
+     REL_IGUAL = 278,
+     REL_MENOR_IGUAL = 279,
+     REL_MAIOR_IGUAL = 280,
+     REL_DIF = 281,
+     SOMA = 282,
+     SUB = 283,
+     MULT = 284,
+     DIV = 285,
+     AND = 286,
+     OR = 287,
+     NOT = 288,
+     PAR_ABRE = 289,
+     PAR_FECHA = 290,
+     VIRGULA = 291,
+     PONTO_VIRGULA = 292,
+     DOIS_PONTOS = 293,
+     PONTO = 294
    };
 #endif
 
@@ -82,18 +91,25 @@ extern int yydebug;
 typedef union YYSTYPE
 {
 /* Line 2058 of yacc.c  */
-#line 27 "sintatico.y"
+#line 30 "sintatico.y"
 
 	char *cadeia;
 	int valor;
+
 	struct tipoExp{
 		int val;
 		int isNum;
+		int arit;
 	}tipoExp;
+
+	struct tipoRel{
+		int inicio;
+		int fim;
+	}tipoRel;
 
 
 /* Line 2058 of yacc.c  */
-#line 97 "sintatico.tab.h"
+#line 113 "sintatico.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

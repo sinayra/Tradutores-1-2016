@@ -1,121 +1,75 @@
 
-************ INICIO ************
+*** INICIO ***
 
   0:     LD  6,0(0) 	* load maxaddress from location 0
   1:     ST  0,0(0) 	* clear location 0
 
-************ LOAD CONSTANTE ************
+*** READ ***
 
-  2:    LDC  0,3(0) 	* carrega NUM em reg
+  2:     IN  0,0,0 	* le valor para o registrador
+  3:     ST  0,2(5) 	* armazena na memoria index o valor de reg
 
-************ STORE ************
+*** READ ***
 
-  3:     ST  0,0(6) 	* armazena na memoria index o valor de reg
+  4:     IN  0,0,0 	* le valor para o registrador
+  5:     ST  0,1(5) 	* armazena na memoria index o valor de reg
 
-************ LOAD CONSTANTE ************
+*** Processo de relacao = ***
 
-  4:    LDC  0,2(0) 	* carrega NUM em reg
 
-************ STORE ************
+*** LOAD ***
 
-  5:     ST  0,-1(6) 	* armazena na memoria index o valor de reg
+  6:     LD  0,2(5) 	* carrega posicao de memoria index em reg
 
-************ PASSA VALOR PARA AC0 E AC1 ************
+*** STORE TEMPORARIO ***
 
-  6:     LD  0,-1(6) 	* carrega posicao de memoria index em reg
-  7:     LD  1,0(6) 	* passa valor do topo da pilha para ac1
+  7:     ST  0,0(6) 	* carrega em mp
 
-************ ADD ************
+*** LOAD CONSTANTE ***
 
-  8:    ADD  0,1,0 	* op + entre ac e ac1
-  9:     ST  0,0(6) 	* armazena valor da soma na memoria
+  8:    LDC  0,10(0) 	* carrega NUM em reg
 
-************ LOAD CONSTANTE ************
+*** STORE TEMPORARIO ***
 
- 10:    LDC  0,5(0) 	* carrega NUM em reg
+  9:     ST  0,-1(6) 	* carrega em mp
 
-************ STORE ************
+*** PASSA VALOR PARA AC0 E AC1 ***
 
- 11:     ST  0,-1(6) 	* armazena na memoria index o valor de reg
+ 10:     LD  0,-1(6) 	* carrega posicao de memoria index em reg
+ 11:     LD  1,0(6) 	* passa valor do topo da pilha para ac1
 
-************ PASSA VALOR PARA AC0 E AC1 ************
+*** RELACAO: IGUAL ***
 
- 12:     LD  0,-1(6) 	* carrega posicao de memoria index em reg
- 13:     LD  1,0(6) 	* passa valor do topo da pilha para ac1
+ 12:    SUB  0,1,0 	* op - entre ac e ac1
+ 13:    JEQ  0,4(7) 	* a - b == 0 ? Se sim, pule para armazenar true
 
-************ ADD ************
+*** STORE RESULTADO DA RELACAO ***
 
- 14:    ADD  0,1,0 	* op + entre ac e ac1
- 15:     ST  0,0(6) 	* armazena valor da soma na memoria
+ 14:    LDC  0,0(0) 	* false
+ 15:     ST  0,0(6) 	* armazena false no topo
+ 16:    LDC  0,0(0) 	* 
+ 17:    JEQ  0,2(7) 	* Pula para o if
+ 18:    LDC  0,1(0) 	* true
+ 19:     ST  0,0(6) 	* armazena true no topo
 
-************ STORE ************
+*** Fim de = ***
 
- 16:     ST  0,2(5) 	* armazena na memoria index o valor de reg
 
-************ LOAD CONSTANTE ************
+*** WRITE ***
 
- 17:    LDC  0,2(0) 	* carrega NUM em reg
+ 22:     LD  0,1(5) 	* carrega posicao de memoria index em reg
+ 23:    OUT  0,0,0 	* write ac
 
-************ STORE ************
+*** JUMP se o valor da relacao for false ***
 
- 18:     ST  0,-1(6) 	* armazena na memoria index o valor de reg
+ 20:     LD  0,0(6) 	* 
+ 21:    JEQ  0,2(7) 	* Pula para o else
 
-************ LOAD CONSTANTE ************
+*** WRITE ***
 
- 19:    LDC  0,5(0) 	* carrega NUM em reg
+ 24:     LD  0,2(5) 	* carrega posicao de memoria index em reg
+ 25:    OUT  0,0,0 	* write ac
 
-************ STORE ************
+*** FIM ***
 
- 20:     ST  0,-2(6) 	* armazena na memoria index o valor de reg
-
-************ PASSA VALOR PARA AC0 E AC1 ************
-
- 21:     LD  0,-2(6) 	* carrega posicao de memoria index em reg
- 22:     LD  1,-1(6) 	* passa valor do topo da pilha para ac1
-
-************ ADD ************
-
- 23:    ADD  0,1,0 	* op + entre ac e ac1
- 24:     ST  0,-1(6) 	* armazena valor da soma na memoria
-
-************ STORE ************
-
- 25:     ST  0,1(5) 	* armazena na memoria index o valor de reg
-
-************ LOAD ************
-
- 26:     LD  0,2(5) 	* carrega posicao de memoria index em reg
-
-************ STORE ************
-
- 27:     ST  0,-2(6) 	* armazena na memoria index o valor de reg
-
-************ LOAD ************
-
- 28:     LD  0,2(5) 	* carrega posicao de memoria index em reg
-
-************ WRITE ************
-
- 29:     LD  0,2(5) 	* carrega posicao de memoria index em reg
- 30:    OUT  0,0,0 	* write ac
-
-************ LOAD ************
-
- 31:     LD  0,1(5) 	* carrega posicao de memoria index em reg
-
-************ STORE ************
-
- 32:     ST  0,-3(6) 	* armazena na memoria index o valor de reg
-
-************ LOAD ************
-
- 33:     LD  0,1(5) 	* carrega posicao de memoria index em reg
-
-************ WRITE ************
-
- 34:     LD  0,1(5) 	* carrega posicao de memoria index em reg
- 35:    OUT  0,0,0 	* write ac
-
-************ FIM ************
-
- 36:   HALT  0,0,0 	* 
+ 26:   HALT  0,0,0 	* 
