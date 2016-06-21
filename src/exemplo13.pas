@@ -5,8 +5,8 @@ var
 
 begin
 	read(a);
-	write(a);
+	write(a + 3);
 	
 	b := a + 2;
-	write(b);
+	write(b, b + 4);
 end.

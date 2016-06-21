@@ -11,5 +11,5 @@ begin
 	if 1 < 2 then
 		a := -5;
 
-	write(a);
+	write(a, a * a);
 end.

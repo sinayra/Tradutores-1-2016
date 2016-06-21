@@ -4,114 +4,142 @@
   0:     LD  6,0(0) 	* load maxaddress from location 0
   1:     ST  0,0(0) 	* clear location 0
 
-*** READ ***
-
-  2:     IN  0,0,0 	* le valor para o registrador
-  3:     ST  0,1(5) 	* armazena na memoria index o valor de reg
-
-<<<<<<< HEAD
-*** READ ***
-
-  4:     IN  0,0,0 	* le valor para o registrador
-  5:     ST  0,1(5) 	* armazena na memoria index o valor de reg
-
-*** Processo de relacao <> ***
-=======
-*** Processo de divisao ***
->>>>>>> 34f62a1febd0df6b1bc5b48e95e419ab80ad1aa3
-
-
-*** LOAD ***
-
-  4:     LD  0,1(5) 	* carrega posicao de memoria index em reg
-
-*** STORE TEMPORARIO ***
-
-  5:     ST  0,0(6) 	* carrega em mp
-
-*** LOAD CONSTANTE ***
-
-  6:    LDC  0,2(0) 	* carrega NUM em reg
-
-*** STORE TEMPORARIO ***
-
-  7:     ST  0,-1(6) 	* carrega em mp
-
-*** PASSA VALOR PARA AC0 E AC1 ***
-
-  8:     LD  0,-1(6) 	* carrega posicao de memoria index em reg
-  9:     LD  1,0(6) 	* passa valor do topo da pilha para ac1
-
-<<<<<<< HEAD
-*** RELACAO: DIFERENTE ***
-
- 12:    SUB  0,1,0 	* op - entre ac e ac1
- 13:    JNE  0,4(7) 	* a - b != 0 ? Se sim, pule para armazenar true
-=======
-*** DIVISAO ***
-
- 10:    DIV  0,1,0 	* op + entre ac e ac1
- 11:     ST  0,0(6) 	* armazena valor da soma na memoria
->>>>>>> 34f62a1febd0df6b1bc5b48e95e419ab80ad1aa3
-
-*** Fim de divisao ***
-
-
-<<<<<<< HEAD
-*** Fim de <> ***
-
-
-*** LOAD ***
-
- 22:     LD  0,1(5) 	* carrega posicao de memoria index em reg
-
-*** WRITE ***
-
- 23:     LD  0,1(5) 	* carrega posicao de memoria index em reg
- 24:    OUT  0,0,0 	* write ac
-=======
 *** Processo de atribuicao ***
 
 
-*** STORE TEMPORARIO ***
+*** LOAD CONSTANTE ***
 
- 12:     ST  0,0(6) 	* carrega em mp
->>>>>>> 34f62a1febd0df6b1bc5b48e95e419ab80ad1aa3
+  2:    LDC  0,5(0) 	* carrega NUM em reg
 
 *** STORE ***
 
- 13:     ST  0,1(5) 	* carrega em gp
+  3:     ST  0,1(5) 	* carrega endereco de memoria valor de gp em reg
 
-*** Fim de adicao ***
+*** Fim de atribuicao ***
 
 
-*** LOAD ***
+*** Processo de atribuicao ***
 
-<<<<<<< HEAD
+
+*** LOAD CONSTANTE ***
+
+  4:    LDC  0,1(0) 	* carrega NUM em reg
+
+*** STORE ***
+
+  5:     ST  0,2(5) 	* carrega endereco de memoria valor de gp em reg
+
+*** Fim de atribuicao ***
+
+
+*** Processo de relacao < ***
+
+
+*** LOAD CONSTANTE ***
+
+  6:    LDC  0,1(0) 	* carrega NUM em reg
+
+*** STORE TEMPORARIO ***
+
+  7:     ST  0,0(6) 	* carrega endereco de memoria valor de mp em reg
+
+*** LOAD CONSTANTE ***
+
+  8:    LDC  0,2(0) 	* carrega NUM em reg
+
+*** STORE TEMPORARIO ***
+
+  9:     ST  0,-1(6) 	* carrega endereco de memoria valor de mp em reg
+
+*** PASSA VALOR PARA AC0 E AC1 ***
+
+ 10:     LD  0,-1(6) 	* carrega em ac o que tem no endereco de memoria valor de mp
+ 11:     LD  1,0(6) 	* carrega em ac1 o que tem no endereco de memoria valor de mp
+
+*** RELACAO: MENOR ***
+
+ 12:    SUB  0,1,0 	* 
+ 13:    JLT  0,4(7) 	* a - b < 0 ? Se sim, pule para armazenar true
+
+*** STORE RESULTADO DA RELACAO ***
+
+ 14:    LDC  0,0(0) 	* false
+ 15:     ST  0,0(6) 	* armazena false no topo
+ 16:    LDC  0,0(0) 	* 
+ 17:    JEQ  0,2(7) 	* Pula para o if
+ 18:    LDC  0,1(0) 	* true
+ 19:     ST  0,0(6) 	* armazena true no topo
+
+*** Fim de < ***
+
+
+*** Processo de atribuicao ***
+
+
+*** LOAD CONSTANTE ***
+
+ 22:    LDC  0,-5(0) 	* carrega NUM em reg
+
+*** STORE ***
+
+ 23:     ST  0,1(5) 	* carrega endereco de memoria valor de gp em reg
+
+*** Fim de atribuicao ***
+
+
+*** JUMP se o valor da relacao for false ***
+
  20:     LD  0,0(6) 	* 
- 21:    JEQ  0,3(7) 	* Pula para o else
+ 21:    JEQ  0,2(7) 	* Pula para o else
 
 *** LOAD ***
 
- 25:     LD  0,2(5) 	* carrega posicao de memoria index em reg
+ 24:     LD  0,1(5) 	* carrega para reg o que tem no endereco de memoria valor que esta no gp
 
 *** WRITE ***
 
- 26:     LD  0,2(5) 	* carrega posicao de memoria index em reg
- 27:    OUT  0,0,0 	* write ac
+ 25:    OUT  0,0,0 	* write ac
 
-*** FIM ***
+*** Processo de multiplicacao ***
 
- 28:   HALT  0,0,0 	* 
-=======
- 14:     LD  0,1(5) 	* carrega posicao de memoria index em reg
+
+*** LOAD ***
+
+ 26:     LD  0,1(5) 	* carrega para reg o que tem no endereco de memoria valor que esta no gp
+
+*** STORE TEMPORARIO ***
+
+ 27:     ST  0,0(6) 	* carrega endereco de memoria valor de mp em reg
+
+*** LOAD ***
+
+ 28:     LD  0,1(5) 	* carrega para reg o que tem no endereco de memoria valor que esta no gp
+
+*** STORE TEMPORARIO ***
+
+ 29:     ST  0,-1(6) 	* carrega endereco de memoria valor de mp em reg
+
+*** PASSA VALOR PARA AC0 E AC1 ***
+
+ 30:     LD  0,-1(6) 	* carrega em ac o que tem no endereco de memoria valor de mp
+ 31:     LD  1,0(6) 	* carrega em ac1 o que tem no endereco de memoria valor de mp
+
+*** MULTIPLICACAO ***
+
+ 32:    MUL  0,1,0 	* ac = ac1 * ac
+ 33:     ST  0,0(6) 	* armazena valor da multiplicacao na memoria mp
+
+*** Fim de multiplicacao ***
+
+
+*** LOAD O QUE ESTA NO TOPO DA PILHA DOS TEMPORARIOS ***
+
+ 34:     LD  0,0(6) 	* carrega para reg o que tem no endereco de memoria valor que esta no mp
 
 *** WRITE ***
 
- 15:     LD  0,1(5) 	* carrega posicao de memoria index em reg
- 16:    OUT  0,0,0 	* write ac
+ 35:    OUT  0,0,0 	* write ac
 
 *** FIM ***
 
- 17:   HALT  0,0,0 	* 
->>>>>>> 34f62a1febd0df6b1bc5b48e95e419ab80ad1aa3
+ 36:   HALT  0,0,0 	* 
