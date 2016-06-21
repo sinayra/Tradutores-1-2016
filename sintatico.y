@@ -159,7 +159,7 @@ estrutura_bloco: bloco_composto {;}
 
 					setLinhaAtual($4);
 
-					linhaaux = (linhatual_aux - 1) - $4; //(PC+4) - 2 instruções de linha_rel
+					linhaaux = (linhatual_aux - 2) - $4; //(PC+4) - 2 instruções de linha_rel
 					montador(yyout, INSTR_JUMP, linhaaux, -1);
 
 					setLinhaAtual(linhatual_aux);
@@ -186,7 +186,9 @@ estrutura_simples:		ID OP_ATRIB exp
 										
 									}
 								}
-								montador(yyout, INSTR_LOAD_MEMORIA_TEMP, -1, ac);
+								else
+									montador(yyout, INSTR_LOAD_MEMORIA_TEMP, -1, ac);
+
 								montador(yyout, INSTR_STORE_MEMORIA, index, ac);
 							}
 							escreverComentario(yyout, "Fim de atribuicao");
@@ -453,7 +455,7 @@ argumentos_O:	ID
 					}
 					else{
 						montador(yyout, INSTR_LOAD_MEMORIA, index, ac);
-						montador(yyout, INSTR_WRITE, index, ac);
+						montador(yyout, INSTR_WRITE, -1, -1);
 					}
 					
 
@@ -467,7 +469,7 @@ argumentos_O:	ID
 					}
 					else{
 						montador(yyout, INSTR_LOAD_MEMORIA, index, ac);
-						montador(yyout, INSTR_WRITE, index, ac);
+						montador(yyout, INSTR_WRITE, -1, -1);
 					}
 					
 				}

@@ -5,10 +5,9 @@ void montador(FILE *out, tipoInstr tipo, int valor, int reg){
 
 	switch(tipo){
 		case INSTR_INICIO:
-			reg = ac;
 			emitComment(out, "INICIO" );
-			emitRM(out, "LD",mp,0,reg,"load maxaddress from location 0");
-			emitRM(out, "ST",reg,0,reg,"clear location 0");
+			emitRM(out, "LD",mp,0,ac,"load maxaddress from location 0");
+			emitRM(out, "ST",reg,0,ac,"clear location 0");
 		break;
 
 		case INSTR_FIM:
@@ -19,7 +18,6 @@ void montador(FILE *out, tipoInstr tipo, int valor, int reg){
 		case INSTR_STORE_MEMORIA:
 			emitComment(out, "STORE" );
 			emitRM(out, "ST",reg,valor,gp,"carrega endereco de memoria valor de gp em reg");
-			memOffset++;
 		break;
 
 		case INSTR_STORE_MEMORIA_TEMP:
@@ -46,7 +44,6 @@ void montador(FILE *out, tipoInstr tipo, int valor, int reg){
 
 		case INSTR_WRITE:
 			emitComment(out, "WRITE");
-			emitRM(out, "LD",ac,valor,gp,"carrega em ac o que tem no endereco de memoria valor de gp");
 			emitRO(out, "OUT",ac,0,0,"write ac");
 		break;
 
@@ -154,7 +151,7 @@ void montador(FILE *out, tipoInstr tipo, int valor, int reg){
 		case INSTR_JUMP:
 			emitComment(out, "JUMP");
 			emitRM(out, "LDC",ac,0,0,"");
-			emitRM(out, "JEQ",ac,valor,pc,"Pula incondicionalmente");
+			emitRM(out, "JEQ",ac,valor,pc,"Pula incondicionalmente para pc+valor");
 		break;
 
 		default:

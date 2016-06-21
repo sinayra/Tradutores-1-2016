@@ -1,22 +1,15 @@
-program Exe21;
+program Exe12;
 
 var 
 	a, b: integer;
 
 begin
-	a := 5;
-	b := 10;
+	read(a, b);
 	
 	if a < 10 then
-	begin
 		write(b);
-	end
 	else
-	begin
-		b := b + b;
-		write(b);
-	end
-
+		a := b + b;
 
 	write(a);
 end.
