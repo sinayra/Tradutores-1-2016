@@ -1,11 +1,18 @@
 program Exe20;
 
 var 
-	a: integer;
+	a, b: integer; (*eita que botei comentarios aqui*)
 begin
-	read(a);
+	read(a, b);
 
-	a := a div 2;
+	(*a = 1*)
+	(*5*)
+	(*b = 6*)
+	(*3*)
+	(*5 + 3 = 8*)
+	(*8 - 2 = 6*)
+	(*a = 6*)
+	a := a * 5 + b div 2 - 2;
 
 	write(a);
 end.

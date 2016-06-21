@@ -38,6 +38,12 @@ void montador(FILE *out, tipoInstr tipo, int valor, int reg){
 			emitRM(out, "LDC",reg,valor,0,"carrega NUM em reg");
 		break;
 
+		case INSTR_LOAD_MEMORIA_TEMP:
+			emitComment(out, "LOAD O QUE ESTA NO TOPO DA PILHA DOS TEMPORARIOS" );
+			memOffset++;
+			emitRM(out, "LD",reg,memOffset,mp,"carrega para reg o que tem no endereco de memoria valor que esta no mp");
+		break;
+
 		case INSTR_WRITE:
 			emitComment(out, "WRITE");
 			emitRM(out, "LD",ac,valor,gp,"carrega em ac o que tem no endereco de memoria valor de gp");
@@ -57,32 +63,34 @@ void montador(FILE *out, tipoInstr tipo, int valor, int reg){
 			emitComment(out, "READ");
 			emitRO(out, "IN", reg, 0, 0, "le valor para o registrador");
 			emitRM(out, "ST", reg, valor, gp, "armazena valor de reg para endereco de memoria valor de gp");
-			
-			
 		break;
 
 		case INSTR_ADD:
 			emitComment(out, "ADICAO");
 			emitRO(out, "ADD",ac,ac1,ac,"ac = ac1 + ac");
 			emitRM(out, "ST",ac,memOffset,mp,"armazena valor da soma na memoria mp");
+			memOffset--;
 		break;
 
 		case INSTR_SUB:
 			emitComment(out, "SUBTRACAO");
 			emitRO(out, "SUB",ac,ac1,ac,"ac = ac1 - ac");
 			emitRM(out, "ST",ac,memOffset,mp,"armazena valor da subtracao na memoria mp");
+			memOffset--;
 		break;
 
 		case INSTR_MULT:
 			emitComment(out, "MULTIPLICACAO");
 			emitRO(out, "MUL",ac,ac1,ac,"ac = ac1 * ac");
 			emitRM(out, "ST",ac,memOffset,mp,"armazena valor da multiplicacao na memoria mp");
+			memOffset--;
 		break;
 
 		case INSTR_DIV:
 			emitComment(out, "DIVISAO");
 			emitRO(out, "DIV",ac,ac1,ac,"ac = ac1 / ac");
 			emitRM(out, "ST",ac,memOffset,mp,"armazena valor da divisao na memoria mp");
+			memOffset--;
 		break;
 
 		case INSTR_REL_MENOR:

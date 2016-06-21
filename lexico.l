@@ -8,6 +8,7 @@ extern char *strdup(const char *s);
 %}
 
 %option yylineno
+%x PAS_COMMENT
 
 PROGRAM		("program")
 WRITE		("write")
@@ -85,6 +86,9 @@ REL_DIF			("<>")
 .				{return yytext[0];}
 
 
+"(*"            { BEGIN(PAS_COMMENT); }
+<PAS_COMMENT>"*)" { BEGIN(INITIAL); }
+<PAS_COMMENT>.    { }
 %%
 int yywrap() {
  return 1;
