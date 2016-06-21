@@ -99,7 +99,6 @@ int checa_elemento(char *nome);
 
 programa:	PROGRAM ID PONTO_VIRGULA 
 			{
-				
 				TS temp;
 				strcpy(temp.cadeia, $ID);
 				temp.tipo = TIPO_INDEFINIDO;

@@ -90,6 +90,7 @@ REL_DIF			("<>")
 <PAS_COMMENT>"*)" { BEGIN(INITIAL); }
 <PAS_COMMENT>.    { }
 %%
+
 int yywrap() {
  return 1;
 }
