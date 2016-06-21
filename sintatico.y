@@ -25,6 +25,7 @@ int busca_tabela(char *id);
 void verifica_tabela();
 void processa_operacao(int isNum1, int val1, int arit1, int isNum2, int val2, int arit2, tipoInstr tipo);
 int checa_elemento(char *nome);
+int checa_tipo(TS var, int isNum, int isBool);
 
 %}
 
@@ -35,13 +36,15 @@ int checa_elemento(char *nome);
 	struct tipoExp{
 		int val;
 		int isNum;
-		int arit;
+		int isArit;
+		int isBool;
 	}tipoExp;
 
 	struct tipoRel{
 		int inicio;
 		int fim;
-		int arit;
+		int isArit;
+		int isBool;
 	}tipoRel;
 }
 
@@ -55,6 +58,8 @@ int checa_elemento(char *nome);
 %token WRITE
 %token BLOCO_ABRE
 %token BLOCO_FECHA
+%token TRUE
+%token FALSE
 %token WHILE
 %token IF
 %token THEN
@@ -91,7 +96,7 @@ int checa_elemento(char *nome);
 %type<cadeia> ID TIPO
 %type<tipoExp> exp
 %type<tipoRel> rel
-%type<valor> NUM estrutura
+%type<valor> NUM TRUE FALSE estrutura
 
 %%
 /* Regras definindo a GLC e acoes correspondentes */
@@ -99,6 +104,7 @@ int checa_elemento(char *nome);
 
 programa:	PROGRAM ID PONTO_VIRGULA 
 			{
+				
 				TS temp;
 				strcpy(temp.cadeia, $ID);
 				temp.tipo = TIPO_INDEFINIDO;
@@ -171,24 +177,28 @@ estrutura_simples:		ID OP_ATRIB exp
 						{
 							escreverComentario(yyout, "Processo de atribuicao");
 							int index = checa_elemento($ID);
+
 							if(index < 0){
 								erro_semantico = 1;
 								printf("ERRO Linha %d: %s nao declarado \n", yylineno, $ID);
 							}
 							else{
-								if(!$exp.arit){
-									if($exp.isNum){
-										montador(yyout, INSTR_LOAD_CTE, $exp.val, ac);
+								int tipo = checa_tipo(buscar_elemento_indice(index), $exp.isNum, $exp.isBool);
+								if(tipo){
+									if(!$exp.isArit){
+										if($exp.isNum || $exp.isBool){
+											montador(yyout, INSTR_LOAD_CTE, $exp.val, ac);
+										}
+										else{
+											montador(yyout, INSTR_LOAD_MEMORIA, $exp.val, ac);
+											
+										}
 									}
-									else{
-										montador(yyout, INSTR_LOAD_MEMORIA, $exp.val, ac);
-										
-									}
-								}
-								else
-									montador(yyout, INSTR_LOAD_MEMORIA_TEMP, -1, ac);
+									else
+										montador(yyout, INSTR_LOAD_MEMORIA_TEMP, -1, ac);
 
-								montador(yyout, INSTR_STORE_MEMORIA, index, ac);
+									montador(yyout, INSTR_STORE_MEMORIA, index, ac);
+								}
 							}
 							escreverComentario(yyout, "Fim de atribuicao");
 							
@@ -282,10 +292,24 @@ funcao_declaracao:	FUNCTION ID PAR_ABRE PAR_FECHA DOIS_PONTOS TIPO PONTO_VIRGULA
 ;
 exp:	NUM					
 		{
-
 			$$.val = $NUM;
 			$$.isNum = 1;
-			$$.arit = 0;
+			$$.isArit = 0;
+			$$.isBool = 0;
+		}
+		|TRUE					
+		{
+			$$.val = $TRUE;
+			$$.isNum = 0;
+			$$.isArit = 0;
+			$$.isBool = 1;
+		}
+		|FALSE					
+		{
+			$$.val = $FALSE;
+			$$.isNum = 0;
+			$$.isArit = 0;
+			$$.isBool = 1;
 		}
 		| ID				
 		{
@@ -297,7 +321,8 @@ exp:	NUM
 			else{
 				$$.val = index;
 				$$.isNum = 0;
-				$$.arit = 0;
+				$$.isArit = 0;
+				$$.isBool = 0;
 			}
 			
 		}
@@ -306,41 +331,41 @@ exp:	NUM
 		{
 			escreverComentario(yyout, "Processo de adicao");
 
-			processa_operacao($1.isNum, $1.val, $1.arit, $3.isNum, $3.val, $3.arit,INSTR_ADD);
+			processa_operacao($1.isNum, $1.val, $1.isArit, $3.isNum, $3.val, $3.isArit,INSTR_ADD);
 
 			escreverComentario(yyout, "Fim de adicao");
-			$$.arit = 1;
+			$$.isArit = 1;
 		}
 		| exp SUB exp		
 		{
 			escreverComentario(yyout, "Processo de subtracao");
 			
-			processa_operacao($1.isNum, $1.val, $1.arit, $3.isNum, $3.val, $3.arit,INSTR_SUB);
+			processa_operacao($1.isNum, $1.val, $1.isArit, $3.isNum, $3.val, $3.isArit,INSTR_SUB);
 
 			escreverComentario(yyout, "Fim de subtracao");
-			$$.arit = 1;
+			$$.isArit = 1;
 		}
 		| exp MULT exp		
 		{
 			escreverComentario(yyout, "Processo de multiplicacao");
 			
-			processa_operacao($1.isNum, $1.val, $1.arit, $3.isNum, $3.val, $3.arit,INSTR_MULT);
+			processa_operacao($1.isNum, $1.val, $1.isArit, $3.isNum, $3.val, $3.isArit,INSTR_MULT);
 
 			escreverComentario(yyout, "Fim de multiplicacao");
-			$$.arit = 1;
+			$$.isArit = 1;
 		}
 		| exp DIV exp 
 		{
 			escreverComentario(yyout, "Processo de divisao");
 			
-			processa_operacao($1.isNum, $1.val, $1.arit, $3.isNum, $3.val, $3.arit,INSTR_DIV);
+			processa_operacao($1.isNum, $1.val, $1.isArit, $3.isNum, $3.val, $3.isArit,INSTR_DIV);
 
 			escreverComentario(yyout, "Fim de divisao");
-			$$.arit = 1;
+			$$.isArit = 1;
 		}
 		| PAR_ABRE rel PAR_FECHA	
 		{
-			$$.arit = $rel.arit; /*para passar para arvore sintática o valor de expressão se ela for aritmética*/
+			$$.isArit = $rel.isArit; /*para passar para arvore sintática o valor de expressão se ela for aritmética*/
 		}
 		| ID PAR_ABRE PAR_FECHA				/*Para funções sem argumentos*/
 		{
@@ -356,12 +381,13 @@ rel:	 exp REL_MENOR exp
 			escreverComentario(yyout, "Processo de relacao <");
 			$$.inicio = getLinhaAtual();
 
-			processa_operacao($1.isNum, $1.val, $1.arit, $3.isNum, $3.val, $3.arit,INSTR_REL_MENOR);
+			processa_operacao($1.isNum, $1.val, $1.isArit, $3.isNum, $3.val, $3.isArit,INSTR_REL_MENOR);
 			montador(yyout, INSTR_STORE_REL, -1, -1);
 
 			$$.fim = getLinhaAtual();
 			setLinhaAtual($$.fim + 2); //+ duas instruções quando for dar jump
-			$$.arit = 0;
+			$$.isArit = 0;
+			$$.isBool = 1;
 
 			escreverComentario(yyout, "Fim de <");
 		}
@@ -370,12 +396,13 @@ rel:	 exp REL_MENOR exp
 			escreverComentario(yyout, "Processo de relacao >");
 			$$.inicio = getLinhaAtual();
 
-			processa_operacao($1.isNum, $1.val, $1.arit, $3.isNum, $3.val, $3.arit,INSTR_REL_MAIOR);
+			processa_operacao($1.isNum, $1.val, $1.isArit, $3.isNum, $3.val, $3.isArit,INSTR_REL_MAIOR);
 			montador(yyout, INSTR_STORE_REL, -1, -1);
 			
 			$$.fim = getLinhaAtual();
 			setLinhaAtual($$.fim + 2); //+ duas instruções quando for dar jump
-			$$.arit = 0;
+			$$.isArit = 0;
+			$$.isBool = 1;
 
 			escreverComentario(yyout, "Fim de >");
 		}
@@ -384,12 +411,13 @@ rel:	 exp REL_MENOR exp
 			escreverComentario(yyout, "Processo de relacao =");
 			$$.inicio = getLinhaAtual();
 			
-			processa_operacao($1.isNum, $1.val, $1.arit, $3.isNum, $3.val, $3.arit,INSTR_REL_IGUAL);
+			processa_operacao($1.isNum, $1.val, $1.isArit, $3.isNum, $3.val, $3.isArit,INSTR_REL_IGUAL);
 			montador(yyout, INSTR_STORE_REL, -1, -1);
 
 			$$.fim = getLinhaAtual();
 			setLinhaAtual($$.fim + 2); //+ duas instruções quando for dar jump
-			$$.arit = 0;
+			$$.isArit = 0;
+			$$.isBool = 1;
 
 			escreverComentario(yyout, "Fim de =");
 		}
@@ -398,12 +426,13 @@ rel:	 exp REL_MENOR exp
 			escreverComentario(yyout, "Processo de relacao >=");
 			$$.inicio = getLinhaAtual();
 
-			processa_operacao($1.isNum, $1.val, $1.arit, $3.isNum, $3.val, $3.arit,INSTR_REL_MAIOR_IGUAL);
+			processa_operacao($1.isNum, $1.val, $1.isArit, $3.isNum, $3.val, $3.isArit,INSTR_REL_MAIOR_IGUAL);
 			montador(yyout, INSTR_STORE_REL, -1, -1);
 
 			$$.fim = getLinhaAtual();
 			setLinhaAtual($$.fim + 2);
-			$$.arit = 0;
+			$$.isArit = 0;
+			$$.isBool = 1;
 
 			escreverComentario(yyout, "Fim de >=");
 		
@@ -413,12 +442,13 @@ rel:	 exp REL_MENOR exp
 			escreverComentario(yyout, "Processo de relacao <=");
 			$$.inicio = getLinhaAtual();
 
-			processa_operacao($1.isNum, $1.val, $1.arit, $3.isNum, $3.val, $3.arit,INSTR_REL_MENOR_IGUAL);
+			processa_operacao($1.isNum, $1.val, $1.isArit, $3.isNum, $3.val, $3.isArit,INSTR_REL_MENOR_IGUAL);
 			montador(yyout, INSTR_STORE_REL, -1, -1);
 
 			$$.fim = getLinhaAtual();
 			setLinhaAtual($$.fim + 2);
-			$$.arit = 0;
+			$$.isArit = 0;
+			$$.isBool = 1;
 
 			escreverComentario(yyout, "Fim de <=");
 		
@@ -428,21 +458,19 @@ rel:	 exp REL_MENOR exp
 			escreverComentario(yyout, "Processo de relacao <>");
 			$$.inicio = getLinhaAtual();
 
-			processa_operacao($1.isNum, $1.val, $1.arit, $3.isNum, $3.val, $3.arit,INSTR_REL_DIF);
+			processa_operacao($1.isNum, $1.val, $1.isArit, $3.isNum, $3.val, $3.isArit, INSTR_REL_DIF);
 			montador(yyout, INSTR_STORE_REL, -1, -1);
 
 			$$.fim = getLinhaAtual();
 			setLinhaAtual($$.fim + 2);
-			$$.arit = 0;
+			$$.isArit = 0;
+			$$.isBool = 1;
 
 			escreverComentario(yyout, "Fim de <>");
 		}
 		|exp AND exp {;}
 		|exp OR exp {;}
-		|exp 
-		{	
-			$$.arit = $exp.arit;
-		}
+		|exp {;}
 ;
 
 argumentos_O:	ID 
@@ -504,9 +532,9 @@ argumentos_I:	ID
 
 %%
 
-void processa_operacao(int isNum1, int val1, int arit1, int isNum2, int val2, int arit2, tipoInstr tipo){
-	if(!arit1){
-		if(isNum1){
+void processa_operacao(int flag_a, int val1, int inAc1, int flag_b, int val2, int inAc2, tipoInstr tipo){
+	if(!inAc1){
+		if(flag_a){
 			montador(yyout, INSTR_LOAD_CTE, val1, ac);
 			montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
 		}
@@ -516,8 +544,8 @@ void processa_operacao(int isNum1, int val1, int arit1, int isNum2, int val2, in
 		}
 	}
 
-	if(!arit2){
-		if(isNum2){
+	if(!inAc2){
+		if(flag_b){
 			montador(yyout, INSTR_LOAD_CTE, val2, ac);
 			montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
 		}
@@ -529,6 +557,30 @@ void processa_operacao(int isNum1, int val1, int arit1, int isNum2, int val2, in
 		
 	montador(yyout, INSTR_TEMP_ACS, -1, -1);
 	montador(yyout, tipo, -1, -1);	
+}
+
+int checa_tipo(TS var, int isNum, int isBool){
+	switch(var.tipo){
+		case(INTEGER):
+			if(!isNum){
+				erro_semantico = 1;
+				printf("ERRO Linha %d: Tipo incompativel. Esperado expressao de tipo integer \n", yylineno);
+				return 0;
+			}
+		break;
+		case(BOOLEAN):
+			if(!isBool){
+				erro_semantico = 1;
+				printf("ERRO Linha %d: Tipo incompativel. Esperado expressao de tipo boolean \n", yylineno);
+				return 0;
+			}
+		break;
+		default:
+			return 0;
+		break;
+	}
+
+	return 1;
 }
 
 int checa_elemento(char *nome){
