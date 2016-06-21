@@ -9,7 +9,11 @@ begin
 	if a > 10 then
 	begin
 		write(b);
+		if b < 10 then
+		begin
+			write(a);
+		end
 	end
+	
 
-	write(a);
 end.

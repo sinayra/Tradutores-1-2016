@@ -7,8 +7,8 @@ begin
 	begin
 		a := a + b;
 		read ( a, b, c ) ;
-		a := b
-	end;
+		a := b;
+	end
 
-	a := c
+	a := c;
 end.

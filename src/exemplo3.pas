@@ -6,7 +6,7 @@ var
 begin
 	read(b);
 
-	while a > 3.3 do
+	while a < 3.3 do
 		a := a + b;
 		
 	write(a);

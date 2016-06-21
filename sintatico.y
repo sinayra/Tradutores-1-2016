@@ -21,6 +21,10 @@ int linha_fim_estr, linha_fimif;
 int erro_semantico = 0;
 int busca_tabela(char *id);
 
+//Auxiliar para a geracao de codigo
+int pulou_linhas = 0;
+
+
 void verifica_tabela();
 void processa_relacao(int isNum1, int val1, int isNum2, int val2, tipoInstr tipo);
 int checa_elemento(char *nome);
@@ -35,6 +39,7 @@ int checa_elemento(char *nome);
 		int val;
 		int isNum;
 		int arit;
+		int inicio;
 	}tipoExp;
 
 	struct tipoRel{
@@ -116,12 +121,13 @@ bloco_principal:  variavel_declaracao_inicio funcao_declaracao_inicio BLOCO_ABRE
 componente:	estrutura {;}
 			|componente estrutura{;}
 ;
-estrutura: 	estrutura_simples PONTO_VIRGULA {$$ = getLinhaAtual();}
-			|estrutura_bloco {$$ = getLinhaAtual();}
+estrutura: 	estrutura_simples PONTO_VIRGULA {$$ = getLinhaAtual();pulou_linhas = 0;}
+			|estrutura_bloco {$$ = getLinhaAtual();pulou_linhas = 0;}
 ;
 estrutura_bloco: bloco_composto {;}
 				|WHILE rel DO estrutura	
 				{
+					pulou_linhas = 0;
 					int linhaaux;
 					setLinhaAtual($rel.fim);
 
@@ -134,6 +140,7 @@ estrutura_bloco: bloco_composto {;}
 				}
 				|IF rel THEN estrutura %prec IF_CONFLICT
 				{
+					pulou_linhas = 0;
 					int linhaaux;
 					setLinhaAtual($rel.fim);
 
@@ -144,10 +151,12 @@ estrutura_bloco: bloco_composto {;}
 				}
 				|IF rel THEN estrutura ELSE 
 				{
+					pulou_linhas = 0;
 					setLinhaAtual($4 + 2); //mais duas instruções do jump
 				} 
 				estrutura 
 				{
+					pulou_linhas = 0;
 					int linhaaux, linhatual_aux;
 					linhatual_aux = getLinhaAtual();
 
@@ -403,7 +412,7 @@ exp:	NUM
 			escreverComentario(yyout, "Fim de divisao");
 			$$.arit = 1;
 		}
-		| PAR_ABRE rel PAR_FECHA	{;}
+		| PAR_ABRE rel PAR_FECHA	{$$.inicio = getLinhaAtual();}
 		| ID PAR_ABRE PAR_FECHA				/*Para funções sem argumentos*/
 		{
 			if(checa_elemento($ID) == -1){
@@ -415,65 +424,134 @@ exp:	NUM
 ;
 rel:	 exp REL_MENOR exp	
 		{
+			if(pulou_linhas){
+				setLinhaAtual(getLinhaAtual() - 2);
+				pulou_linhas = 0;
+			}
 			$$.inicio = getLinhaAtual();
 			escreverComentario(yyout, "*** Processo de relacao < ***");
 			processa_relacao($1.isNum, $1.val, $3.isNum, $3.val,INSTR_REL_MENOR);
 			$$.fim = getLinhaAtual();
 			setLinhaAtual($$.fim + 2); //+ duas instruções quando for dar jump
+			pulou_linhas = 1;
 
 			escreverComentario(yyout, "Fim de <");
 		}
 		|exp REL_MAIOR exp
 		{
+			if(pulou_linhas){
+				setLinhaAtual(getLinhaAtual() - 2);
+				pulou_linhas = 0;
+			}
 			$$.inicio = getLinhaAtual();
 			escreverComentario(yyout, "Processo de relacao >");
 			processa_relacao($1.isNum, $1.val, $3.isNum, $3.val,INSTR_REL_MAIOR);
 			$$.fim = getLinhaAtual();
 			setLinhaAtual($$.fim + 2); //+ duas instruções quando for dar jump
+			pulou_linhas = 1;
 
 			escreverComentario(yyout, "Fim de >");
 		}
 		|exp REL_IGUAL exp
 		{
+			if(pulou_linhas){
+				setLinhaAtual(getLinhaAtual() - 2);
+				pulou_linhas = 0;
+			}
 			$$.inicio = getLinhaAtual();
 			escreverComentario(yyout, "Processo de relacao =");
 			processa_relacao($1.isNum, $1.val, $3.isNum, $3.val,INSTR_REL_IGUAL);
 			$$.fim = getLinhaAtual();
 			setLinhaAtual($$.fim + 2); //+ duas instruções quando for dar jump
+			pulou_linhas = 1;
 			escreverComentario(yyout, "Fim de =");
 		}
 		|exp REL_MAIOR_IGUAL exp 
 		{
+			if(pulou_linhas){
+				setLinhaAtual(getLinhaAtual() - 2);
+				pulou_linhas = 0;
+			}
 			$$.inicio = getLinhaAtual();
 			escreverComentario(yyout, "Processo de relacao >=");
 			processa_relacao($1.isNum, $1.val, $3.isNum, $3.val,INSTR_REL_MAIOR_IGUAL);
 			$$.fim = getLinhaAtual();
 			setLinhaAtual($$.fim + 2);
+			pulou_linhas = 1;
 			escreverComentario(yyout, "Fim de >=");
+			
 		
 		}
 		|exp REL_MENOR_IGUAL exp 
 		{
+			if(pulou_linhas){
+				setLinhaAtual(getLinhaAtual() - 2);
+				pulou_linhas = 0;
+			}
 			$$.inicio = getLinhaAtual();
 			escreverComentario(yyout, "Processo de relacao <=");
 			processa_relacao($1.isNum, $1.val, $3.isNum, $3.val,INSTR_REL_MENOR_IGUAL);
 			$$.fim = getLinhaAtual();
 			setLinhaAtual($$.fim + 2);
+			pulou_linhas = 1;
 			escreverComentario(yyout, "Fim de <=");
 		
 		}
 		|exp REL_DIF exp 
 		{
+			if(pulou_linhas){
+				setLinhaAtual(getLinhaAtual() - 2);
+				pulou_linhas = 0;
+			}
 			$$.inicio = getLinhaAtual();
 			escreverComentario(yyout, "Processo de relacao <>");
 			processa_relacao($1.isNum, $1.val, $3.isNum, $3.val,INSTR_REL_DIF);
 			$$.fim = getLinhaAtual();
 			setLinhaAtual($$.fim + 2);
+			pulou_linhas = 1;
 			escreverComentario(yyout, "Fim de <>");
 		}
-		|exp AND exp {;}
-		|exp OR exp {;}
-		|exp {;}
+		|exp AND exp 
+		{
+			if(pulou_linhas){
+				setLinhaAtual(getLinhaAtual() - 2);
+				pulou_linhas = 0;
+			}
+			$$.inicio = $1.inicio - 16;
+
+			escreverComentario(yyout, "Processo de relacao AND");
+			montador(yyout, INSTR_TEMP_ACS, -1, -1);
+			montador(yyout, INSTR_REL_AND, -1,-1);
+			montador(yyout, INSTR_STORE_REL, -1, -1);
+			
+			$$.fim = getLinhaAtual();
+			setLinhaAtual($$.fim + 2);
+			pulou_linhas = 1;
+			
+			escreverComentario(yyout, "Fim de AND");
+		
+		}
+		|exp OR exp 
+		{
+			if(pulou_linhas){
+				setLinhaAtual(getLinhaAtual() - 2);
+				pulou_linhas = 0;
+			}
+			$$.inicio = $1.inicio - 16;
+			escreverComentario(yyout, "Processo de relacao OR");
+			montador(yyout, INSTR_TEMP_ACS, -1, -1);
+			montador(yyout, INSTR_REL_OR, -1,-1);
+			montador(yyout, INSTR_STORE_REL, -1, -1);
+			
+			$$.fim = getLinhaAtual();
+			setLinhaAtual($$.fim + 2);
+			pulou_linhas = 1;
+			
+			escreverComentario(yyout, "Fim de OR");
+		
+		
+		}
+		|exp {$$.inicio = getLinhaAtual();}
 ;
 
 argumentos_O:	ID 

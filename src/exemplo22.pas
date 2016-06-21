@@ -6,10 +6,16 @@ var
 begin
 	read(a,b);
 	
-	if a > 10 then
+	if a <= 10 then
 	begin
 		write(b);
 	end
+	else
+	begin
+		b := b + b;
+		write(b);
+	end
+
 
 	write(a);
 end.
