@@ -543,7 +543,7 @@ static const yytype_uint16 yyrline[] =
      221,   224,   225,   228,   241,   259,   260,   263,   264,   267,
      266,   280,   279,   293,   300,   307,   314,   329,   330,   339,
      348,   357,   366,   370,   379,   394,   409,   424,   440,   456,
-     471,   472,   473,   476,   487,   500,   511
+     471,   472,   473,   476,   493,   512,   523
 };
 #endif
 
@@ -2075,34 +2075,46 @@ yyreduce:
 #line 477 "sintatico.y"
     {	
 					if((yyvsp[(1) - (1)].tipoExp).isArit){
-							montador(yyout, INSTR_LOAD_MEMORIA_TEMP, (yyvsp[(1) - (1)].tipoExp).val, ac);
+						montador(yyout, INSTR_LOAD_MEMORIA_TEMP, (yyvsp[(1) - (1)].tipoExp).val, ac);
+						montador(yyout, INSTR_WRITE, (yyvsp[(1) - (1)].tipoExp).val, ac);
+					}
+					else{
+						if((yyvsp[(1) - (1)].tipoExp).isNum){
+							montador(yyout, INSTR_LOAD_CTE, (yyvsp[(1) - (1)].tipoExp).val, ac);
 							montador(yyout, INSTR_WRITE, (yyvsp[(1) - (1)].tipoExp).val, ac);
 						}
-					else{
-						montador(yyout, INSTR_LOAD_MEMORIA, (yyvsp[(1) - (1)].tipoExp).val, ac);
-						montador(yyout, INSTR_WRITE, (yyvsp[(1) - (1)].tipoExp).val, ac);
+						else{
+							montador(yyout, INSTR_LOAD_MEMORIA, (yyvsp[(1) - (1)].tipoExp).val, ac);
+							montador(yyout, INSTR_WRITE, (yyvsp[(1) - (1)].tipoExp).val, ac);
+						}
 					}
 				}
     break;
 
   case 54:
 /* Line 1792 of yacc.c  */
-#line 488 "sintatico.y"
+#line 494 "sintatico.y"
     {
 					if((yyvsp[(3) - (3)].tipoExp).isArit){
 							montador(yyout, INSTR_LOAD_MEMORIA_TEMP, (yyvsp[(3) - (3)].tipoExp).val, ac);
 							montador(yyout, INSTR_WRITE, (yyvsp[(3) - (3)].tipoExp).val, ac);
 						}
 					else{
-						montador(yyout, INSTR_LOAD_MEMORIA, (yyvsp[(3) - (3)].tipoExp).val, ac);
-						montador(yyout, INSTR_WRITE, (yyvsp[(3) - (3)].tipoExp).val, ac);
+						if((yyvsp[(3) - (3)].tipoExp).isNum){
+							montador(yyout, INSTR_LOAD_CTE, (yyvsp[(3) - (3)].tipoExp).val, ac);
+							montador(yyout, INSTR_WRITE, (yyvsp[(3) - (3)].tipoExp).val, ac);
+						}
+						else{
+							montador(yyout, INSTR_LOAD_MEMORIA, (yyvsp[(3) - (3)].tipoExp).val, ac);
+							montador(yyout, INSTR_WRITE, (yyvsp[(3) - (3)].tipoExp).val, ac);
+						}
 					}
 				}
     break;
 
   case 55:
 /* Line 1792 of yacc.c  */
-#line 501 "sintatico.y"
+#line 513 "sintatico.y"
     {
 					int index = checa_elemento((yyvsp[(1) - (1)].cadeia));
 					if(index < 0){
@@ -2117,7 +2129,7 @@ yyreduce:
 
   case 56:
 /* Line 1792 of yacc.c  */
-#line 512 "sintatico.y"
+#line 524 "sintatico.y"
     {
 					
 					int index = checa_elemento((yyvsp[(3) - (3)].cadeia));
@@ -2134,7 +2146,7 @@ yyreduce:
 
 
 /* Line 1792 of yacc.c  */
-#line 2138 "sintatico.tab.c"
+#line 2150 "sintatico.tab.c"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2366,7 +2378,7 @@ yyreturn:
 
 
 /* Line 2055 of yacc.c  */
-#line 528 "sintatico.y"
+#line 540 "sintatico.y"
 
 
 void processa_operacao(int flag_a, int val1, int inAc1, int flag_b, int val2, int inAc2, tipoInstr tipo){

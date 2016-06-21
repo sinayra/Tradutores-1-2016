@@ -476,12 +476,18 @@ rel:	 exp REL_MENOR exp
 argumentos_O:	exp 
 				{	
 					if($exp.isArit){
-							montador(yyout, INSTR_LOAD_MEMORIA_TEMP, $exp.val, ac);
+						montador(yyout, INSTR_LOAD_MEMORIA_TEMP, $exp.val, ac);
+						montador(yyout, INSTR_WRITE, $exp.val, ac);
+					}
+					else{
+						if($exp.isNum){
+							montador(yyout, INSTR_LOAD_CTE, $exp.val, ac);
 							montador(yyout, INSTR_WRITE, $exp.val, ac);
 						}
-					else{
-						montador(yyout, INSTR_LOAD_MEMORIA, $exp.val, ac);
-						montador(yyout, INSTR_WRITE, $exp.val, ac);
+						else{
+							montador(yyout, INSTR_LOAD_MEMORIA, $exp.val, ac);
+							montador(yyout, INSTR_WRITE, $exp.val, ac);
+						}
 					}
 				}
 				| argumentos_O VIRGULA exp
@@ -491,8 +497,14 @@ argumentos_O:	exp
 							montador(yyout, INSTR_WRITE, $exp.val, ac);
 						}
 					else{
-						montador(yyout, INSTR_LOAD_MEMORIA, $exp.val, ac);
-						montador(yyout, INSTR_WRITE, $exp.val, ac);
+						if($exp.isNum){
+							montador(yyout, INSTR_LOAD_CTE, $exp.val, ac);
+							montador(yyout, INSTR_WRITE, $exp.val, ac);
+						}
+						else{
+							montador(yyout, INSTR_LOAD_MEMORIA, $exp.val, ac);
+							montador(yyout, INSTR_WRITE, $exp.val, ac);
+						}
 					}
 				}
 ;

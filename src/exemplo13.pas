@@ -8,5 +8,5 @@ begin
 	write(a + 3);
 	
 	b := a + 2;
-	write(b, b + 4);
+	write(b, b + 4, 9);
 end.
