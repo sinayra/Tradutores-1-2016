@@ -1,6 +1,7 @@
 program Exe23;
 
 var 
+<<<<<<< HEAD
 	a, b: integer;
 
 begin
@@ -12,4 +13,17 @@ begin
 	end
 
 	
+=======
+	a: integer;
+	b: boolean;
+
+begin
+	a := 5;
+	b := true;
+
+	if 1 < 2 then
+		a := -5;
+
+	write(a);
+>>>>>>> 7bf89e855c7a1f1b084376c2f63af16d8940afa6
 end.

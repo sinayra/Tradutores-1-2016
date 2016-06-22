@@ -1,4 +1,4 @@
-program Exe15;
+program Exe17;
 
 var 
 	a, b, aux: integer;

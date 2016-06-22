@@ -1,4 +1,4 @@
-program Exe13;
+program Exe16;
 
 var 
 	a, b,c,d: integer;

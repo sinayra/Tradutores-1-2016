@@ -8,6 +8,7 @@ extern char *strdup(const char *s);
 %}
 
 %option yylineno
+%x PAS_COMMENT
 
 PROGRAM		("program")
 WRITE		("write")
@@ -16,6 +17,8 @@ FUNCTION	("function")
 PROCEDURE	("procedure")
 BLOCO_ABRE	("begin")
 BLOCO_FECHA ("end")
+TRUE 		("true")
+FALSE 		("false")
 WHILE 		("while")
 IF			("if")
 THEN		("then")
@@ -59,6 +62,8 @@ REL_DIF			("<>")
 {OR}	 		{return OR;}
 {AND}	 		{return AND;}
 {NOT}	 		{return NOT;}
+{TRUE}			{yylval.valor = 1; return TRUE;}
+{FALSE}			{yylval.valor = 0; return FALSE;}
 {TIPO}			{yylval.cadeia = (char *) strdup(yytext); return TIPO;}
 {ID}			{yylval.cadeia = (char *) strdup(yytext); return ID;}
 {NUM}			{yylval.valor = atoi(yytext); return NUM;}
@@ -85,7 +90,11 @@ REL_DIF			("<>")
 .				{return yytext[0];}
 
 
+"(*"            { BEGIN(PAS_COMMENT); }
+<PAS_COMMENT>"*)" { BEGIN(INITIAL); }
+<PAS_COMMENT>.    { }
 %%
+
 int yywrap() {
  return 1;
 }
