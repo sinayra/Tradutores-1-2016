@@ -29,7 +29,7 @@ int pulou_linhas = 0;
 void verifica_tabela();
 void processa_operacao(int isNum1, int val1, int arit1, int isNum2, int val2, int arit2, tipoInstr tipo);
 int checa_elemento(char *nome);
-int checa_tipo(TS var, int isNum, int isBool);
+int checa_tipo(TS var, int isNum, int isBool, int isArit);
 
 %}
 
@@ -196,7 +196,7 @@ estrutura_simples:		ID OP_ATRIB exp
 								printf("ERRO Linha %d: %s nao declarado \n", yylineno, $ID);
 							}
 							else{
-								int tipo = checa_tipo(buscar_elemento_indice(index), $exp.isNum, $exp.isBool);
+								int tipo = checa_tipo(buscar_elemento_indice(index), $exp.isNum, $exp.isBool, $exp.isArit);
 								if(tipo){
 									if(!$exp.isArit){
 										if($exp.isNum || $exp.isBool){
@@ -600,32 +600,39 @@ rel:	 exp REL_MENOR exp
 		|exp {$$.inicio = getLinhaAtual();}
 ;
 
-argumentos_O:	ID 
+argumentos_O:	exp 
 				{	
-					int index = checa_elemento($ID);
-					if(index < 0){
-						erro_semantico = 1;
-						printf("ERRO Linha %d: %s nao declarado \n", yylineno, $ID);
+					if($exp.isArit){
+						montador(yyout, INSTR_LOAD_MEMORIA_TEMP, $exp.val, ac);
+						montador(yyout, INSTR_WRITE, $exp.val, ac);
 					}
 					else{
-						montador(yyout, INSTR_LOAD_MEMORIA, index, ac);
-						montador(yyout, INSTR_WRITE, -1, -1);
+						if($exp.isNum){
+							montador(yyout, INSTR_LOAD_CTE, $exp.val, ac);
+							montador(yyout, INSTR_WRITE, $exp.val, ac);
+						}
+						else{
+							montador(yyout, INSTR_LOAD_MEMORIA, $exp.val, ac);
+							montador(yyout, INSTR_WRITE, $exp.val, ac);
+						}
 					}
-					
-
 				}
-				| argumentos_O VIRGULA ID
-				{	
-					int index = checa_elemento($ID);
-					if(index < 0){
-						erro_semantico = 1;
-						printf("ERRO Linha %d: %s nao declarado \n", yylineno, $ID);
-					}
+				| argumentos_O VIRGULA exp
+				{
+					if($exp.isArit){
+							montador(yyout, INSTR_LOAD_MEMORIA_TEMP, $exp.val, ac);
+							montador(yyout, INSTR_WRITE, $exp.val, ac);
+						}
 					else{
-						montador(yyout, INSTR_LOAD_MEMORIA, index, ac);
-						montador(yyout, INSTR_WRITE, -1, -1);
+						if($exp.isNum){
+							montador(yyout, INSTR_LOAD_CTE, $exp.val, ac);
+							montador(yyout, INSTR_WRITE, $exp.val, ac);
+						}
+						else{
+							montador(yyout, INSTR_LOAD_MEMORIA, $exp.val, ac);
+							montador(yyout, INSTR_WRITE, $exp.val, ac);
+						}
 					}
-					
 				}
 ;
 
@@ -686,10 +693,10 @@ void processa_operacao(int flag_a, int val1, int inAc1, int flag_b, int val2, in
 	montador(yyout, tipo, -1, -1);	
 }
 
-int checa_tipo(TS var, int isNum, int isBool){
+int checa_tipo(TS var, int isNum, int isBool, int isArit){
 	switch(var.tipo){
 		case(INTEGER):
-			if(!isNum){
+			if(!isNum && !isArit){
 				erro_semantico = 1;
 				printf("ERRO Linha %d: Tipo incompativel. Esperado expressao de tipo integer \n", yylineno);
 				return 0;

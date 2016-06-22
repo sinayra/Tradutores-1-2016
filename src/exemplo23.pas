@@ -24,6 +24,11 @@ begin
 	if 1 < 2 then
 		a := -5;
 
+<<<<<<< HEAD
 	write(a);
 >>>>>>> 7bf89e855c7a1f1b084376c2f63af16d8940afa6
+=======
+	write(a, a * a, 6);
+	write(2);
+>>>>>>> ca0bfd3741d6fa7a7cb4ab0b8a54722a89c11685
 end.
