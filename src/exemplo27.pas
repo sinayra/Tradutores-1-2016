@@ -1,4 +1,4 @@
-program Exe21;
+program Exe27;
 
 var 
 	a, b: integer;

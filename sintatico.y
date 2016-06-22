@@ -508,7 +508,6 @@ rel:	 exp REL_MENOR exp
 			setLinhaAtual($$.fim + 2);
 
 			pulou_linhas = 1;
-=======
 			$$.isArit = 0;
 			$$.isBool = 1;
 

@@ -18,18 +18,17 @@ void montador(FILE *out, tipoInstr tipo, int valor, int reg){
 		case INSTR_STORE_MEMORIA:
 			emitComment(out, "STORE" );
 			emitRM(out, "ST",reg,valor,gp,"carrega endereco de memoria valor de gp em reg");
-			memOffset++;
 		break;
 
 		case INSTR_STORE_MEMORIA_TEMP:
 			emitComment(out, "STORE TEMPORARIO" );
-			emitRM(out, "ST",reg,memOffset,mp,"carrega em mp");
+			emitRM(out, "ST",reg,memOffset,mp,"carrega endereco de memoria valor de mp em reg");
 			memOffset--;
 		break;
 
 		case INSTR_LOAD_MEMORIA:
 			emitComment(out, "LOAD" );
-			emitRM(out, "LD",reg,valor,gp,"carrega posicao de memoria index em reg");
+			emitRM(out, "LD",reg,valor,gp,"carrega para reg o que tem no endereco de memoria valor que esta no gp");
 		break;
 
 		case INSTR_LOAD_CTE:
@@ -44,9 +43,7 @@ void montador(FILE *out, tipoInstr tipo, int valor, int reg){
 		break;
 
 		case INSTR_WRITE:
-			reg = ac;
 			emitComment(out, "WRITE");
-			emitRM(out, "LD",reg,valor,gp,"carrega posicao de memoria index em reg");
 			emitRO(out, "OUT",ac,0,0,"write ac");
 		break;
 
@@ -54,9 +51,9 @@ void montador(FILE *out, tipoInstr tipo, int valor, int reg){
 			emitComment(out, "PASSA VALOR PARA AC0 E AC1");
 
 			memOffset++;
-			emitRM(out, "LD",ac,memOffset,mp,"carrega posicao de memoria index em reg");
+			emitRM(out, "LD",ac,memOffset,mp,"carrega em ac o que tem no endereco de memoria valor de mp");
 			memOffset++;
-			emitRM(out, "LD",ac1,memOffset,mp,"passa valor do topo da pilha para ac1");
+			emitRM(out, "LD",ac1,memOffset,mp,"carrega em ac1 o que tem no endereco de memoria valor de mp");
 		break;
 		
 		case INSTR_READ:
@@ -95,7 +92,7 @@ void montador(FILE *out, tipoInstr tipo, int valor, int reg){
 
 		case INSTR_REL_MENOR:
 			emitComment(out, "RELACAO: MENOR");
-			emitRO(out, "SUB",ac,ac1,ac,"op - entre ac e ac1");
+			emitRO(out, "SUB",ac,ac1,ac,"");
 			emitRM(out, "JLT",ac,4,pc,"a - b < 0 ? Se sim, pule para armazenar true");
 		break;
 		
@@ -107,7 +104,7 @@ void montador(FILE *out, tipoInstr tipo, int valor, int reg){
 
 		case INSTR_REL_MAIOR:
 			emitComment(out, "RELACAO: MAIOR");
-			emitRO(out, "SUB",ac,ac1,ac,"op - entre ac e ac1");
+			emitRO(out, "SUB",ac,ac1,ac,"");
 			emitRM(out, "JGT",ac,4,pc,"a - b > 0 ? Se sim, pule para armazenar true");
 		break;
 		
@@ -119,7 +116,7 @@ void montador(FILE *out, tipoInstr tipo, int valor, int reg){
 
 		case INSTR_REL_IGUAL:
 			emitComment(out, "RELACAO: IGUAL");
-			emitRO(out, "SUB",ac,ac1,ac,"op - entre ac e ac1");
+			emitRO(out, "SUB",ac,ac1,ac,"");
 			emitRM(out, "JEQ",ac,4,pc,"a - b == 0 ? Se sim, pule para armazenar true");
 		break;
 
@@ -128,7 +125,7 @@ void montador(FILE *out, tipoInstr tipo, int valor, int reg){
 			emitRO(out, "SUB",ac,ac1,ac,"op - entre ac e ac1");
 			emitRM(out, "JNE",ac,4,pc,"a - b != 0 ? Se sim, pule para armazenar true");
 		break;
-		
+
 		case INSTR_REL_AND:
 			emitComment(out, "OPERACAO LOGICA: AND");
 			emitRM(out, "JEQ", ac, 3, pc, "ac == 0? Se sim, avalia como falso");
