@@ -24,6 +24,7 @@ int busca_tabela(char *id);
 
 //Auxiliar para a geracao de codigo
 int pulou_linhas = 0;
+int not_op = 0;
 
 
 void verifica_tabela();
@@ -41,6 +42,7 @@ int checa_tipo(TS var, int isNum, int isBool, int isArit);
 		int val;
 		int isNum;
 		int inicio;
+		int fim;
 		int isArit;
 		int isBool;
 	}tipoExp;
@@ -150,6 +152,7 @@ estrutura_bloco: bloco_composto {;}
 					pulou_linhas = 0;
 					int linhaaux;
 					setLinhaAtual($rel.fim);
+					printf("estrutura: %d\t rel_fim: %d\n", $estrutura, $rel.fim);
 
 					linhaaux = ($estrutura - 1) - ($rel.fim + 1); //(PC+4) - 2 instruções de linha_rel
 					montador(yyout, INSTR_JUMP_REL_FALSE, linhaaux, -1);
@@ -335,7 +338,34 @@ exp:	NUM
 			}
 			
 		}
-		| NOT exp {;}
+		| NOT exp 
+		{
+			if(pulou_linhas){
+				setLinhaAtual(getLinhaAtual() - 2);
+				pulou_linhas = 0;
+			}
+			$$.inicio = getLinhaAtual();
+			if($2.isBool){
+				montador(yyout, INSTR_LOAD_CTE, $2.val, ac);
+			}
+			else{
+				if(!$2.isNum && !$2.isArit){
+					montador(yyout, INSTR_LOAD_MEMORIA, $2.val, ac);
+				}
+			}
+			montador(yyout, INSTR_LOAD_CTE, -1, ac1);
+			montador(yyout, INSTR_MULT, -1, -1);
+			montador(yyout, INSTR_LOAD_MEMORIA_TEMP, -1, ac);
+			montador(yyout, INSTR_LOAD_CTE, 1, ac1);
+			montador(yyout, INSTR_ADD, -1, -1);
+
+			escreverComentario(yyout, "Fim do processo de NOT");
+
+			pulou_linhas = 1;
+			$$.fim = getLinhaAtual(); 
+			setLinhaAtual($$.fim + 2);
+			$$.isBool = $2.isBool;
+		}
 		| exp SOMA exp		
 		{
 			escreverComentario(yyout, "Processo de adicao");
@@ -580,7 +610,36 @@ rel:	 exp REL_MENOR exp
 		
 		
 		}
-		|exp {$$.inicio = getLinhaAtual();}
+		|exp 
+		{
+			if($exp.isBool){
+				escreverComentario(yyout, "Inicio de exp");
+				if(pulou_linhas){
+					setLinhaAtual(getLinhaAtual() - 2);
+					pulou_linhas = 0;
+				}
+				$$.inicio = getLinhaAtual();
+				if(!$exp.isArit){
+					if($exp. isBool){
+						montador(yyout, INSTR_LOAD_CTE, $exp.val, ac);
+						montador(yyout, INSTR_STORE_MEMORIA_TEMP, $exp.val, ac);
+					}
+					else{
+						montador(yyout, INSTR_LOAD_MEMORIA, $exp.val, ac);
+						montador(yyout, INSTR_STORE_MEMORIA_TEMP, $exp.val, ac);
+					}
+				}
+				pulou_linhas = 1;
+				$$.fim = getLinhaAtual(); 
+				setLinhaAtual($$.fim + 2);
+				escreverComentario(yyout, "Fim de exp");
+				$$.isBool = $exp.isBool;
+			}
+			else{
+				$$.inicio = getLinhaAtual();
+				$$.isArit = $exp.isArit;
+			}
+		}
 ;
 
 argumentos_O:	exp 

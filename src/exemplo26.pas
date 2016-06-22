@@ -12,8 +12,13 @@ begin
 		write(b);
 		if b <> 16 then
 		begin
-			write(a);
+			write(a, a + 2, 9);
 		end
+	end
+	else
+	begin
+		b := 5;
+		write(b, b + 2, 9);
 	end
 	
 

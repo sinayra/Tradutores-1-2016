@@ -55,34 +55,36 @@ extern int yydebug;
      WRITE = 264,
      BLOCO_ABRE = 265,
      BLOCO_FECHA = 266,
-     WHILE = 267,
-     IF = 268,
-     THEN = 269,
-     DO = 270,
-     VAR = 271,
-     TIPO = 272,
-     NUM = 273,
-     ID = 274,
-     OP_ATRIB = 275,
-     REL_MENOR = 276,
-     REL_MAIOR = 277,
-     REL_IGUAL = 278,
-     REL_MENOR_IGUAL = 279,
-     REL_MAIOR_IGUAL = 280,
-     REL_DIF = 281,
-     SOMA = 282,
-     SUB = 283,
-     MULT = 284,
-     DIV = 285,
-     AND = 286,
-     OR = 287,
-     NOT = 288,
-     PAR_ABRE = 289,
-     PAR_FECHA = 290,
-     VIRGULA = 291,
-     PONTO_VIRGULA = 292,
-     DOIS_PONTOS = 293,
-     PONTO = 294
+     TRUE = 267,
+     FALSE = 268,
+     WHILE = 269,
+     IF = 270,
+     THEN = 271,
+     DO = 272,
+     VAR = 273,
+     TIPO = 274,
+     NUM = 275,
+     ID = 276,
+     OP_ATRIB = 277,
+     REL_MENOR = 278,
+     REL_MAIOR = 279,
+     REL_IGUAL = 280,
+     REL_MENOR_IGUAL = 281,
+     REL_MAIOR_IGUAL = 282,
+     REL_DIF = 283,
+     SOMA = 284,
+     SUB = 285,
+     MULT = 286,
+     DIV = 287,
+     AND = 288,
+     OR = 289,
+     NOT = 290,
+     PAR_ABRE = 291,
+     PAR_FECHA = 292,
+     VIRGULA = 293,
+     PONTO_VIRGULA = 294,
+     DOIS_PONTOS = 295,
+     PONTO = 296
    };
 #endif
 
@@ -91,7 +93,7 @@ extern int yydebug;
 typedef union YYSTYPE
 {
 /* Line 2058 of yacc.c  */
-#line 34 "sintatico.y"
+#line 37 "sintatico.y"
 
 	char *cadeia;
 	int valor;
@@ -99,18 +101,22 @@ typedef union YYSTYPE
 	struct tipoExp{
 		int val;
 		int isNum;
-		int arit;
 		int inicio;
+		int fim;
+		int isArit;
+		int isBool;
 	}tipoExp;
 
 	struct tipoRel{
 		int inicio;
 		int fim;
+		int isArit;
+		int isBool;
 	}tipoRel;
 
 
 /* Line 2058 of yacc.c  */
-#line 114 "sintatico.tab.h"
+#line 120 "sintatico.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
