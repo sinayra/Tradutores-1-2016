@@ -4,17 +4,12 @@ var
 	a, b: integer;
 
 begin
-	a := 5;
-	b := 10;
+	read(a, b);
 	
 	if a < 10 then
-	begin
-		if b < 20 then
-		begin
-			a := a + b;
-			write(b);
-		end
-	end
+		write(b);
+	else
+		a := b + b;
 
 	write(a);
 end.

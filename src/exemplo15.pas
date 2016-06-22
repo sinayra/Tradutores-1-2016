@@ -1,21 +1,15 @@
-program Exe15;
+program Exe13;
 
 var 
-	a, b, aux: integer;
+	a, b: integer;
 
 begin
-	a := 1;
-	b := 1;
+	read(a,b);
+	write(a,b);
 	
-	while b < 11 do
-	begin
-		a := 1;
-		while a < 11 do
-		begin
-			aux := a * b;
-			write(aux);
-			a := a + 1;
-		end
-		b := b + 1;
-	end
+	read(a);
+	write(a);
+	
+	b := a + 2;
+	write(b);
 end.

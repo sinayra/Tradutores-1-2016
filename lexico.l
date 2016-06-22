@@ -8,6 +8,7 @@ extern char *strdup(const char *s);
 %}
 
 %option yylineno
+%x PAS_COMMENT
 
 PROGRAM		("program")
 WRITE		("write")
@@ -16,12 +17,18 @@ FUNCTION	("function")
 PROCEDURE	("procedure")
 BLOCO_ABRE	("begin")
 BLOCO_FECHA ("end")
+TRUE 		("true")
+FALSE 		("false")
 WHILE 		("while")
 IF			("if")
 THEN		("then")
 ELSE		("else")
 DO 			("do")
 VAR			("var")
+DIV			("div")
+AND			("and")
+OR			("or")
+NOT			("not")
 TIPO		("integer"|"boolean"|"char")
 ID			[a-zA-Z][a-zA-Z0-9]*	
 NUM 		("+"|"-")?[0-9]+((".")[0-9]+)?
@@ -31,7 +38,10 @@ SUB			("-")
 MULT		("*")
 REL_MENOR	("<")
 REL_MAIOR	(">")
-REL_IGUAL	("=")
+REL_IGUAL		("=")
+REL_MENOR_IGUAL	("<=")
+REL_MAIOR_IGUAL	(">=")
+REL_DIF			("<>")
 
 
 %%
@@ -48,6 +58,12 @@ REL_IGUAL	("=")
 {ELSE}			{return ELSE;}
 {DO}			{return DO;}
 {VAR}			{return VAR;}
+{DIV}	 		{return DIV;}
+{OR}	 		{return OR;}
+{AND}	 		{return AND;}
+{NOT}	 		{return NOT;}
+{TRUE}			{yylval.valor = 1; return TRUE;}
+{FALSE}			{yylval.valor = 0; return FALSE;}
 {TIPO}			{yylval.cadeia = (char *) strdup(yytext); return TIPO;}
 {ID}			{yylval.cadeia = (char *) strdup(yytext); return ID;}
 {NUM}			{yylval.valor = atoi(yytext); return NUM;}
@@ -63,6 +79,9 @@ REL_IGUAL	("=")
 {REL_MENOR} 		{return REL_MENOR;}
 {REL_MAIOR} 		{return REL_MAIOR;}
 {REL_IGUAL} 		{return REL_IGUAL;}
+{REL_MENOR_IGUAL} 		{return REL_MENOR_IGUAL;}
+{REL_MAIOR_IGUAL} 		{return REL_MAIOR_IGUAL;}
+{REL_DIF} 		{return REL_DIF;}
 {SOMA}	 		{return SOMA;}
 {SUB}	 		{return SUB;}
 {MULT}	 		{return MULT;}
@@ -71,7 +90,11 @@ REL_IGUAL	("=")
 .				{return yytext[0];}
 
 
+"(*"            { BEGIN(PAS_COMMENT); }
+<PAS_COMMENT>"*)" { BEGIN(INITIAL); }
+<PAS_COMMENT>.    { }
 %%
+
 int yywrap() {
  return 1;
 }
