@@ -83,12 +83,18 @@ void yyerror(const char *s);
 int linha_fim_estr, linha_fimif;
 int erro_semantico = 0;
 int busca_tabela(char *id);
+
+//Auxiliar para a geracao de codigo
+int pulou_linhas = 0;
+
+
 void verifica_tabela();
+void processa_relacao(int isNum1, int val1, int isNum2, int val2, tipoInstr tipo);
 int checa_elemento(char *nome);
 
 
 /* Line 371 of yacc.c  */
-#line 92 "sintatico.tab.c"
+#line 98 "sintatico.tab.c"
 
 # ifndef YY_NULL
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -169,7 +175,7 @@ extern int yydebug;
 typedef union YYSTYPE
 {
 /* Line 387 of yacc.c  */
-#line 28 "sintatico.y"
+#line 34 "sintatico.y"
 
 	char *cadeia;
 	int valor;
@@ -178,6 +184,7 @@ typedef union YYSTYPE
 		int val;
 		int isNum;
 		int arit;
+		int inicio;
 	}tipoExp;
 
 	struct tipoRel{
@@ -187,7 +194,7 @@ typedef union YYSTYPE
 
 
 /* Line 387 of yacc.c  */
-#line 191 "sintatico.tab.c"
+#line 198 "sintatico.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -215,7 +222,7 @@ int yyparse ();
 /* Copy the second part of user declarations.  */
 
 /* Line 390 of yacc.c  */
-#line 219 "sintatico.tab.c"
+#line 226 "sintatico.tab.c"
 
 #ifdef short
 # undef short
@@ -529,21 +536,12 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-<<<<<<< HEAD
-       0,    99,    99,    98,   113,   116,   117,   119,   120,   122,
-     123,   135,   146,   145,   166,   169,   193,   194,   195,   207,
-     208,   211,   212,   215,   228,   246,   247,   250,   251,   254,
-     253,   267,   266,   280,   287,   301,   302,   328,   354,   380,
-     406,   407,   416,   426,   436,   445,   455,   465,   475,   476,
-     477,   480,   494,   509,   520
-=======
-       0,    97,    97,    96,   111,   114,   115,   117,   118,   120,
-     121,   133,   144,   143,   164,   167,   191,   192,   193,   205,
-     206,   209,   210,   213,   226,   244,   245,   248,   249,   252,
-     251,   265,   264,   278,   285,   299,   300,   326,   352,   378,
-     404,   405,   414,   445,   477,   507,   508,   509,   510,   511,
-     512,   515,   529,   544,   555
->>>>>>> 34f62a1febd0df6b1bc5b48e95e419ab80ad1aa3
+       0,   104,   104,   103,   118,   121,   122,   124,   125,   127,
+     128,   141,   153,   152,   175,   178,   202,   203,   204,   216,
+     217,   220,   221,   224,   237,   255,   256,   259,   260,   263,
+     262,   276,   275,   289,   296,   310,   311,   337,   363,   389,
+     415,   416,   425,   440,   455,   469,   485,   500,   514,   534,
+     554,   557,   571,   586,   597
 };
 #endif
 
@@ -1515,7 +1513,7 @@ yyreduce:
     {
         case 2:
 /* Line 1792 of yacc.c  */
-#line 97 "sintatico.y"
+#line 104 "sintatico.y"
     {
 				
 				TS temp;
@@ -1531,44 +1529,45 @@ yyreduce:
 
   case 4:
 /* Line 1792 of yacc.c  */
-#line 111 "sintatico.y"
+#line 118 "sintatico.y"
     {;}
     break;
 
   case 5:
 /* Line 1792 of yacc.c  */
-#line 114 "sintatico.y"
+#line 121 "sintatico.y"
     {;}
     break;
 
   case 6:
 /* Line 1792 of yacc.c  */
-#line 115 "sintatico.y"
+#line 122 "sintatico.y"
     {;}
     break;
 
   case 7:
 /* Line 1792 of yacc.c  */
-#line 117 "sintatico.y"
-    {(yyval.valor) = getLinhaAtual();}
+#line 124 "sintatico.y"
+    {(yyval.valor) = getLinhaAtual();pulou_linhas = 0;}
     break;
 
   case 8:
 /* Line 1792 of yacc.c  */
-#line 118 "sintatico.y"
-    {(yyval.valor) = getLinhaAtual();}
+#line 125 "sintatico.y"
+    {(yyval.valor) = getLinhaAtual();pulou_linhas = 0;}
     break;
 
   case 9:
 /* Line 1792 of yacc.c  */
-#line 120 "sintatico.y"
+#line 127 "sintatico.y"
     {;}
     break;
 
   case 10:
 /* Line 1792 of yacc.c  */
-#line 122 "sintatico.y"
+#line 129 "sintatico.y"
     {
+					pulou_linhas = 0;
 					int linhaaux;
 					setLinhaAtual((yyvsp[(2) - (4)].tipoRel).fim);
 
@@ -1583,8 +1582,9 @@ yyreduce:
 
   case 11:
 /* Line 1792 of yacc.c  */
-#line 134 "sintatico.y"
+#line 142 "sintatico.y"
     {
+					pulou_linhas = 0;
 					int linhaaux;
 					setLinhaAtual((yyvsp[(2) - (4)].tipoRel).fim);
 
@@ -1597,16 +1597,18 @@ yyreduce:
 
   case 12:
 /* Line 1792 of yacc.c  */
-#line 144 "sintatico.y"
+#line 153 "sintatico.y"
     {
+					pulou_linhas = 0;
 					setLinhaAtual((yyvsp[(4) - (5)].valor) + 2); //mais duas instruções do jump
 				}
     break;
 
   case 13:
 /* Line 1792 of yacc.c  */
-#line 148 "sintatico.y"
+#line 158 "sintatico.y"
     {
+					pulou_linhas = 0;
 					int linhaaux, linhatual_aux;
 					linhatual_aux = getLinhaAtual();
 
@@ -1625,13 +1627,13 @@ yyreduce:
 
   case 14:
 /* Line 1792 of yacc.c  */
-#line 164 "sintatico.y"
+#line 175 "sintatico.y"
     {;}
     break;
 
   case 15:
 /* Line 1792 of yacc.c  */
-#line 168 "sintatico.y"
+#line 179 "sintatico.y"
     {
 							escreverComentario(yyout, "Processo de atribuicao");
 							int index = checa_elemento((yyvsp[(1) - (3)].cadeia));
@@ -1659,19 +1661,19 @@ yyreduce:
 
   case 16:
 /* Line 1792 of yacc.c  */
-#line 191 "sintatico.y"
+#line 202 "sintatico.y"
     {;}
     break;
 
   case 17:
 /* Line 1792 of yacc.c  */
-#line 192 "sintatico.y"
+#line 203 "sintatico.y"
     {;}
     break;
 
   case 18:
 /* Line 1792 of yacc.c  */
-#line 194 "sintatico.y"
+#line 205 "sintatico.y"
     {
 							int index = checa_elemento((yyvsp[(1) - (3)].cadeia));
 							if(index < 0){
@@ -1684,31 +1686,31 @@ yyreduce:
 
   case 19:
 /* Line 1792 of yacc.c  */
-#line 205 "sintatico.y"
+#line 216 "sintatico.y"
     {;}
     break;
 
   case 20:
 /* Line 1792 of yacc.c  */
-#line 206 "sintatico.y"
+#line 217 "sintatico.y"
     {;}
     break;
 
   case 21:
 /* Line 1792 of yacc.c  */
-#line 209 "sintatico.y"
+#line 220 "sintatico.y"
     {;}
     break;
 
   case 22:
 /* Line 1792 of yacc.c  */
-#line 210 "sintatico.y"
+#line 221 "sintatico.y"
     {;}
     break;
 
   case 23:
 /* Line 1792 of yacc.c  */
-#line 214 "sintatico.y"
+#line 225 "sintatico.y"
     {
 							TS temp;
 							strcpy(temp.cadeia, (yyvsp[(1) - (3)].cadeia));
@@ -1725,7 +1727,7 @@ yyreduce:
 
   case 24:
 /* Line 1792 of yacc.c  */
-#line 227 "sintatico.y"
+#line 238 "sintatico.y"
     {
 							TS temp1, temp2;
 							int index = get_n_simbolos() - 1;
@@ -1745,31 +1747,31 @@ yyreduce:
 
   case 25:
 /* Line 1792 of yacc.c  */
-#line 244 "sintatico.y"
+#line 255 "sintatico.y"
     {;}
     break;
 
   case 26:
 /* Line 1792 of yacc.c  */
-#line 245 "sintatico.y"
+#line 256 "sintatico.y"
     {;}
     break;
 
   case 27:
 /* Line 1792 of yacc.c  */
-#line 248 "sintatico.y"
+#line 259 "sintatico.y"
     {;}
     break;
 
   case 28:
 /* Line 1792 of yacc.c  */
-#line 249 "sintatico.y"
+#line 260 "sintatico.y"
     {;}
     break;
 
   case 29:
 /* Line 1792 of yacc.c  */
-#line 252 "sintatico.y"
+#line 263 "sintatico.y"
     {
 							TS temp;
 							strcpy(temp.cadeia, (yyvsp[(2) - (7)].cadeia));
@@ -1785,7 +1787,7 @@ yyreduce:
 
   case 31:
 /* Line 1792 of yacc.c  */
-#line 265 "sintatico.y"
+#line 276 "sintatico.y"
     {
 							TS temp;
 							strcpy(temp.cadeia, (yyvsp[(2) - (5)].cadeia));
@@ -1801,7 +1803,7 @@ yyreduce:
 
   case 33:
 /* Line 1792 of yacc.c  */
-#line 279 "sintatico.y"
+#line 290 "sintatico.y"
     {
 
 			(yyval.tipoExp).val = (yyvsp[(1) - (1)].valor);
@@ -1812,7 +1814,7 @@ yyreduce:
 
   case 34:
 /* Line 1792 of yacc.c  */
-#line 286 "sintatico.y"
+#line 297 "sintatico.y"
     {
 			int index = checa_elemento((yyvsp[(1) - (1)].cadeia));
 			if(index < 0){
@@ -1830,13 +1832,13 @@ yyreduce:
 
   case 35:
 /* Line 1792 of yacc.c  */
-#line 299 "sintatico.y"
+#line 310 "sintatico.y"
     {;}
     break;
 
   case 36:
 /* Line 1792 of yacc.c  */
-#line 301 "sintatico.y"
+#line 312 "sintatico.y"
     {
 			escreverComentario(yyout, "Processo de adicao");
 			if((yyvsp[(1) - (3)].tipoExp).isNum){
@@ -1866,7 +1868,7 @@ yyreduce:
 
   case 37:
 /* Line 1792 of yacc.c  */
-#line 327 "sintatico.y"
+#line 338 "sintatico.y"
     {
 			escreverComentario(yyout, "Processo de subtracao");
 			if((yyvsp[(1) - (3)].tipoExp).isNum){
@@ -1896,7 +1898,7 @@ yyreduce:
 
   case 38:
 /* Line 1792 of yacc.c  */
-#line 353 "sintatico.y"
+#line 364 "sintatico.y"
     {
 			escreverComentario(yyout, "Processo de multiplicacao");
 			if((yyvsp[(1) - (3)].tipoExp).isNum){
@@ -1926,11 +1928,7 @@ yyreduce:
 
   case 39:
 /* Line 1792 of yacc.c  */
-<<<<<<< HEAD
-#line 381 "sintatico.y"
-=======
-#line 379 "sintatico.y"
->>>>>>> 34f62a1febd0df6b1bc5b48e95e419ab80ad1aa3
+#line 390 "sintatico.y"
     {
 			escreverComentario(yyout, "Processo de divisao");
 			if((yyvsp[(1) - (3)].tipoExp).isNum){
@@ -1960,21 +1958,13 @@ yyreduce:
 
   case 40:
 /* Line 1792 of yacc.c  */
-<<<<<<< HEAD
-#line 406 "sintatico.y"
-=======
-#line 404 "sintatico.y"
->>>>>>> 34f62a1febd0df6b1bc5b48e95e419ab80ad1aa3
-    {;}
+#line 415 "sintatico.y"
+    {(yyval.tipoExp).inicio = getLinhaAtual();}
     break;
 
   case 41:
 /* Line 1792 of yacc.c  */
-<<<<<<< HEAD
-#line 408 "sintatico.y"
-=======
-#line 406 "sintatico.y"
->>>>>>> 34f62a1febd0df6b1bc5b48e95e419ab80ad1aa3
+#line 417 "sintatico.y"
     {
 			if(checa_elemento((yyvsp[(1) - (3)].cadeia)) == -1){
 				erro_semantico = 1;
@@ -1986,38 +1976,18 @@ yyreduce:
 
   case 42:
 /* Line 1792 of yacc.c  */
-<<<<<<< HEAD
-#line 417 "sintatico.y"
-=======
-#line 415 "sintatico.y"
->>>>>>> 34f62a1febd0df6b1bc5b48e95e419ab80ad1aa3
+#line 426 "sintatico.y"
     {
+			if(pulou_linhas){
+				setLinhaAtual(getLinhaAtual() - 2);
+				pulou_linhas = 0;
+			}
 			(yyval.tipoRel).inicio = getLinhaAtual();
 			escreverComentario(yyout, "*** Processo de relacao < ***");
-			if((yyvsp[(1) - (3)].tipoExp).isNum){
-				montador(yyout, INSTR_LOAD_CTE, (yyvsp[(1) - (3)].tipoExp).val, ac);
-				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
-			}
-			else{
-				montador(yyout, INSTR_LOAD_MEMORIA, (yyvsp[(1) - (3)].tipoExp).val, ac);
-				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
-			}
-
-			if((yyvsp[(3) - (3)].tipoExp).isNum){
-				montador(yyout, INSTR_LOAD_CTE, (yyvsp[(3) - (3)].tipoExp).val, ac);
-				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
-			}
-			else{
-				montador(yyout, INSTR_LOAD_MEMORIA, (yyvsp[(3) - (3)].tipoExp).val, ac);
-				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
-			}
-
-			montador(yyout, INSTR_TEMP_ACS, -1, -1);
-			montador(yyout, INSTR_REL_MENOR, -1, -1);	
-
-			montador(yyout, INSTR_STORE_REL, -1, -1);
+			processa_relacao((yyvsp[(1) - (3)].tipoExp).isNum, (yyvsp[(1) - (3)].tipoExp).val, (yyvsp[(3) - (3)].tipoExp).isNum, (yyvsp[(3) - (3)].tipoExp).val,INSTR_REL_MENOR);
 			(yyval.tipoRel).fim = getLinhaAtual();
 			setLinhaAtual((yyval.tipoRel).fim + 2); //+ duas instruções quando for dar jump
+			pulou_linhas = 1;
 
 			escreverComentario(yyout, "Fim de <");
 		}
@@ -2025,39 +1995,18 @@ yyreduce:
 
   case 43:
 /* Line 1792 of yacc.c  */
-<<<<<<< HEAD
-#line 427 "sintatico.y"
-=======
-#line 446 "sintatico.y"
->>>>>>> 34f62a1febd0df6b1bc5b48e95e419ab80ad1aa3
+#line 441 "sintatico.y"
     {
+			if(pulou_linhas){
+				setLinhaAtual(getLinhaAtual() - 2);
+				pulou_linhas = 0;
+			}
 			(yyval.tipoRel).inicio = getLinhaAtual();
 			escreverComentario(yyout, "Processo de relacao >");
-			if((yyvsp[(1) - (3)].tipoExp).isNum){
-				montador(yyout, INSTR_LOAD_CTE, (yyvsp[(1) - (3)].tipoExp).val, ac);
-				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
-			}
-			else{
-				montador(yyout, INSTR_LOAD_MEMORIA, (yyvsp[(1) - (3)].tipoExp).val, ac);
-				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
-			}
-
-			if((yyvsp[(3) - (3)].tipoExp).isNum){
-				montador(yyout, INSTR_LOAD_CTE, (yyvsp[(3) - (3)].tipoExp).val, ac);
-				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
-			}
-			else{
-				montador(yyout, INSTR_LOAD_MEMORIA, (yyvsp[(3) - (3)].tipoExp).val, ac);
-				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
-			}
-
-
-			montador(yyout, INSTR_TEMP_ACS, -1, -1);
-			montador(yyout, INSTR_REL_MAIOR, -1, -1);	
-
-			montador(yyout, INSTR_STORE_REL, -1, -1);
+			processa_relacao((yyvsp[(1) - (3)].tipoExp).isNum, (yyvsp[(1) - (3)].tipoExp).val, (yyvsp[(3) - (3)].tipoExp).isNum, (yyvsp[(3) - (3)].tipoExp).val,INSTR_REL_MAIOR);
 			(yyval.tipoRel).fim = getLinhaAtual();
 			setLinhaAtual((yyval.tipoRel).fim + 2); //+ duas instruções quando for dar jump
+			pulou_linhas = 1;
 
 			escreverComentario(yyout, "Fim de >");
 		}
@@ -2065,136 +2014,136 @@ yyreduce:
 
   case 44:
 /* Line 1792 of yacc.c  */
-<<<<<<< HEAD
-#line 437 "sintatico.y"
-=======
-#line 478 "sintatico.y"
->>>>>>> 34f62a1febd0df6b1bc5b48e95e419ab80ad1aa3
+#line 456 "sintatico.y"
     {
+			if(pulou_linhas){
+				setLinhaAtual(getLinhaAtual() - 2);
+				pulou_linhas = 0;
+			}
 			(yyval.tipoRel).inicio = getLinhaAtual();
 			escreverComentario(yyout, "Processo de relacao =");
-			if((yyvsp[(1) - (3)].tipoExp).isNum){
-				montador(yyout, INSTR_LOAD_CTE, (yyvsp[(1) - (3)].tipoExp).val, ac);
-				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
-			}
-			else{
-				montador(yyout, INSTR_LOAD_MEMORIA, (yyvsp[(1) - (3)].tipoExp).val, ac);
-				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
-			}
-
-			if((yyvsp[(3) - (3)].tipoExp).isNum){
-				montador(yyout, INSTR_LOAD_CTE, (yyvsp[(3) - (3)].tipoExp).val, ac);
-				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
-			}
-			else{
-				montador(yyout, INSTR_LOAD_MEMORIA, (yyvsp[(3) - (3)].tipoExp).val, ac);
-				montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
-			}
-
-			montador(yyout, INSTR_TEMP_ACS, -1, -1);
-			montador(yyout, INSTR_REL_IGUAL, -1, -1);	
-
-			montador(yyout, INSTR_STORE_REL, -1, -1);
+			processa_relacao((yyvsp[(1) - (3)].tipoExp).isNum, (yyvsp[(1) - (3)].tipoExp).val, (yyvsp[(3) - (3)].tipoExp).isNum, (yyvsp[(3) - (3)].tipoExp).val,INSTR_REL_IGUAL);
 			(yyval.tipoRel).fim = getLinhaAtual();
 			setLinhaAtual((yyval.tipoRel).fim + 2); //+ duas instruções quando for dar jump
+			pulou_linhas = 1;
 			escreverComentario(yyout, "Fim de =");
 		}
     break;
 
   case 45:
 /* Line 1792 of yacc.c  */
-<<<<<<< HEAD
-#line 446 "sintatico.y"
+#line 470 "sintatico.y"
     {
+			if(pulou_linhas){
+				setLinhaAtual(getLinhaAtual() - 2);
+				pulou_linhas = 0;
+			}
 			(yyval.tipoRel).inicio = getLinhaAtual();
 			escreverComentario(yyout, "Processo de relacao >=");
 			processa_relacao((yyvsp[(1) - (3)].tipoExp).isNum, (yyvsp[(1) - (3)].tipoExp).val, (yyvsp[(3) - (3)].tipoExp).isNum, (yyvsp[(3) - (3)].tipoExp).val,INSTR_REL_MAIOR_IGUAL);
 			(yyval.tipoRel).fim = getLinhaAtual();
 			setLinhaAtual((yyval.tipoRel).fim + 2);
+			pulou_linhas = 1;
 			escreverComentario(yyout, "Fim de >=");
+			
 		
 		}
-=======
-#line 507 "sintatico.y"
-    {;}
->>>>>>> 34f62a1febd0df6b1bc5b48e95e419ab80ad1aa3
     break;
 
   case 46:
 /* Line 1792 of yacc.c  */
-<<<<<<< HEAD
-#line 456 "sintatico.y"
+#line 486 "sintatico.y"
     {
+			if(pulou_linhas){
+				setLinhaAtual(getLinhaAtual() - 2);
+				pulou_linhas = 0;
+			}
 			(yyval.tipoRel).inicio = getLinhaAtual();
 			escreverComentario(yyout, "Processo de relacao <=");
 			processa_relacao((yyvsp[(1) - (3)].tipoExp).isNum, (yyvsp[(1) - (3)].tipoExp).val, (yyvsp[(3) - (3)].tipoExp).isNum, (yyvsp[(3) - (3)].tipoExp).val,INSTR_REL_MENOR_IGUAL);
 			(yyval.tipoRel).fim = getLinhaAtual();
 			setLinhaAtual((yyval.tipoRel).fim + 2);
+			pulou_linhas = 1;
 			escreverComentario(yyout, "Fim de <=");
 		
 		}
-=======
-#line 508 "sintatico.y"
-    {;}
->>>>>>> 34f62a1febd0df6b1bc5b48e95e419ab80ad1aa3
     break;
 
   case 47:
 /* Line 1792 of yacc.c  */
-<<<<<<< HEAD
-#line 466 "sintatico.y"
+#line 501 "sintatico.y"
     {
+			if(pulou_linhas){
+				setLinhaAtual(getLinhaAtual() - 2);
+				pulou_linhas = 0;
+			}
 			(yyval.tipoRel).inicio = getLinhaAtual();
 			escreverComentario(yyout, "Processo de relacao <>");
 			processa_relacao((yyvsp[(1) - (3)].tipoExp).isNum, (yyvsp[(1) - (3)].tipoExp).val, (yyvsp[(3) - (3)].tipoExp).isNum, (yyvsp[(3) - (3)].tipoExp).val,INSTR_REL_DIF);
 			(yyval.tipoRel).fim = getLinhaAtual();
 			setLinhaAtual((yyval.tipoRel).fim + 2);
+			pulou_linhas = 1;
 			escreverComentario(yyout, "Fim de <>");
-		
 		}
-=======
-#line 509 "sintatico.y"
-    {;}
->>>>>>> 34f62a1febd0df6b1bc5b48e95e419ab80ad1aa3
     break;
 
   case 48:
 /* Line 1792 of yacc.c  */
-<<<<<<< HEAD
-#line 475 "sintatico.y"
-=======
-#line 510 "sintatico.y"
->>>>>>> 34f62a1febd0df6b1bc5b48e95e419ab80ad1aa3
-    {;}
+#line 515 "sintatico.y"
+    {
+			if(pulou_linhas){
+				setLinhaAtual(getLinhaAtual() - 2);
+				pulou_linhas = 0;
+			}
+			(yyval.tipoRel).inicio = (yyvsp[(1) - (3)].tipoExp).inicio - 16;
+
+			escreverComentario(yyout, "Processo de relacao AND");
+			montador(yyout, INSTR_TEMP_ACS, -1, -1);
+			montador(yyout, INSTR_REL_AND, -1,-1);
+			montador(yyout, INSTR_STORE_REL, -1, -1);
+			
+			(yyval.tipoRel).fim = getLinhaAtual();
+			setLinhaAtual((yyval.tipoRel).fim + 2);
+			pulou_linhas = 1;
+			
+			escreverComentario(yyout, "Fim de AND");
+		
+		}
     break;
 
   case 49:
 /* Line 1792 of yacc.c  */
-<<<<<<< HEAD
-#line 476 "sintatico.y"
-=======
-#line 511 "sintatico.y"
->>>>>>> 34f62a1febd0df6b1bc5b48e95e419ab80ad1aa3
-    {;}
+#line 535 "sintatico.y"
+    {
+			if(pulou_linhas){
+				setLinhaAtual(getLinhaAtual() - 2);
+				pulou_linhas = 0;
+			}
+			(yyval.tipoRel).inicio = (yyvsp[(1) - (3)].tipoExp).inicio - 16;
+			escreverComentario(yyout, "Processo de relacao OR");
+			montador(yyout, INSTR_TEMP_ACS, -1, -1);
+			montador(yyout, INSTR_REL_OR, -1,-1);
+			montador(yyout, INSTR_STORE_REL, -1, -1);
+			
+			(yyval.tipoRel).fim = getLinhaAtual();
+			setLinhaAtual((yyval.tipoRel).fim + 2);
+			pulou_linhas = 1;
+			
+			escreverComentario(yyout, "Fim de OR");
+		
+		
+		}
     break;
 
   case 50:
 /* Line 1792 of yacc.c  */
-<<<<<<< HEAD
-#line 477 "sintatico.y"
-=======
-#line 512 "sintatico.y"
->>>>>>> 34f62a1febd0df6b1bc5b48e95e419ab80ad1aa3
-    {;}
+#line 554 "sintatico.y"
+    {(yyval.tipoRel).inicio = getLinhaAtual();}
     break;
 
   case 51:
 /* Line 1792 of yacc.c  */
-<<<<<<< HEAD
-#line 481 "sintatico.y"
-=======
-#line 516 "sintatico.y"
->>>>>>> 34f62a1febd0df6b1bc5b48e95e419ab80ad1aa3
+#line 558 "sintatico.y"
     {	
 					int index = checa_elemento((yyvsp[(1) - (1)].cadeia));
 					if(index < 0){
@@ -2212,11 +2161,7 @@ yyreduce:
 
   case 52:
 /* Line 1792 of yacc.c  */
-<<<<<<< HEAD
-#line 495 "sintatico.y"
-=======
-#line 530 "sintatico.y"
->>>>>>> 34f62a1febd0df6b1bc5b48e95e419ab80ad1aa3
+#line 572 "sintatico.y"
     {	
 					int index = checa_elemento((yyvsp[(3) - (3)].cadeia));
 					if(index < 0){
@@ -2233,11 +2178,7 @@ yyreduce:
 
   case 53:
 /* Line 1792 of yacc.c  */
-<<<<<<< HEAD
-#line 510 "sintatico.y"
-=======
-#line 545 "sintatico.y"
->>>>>>> 34f62a1febd0df6b1bc5b48e95e419ab80ad1aa3
+#line 587 "sintatico.y"
     {
 					int index = checa_elemento((yyvsp[(1) - (1)].cadeia));
 					if(index < 0){
@@ -2252,11 +2193,7 @@ yyreduce:
 
   case 54:
 /* Line 1792 of yacc.c  */
-<<<<<<< HEAD
-#line 521 "sintatico.y"
-=======
-#line 556 "sintatico.y"
->>>>>>> 34f62a1febd0df6b1bc5b48e95e419ab80ad1aa3
+#line 598 "sintatico.y"
     {
 					
 					int index = checa_elemento((yyvsp[(3) - (3)].cadeia));
@@ -2273,11 +2210,7 @@ yyreduce:
 
 
 /* Line 1792 of yacc.c  */
-<<<<<<< HEAD
-#line 2139 "sintatico.tab.c"
-=======
-#line 2177 "sintatico.tab.c"
->>>>>>> 34f62a1febd0df6b1bc5b48e95e419ab80ad1aa3
+#line 2214 "sintatico.tab.c"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2509,8 +2442,7 @@ yyreturn:
 
 
 /* Line 2055 of yacc.c  */
-<<<<<<< HEAD
-#line 537 "sintatico.y"
+#line 614 "sintatico.y"
 
 
 void processa_relacao(int isNum1, int val1, int isNum2, int val2, tipoInstr tipo){
@@ -2522,10 +2454,22 @@ void processa_relacao(int isNum1, int val1, int isNum2, int val2, tipoInstr tipo
 			montador(yyout, INSTR_LOAD_MEMORIA, val1, ac);
 			montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
 		}
-=======
-#line 572 "sintatico.y"
->>>>>>> 34f62a1febd0df6b1bc5b48e95e419ab80ad1aa3
 
+		if(isNum2){
+			montador(yyout, INSTR_LOAD_CTE, val2, ac);
+			montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
+		}
+		else{
+			montador(yyout, INSTR_LOAD_MEMORIA, val2, ac);
+			montador(yyout, INSTR_STORE_MEMORIA_TEMP, ac, ac);
+		}
+		
+		montador(yyout, INSTR_TEMP_ACS, -1, -1);
+		montador(yyout, tipo, -1, -1);	
+
+		montador(yyout, INSTR_STORE_REL, -1, -1);
+
+}
 
 int checa_elemento(char *nome){
 	int index = existe_elemento(nome);
