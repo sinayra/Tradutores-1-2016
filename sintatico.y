@@ -40,13 +40,9 @@ int checa_tipo(TS var, int isNum, int isBool, int isArit);
 	struct tipoExp{
 		int val;
 		int isNum;
-<<<<<<< HEAD
-		int arit;
 		int inicio;
-=======
 		int isArit;
 		int isBool;
->>>>>>> 7bf89e855c7a1f1b084376c2f63af16d8940afa6
 	}tipoExp;
 
 	struct tipoRel{
@@ -379,11 +375,8 @@ exp:	NUM
 		| PAR_ABRE rel PAR_FECHA	
 		{
 			$$.isArit = $rel.isArit; /*para passar para arvore sintática o valor de expressão se ela for aritmética*/
+			$$.inicio = getLinhaAtual();
 		}
-<<<<<<< HEAD
-		| PAR_ABRE rel PAR_FECHA	{$$.inicio = getLinhaAtual();}
-=======
->>>>>>> 7bf89e855c7a1f1b084376c2f63af16d8940afa6
 		| ID PAR_ABRE PAR_FECHA				/*Para funções sem argumentos*/
 		{
 			if(checa_elemento($ID) == -1){
@@ -395,14 +388,11 @@ exp:	NUM
 ;
 rel:	 exp REL_MENOR exp	
 		{
-<<<<<<< HEAD
 			if(pulou_linhas){
 				setLinhaAtual(getLinhaAtual() - 2);
 				pulou_linhas = 0;
 			}
-=======
 			escreverComentario(yyout, "Processo de relacao <");
->>>>>>> 7bf89e855c7a1f1b084376c2f63af16d8940afa6
 			$$.inicio = getLinhaAtual();
 
 			processa_operacao($1.isNum, $1.val, $1.isArit, $3.isNum, $3.val, $3.isArit,INSTR_REL_MENOR);
@@ -410,25 +400,24 @@ rel:	 exp REL_MENOR exp
 
 			$$.fim = getLinhaAtual();
 			setLinhaAtual($$.fim + 2); //+ duas instruções quando for dar jump
-<<<<<<< HEAD
+
 			pulou_linhas = 1;
-=======
+
 			$$.isArit = 0;
 			$$.isBool = 1;
->>>>>>> 7bf89e855c7a1f1b084376c2f63af16d8940afa6
+
 
 			escreverComentario(yyout, "Fim de <");
 		}
 		|exp REL_MAIOR exp
 		{
-<<<<<<< HEAD
+
 			if(pulou_linhas){
 				setLinhaAtual(getLinhaAtual() - 2);
 				pulou_linhas = 0;
 			}
-			$$.inicio = getLinhaAtual();
-=======
->>>>>>> 7bf89e855c7a1f1b084376c2f63af16d8940afa6
+
+
 			escreverComentario(yyout, "Processo de relacao >");
 			$$.inicio = getLinhaAtual();
 
@@ -437,25 +426,25 @@ rel:	 exp REL_MENOR exp
 			
 			$$.fim = getLinhaAtual();
 			setLinhaAtual($$.fim + 2); //+ duas instruções quando for dar jump
-<<<<<<< HEAD
+
 			pulou_linhas = 1;
-=======
+
 			$$.isArit = 0;
 			$$.isBool = 1;
->>>>>>> 7bf89e855c7a1f1b084376c2f63af16d8940afa6
+
 
 			escreverComentario(yyout, "Fim de >");
 		}
 		|exp REL_IGUAL exp
 		{
-<<<<<<< HEAD
+
 			if(pulou_linhas){
 				setLinhaAtual(getLinhaAtual() - 2);
 				pulou_linhas = 0;
 			}
-			$$.inicio = getLinhaAtual();
-=======
->>>>>>> 7bf89e855c7a1f1b084376c2f63af16d8940afa6
+
+
+
 			escreverComentario(yyout, "Processo de relacao =");
 			$$.inicio = getLinhaAtual();
 			
@@ -464,25 +453,23 @@ rel:	 exp REL_MENOR exp
 
 			$$.fim = getLinhaAtual();
 			setLinhaAtual($$.fim + 2); //+ duas instruções quando for dar jump
-<<<<<<< HEAD
+
 			pulou_linhas = 1;
-=======
+
 			$$.isArit = 0;
 			$$.isBool = 1;
 
->>>>>>> 7bf89e855c7a1f1b084376c2f63af16d8940afa6
 			escreverComentario(yyout, "Fim de =");
 		}
 		|exp REL_MAIOR_IGUAL exp 
 		{
-<<<<<<< HEAD
+
 			if(pulou_linhas){
 				setLinhaAtual(getLinhaAtual() - 2);
 				pulou_linhas = 0;
 			}
-			$$.inicio = getLinhaAtual();
-=======
->>>>>>> 7bf89e855c7a1f1b084376c2f63af16d8940afa6
+
+
 			escreverComentario(yyout, "Processo de relacao >=");
 			$$.inicio = getLinhaAtual();
 
@@ -491,27 +478,26 @@ rel:	 exp REL_MENOR exp
 
 			$$.fim = getLinhaAtual();
 			setLinhaAtual($$.fim + 2);
-<<<<<<< HEAD
+
 			pulou_linhas = 1;
-=======
+
 			$$.isArit = 0;
 			$$.isBool = 1;
 
->>>>>>> 7bf89e855c7a1f1b084376c2f63af16d8940afa6
 			escreverComentario(yyout, "Fim de >=");
 			
 		
 		}
 		|exp REL_MENOR_IGUAL exp 
 		{
-<<<<<<< HEAD
+
 			if(pulou_linhas){
 				setLinhaAtual(getLinhaAtual() - 2);
 				pulou_linhas = 0;
 			}
-			$$.inicio = getLinhaAtual();
-=======
->>>>>>> 7bf89e855c7a1f1b084376c2f63af16d8940afa6
+
+
+
 			escreverComentario(yyout, "Processo de relacao <=");
 			$$.inicio = getLinhaAtual();
 
@@ -520,26 +506,25 @@ rel:	 exp REL_MENOR exp
 
 			$$.fim = getLinhaAtual();
 			setLinhaAtual($$.fim + 2);
-<<<<<<< HEAD
+
 			pulou_linhas = 1;
 =======
 			$$.isArit = 0;
 			$$.isBool = 1;
 
->>>>>>> 7bf89e855c7a1f1b084376c2f63af16d8940afa6
+
 			escreverComentario(yyout, "Fim de <=");
 		
 		}
 		|exp REL_DIF exp 
 		{
-<<<<<<< HEAD
+
 			if(pulou_linhas){
 				setLinhaAtual(getLinhaAtual() - 2);
 				pulou_linhas = 0;
 			}
-			$$.inicio = getLinhaAtual();
-=======
->>>>>>> 7bf89e855c7a1f1b084376c2f63af16d8940afa6
+
+
 			escreverComentario(yyout, "Processo de relacao <>");
 			$$.inicio = getLinhaAtual();
 
@@ -548,13 +533,12 @@ rel:	 exp REL_MENOR exp
 
 			$$.fim = getLinhaAtual();
 			setLinhaAtual($$.fim + 2);
-<<<<<<< HEAD
+
 			pulou_linhas = 1;
-=======
 			$$.isArit = 0;
 			$$.isBool = 1;
 
->>>>>>> 7bf89e855c7a1f1b084376c2f63af16d8940afa6
+
 			escreverComentario(yyout, "Fim de <>");
 		}
 		|exp AND exp 
