@@ -6,7 +6,7 @@ var
 begin
 	read(a,b);
 	
-	while (a < 10) or (b <= 10) do
+	while (a < 10) and (b <= 10) do
 	begin
 		b := b + a;
 		write(b);

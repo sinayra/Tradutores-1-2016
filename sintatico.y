@@ -375,7 +375,7 @@ exp:	NUM
 		| PAR_ABRE rel PAR_FECHA	
 		{
 			$$.isArit = $rel.isArit; /*para passar para arvore sintática o valor de expressão se ela for aritmética*/
-			$$.inicio = getLinhaAtual();
+			$$.inicio = $rel.inicio;
 		}
 		| ID PAR_ABRE PAR_FECHA				/*Para funções sem argumentos*/
 		{
@@ -546,7 +546,7 @@ rel:	 exp REL_MENOR exp
 				setLinhaAtual(getLinhaAtual() - 2);
 				pulou_linhas = 0;
 			}
-			$$.inicio = $1.inicio - 16;
+			$$.inicio = $1.inicio;
 
 			escreverComentario(yyout, "Processo de relacao AND");
 			montador(yyout, INSTR_TEMP_ACS, -1, -1);
@@ -566,7 +566,7 @@ rel:	 exp REL_MENOR exp
 				setLinhaAtual(getLinhaAtual() - 2);
 				pulou_linhas = 0;
 			}
-			$$.inicio = $1.inicio - 16;
+			$$.inicio = $1.inicio;
 			escreverComentario(yyout, "Processo de relacao OR");
 			montador(yyout, INSTR_TEMP_ACS, -1, -1);
 			montador(yyout, INSTR_REL_OR, -1,-1);
