@@ -1,4 +1,4 @@
-program Exe26;
+program Exe1;
 (*
 	Lê valores de a e b
 	Se a > 10 e b <= 10
@@ -6,6 +6,8 @@ program Exe26;
 		escreve b
 		se b != 16
 			escreve (a, a+2, 9)
+		senão
+			escreve (b, b+2, 9)
 	senão
 		b = 5
 		escreve (5, 7, 9)
@@ -21,9 +23,9 @@ begin
 		b := b + a;
 		write(b);
 		if b <> 16 then
-		begin
 			write(a, a + 2, 9);
-		end
+		else
+			write(b, b + 2, 9);
 	end
 	else
 	begin

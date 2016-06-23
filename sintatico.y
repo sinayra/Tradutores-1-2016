@@ -24,13 +24,12 @@ int busca_tabela(char *id);
 
 //Auxiliar para a geracao de codigo
 int pulou_linhas = 0;
-int not_op = 0;
 
 
 void verifica_tabela();
 void processa_operacao(int isNum1, int val1, int arit1, int isNum2, int val2, int arit2, tipoInstr tipo);
 int checa_elemento(char *nome);
-int checa_tipo(TS var, int isNum, int isBool, int isArit);
+int checa_tipo(tipoID tipo, int isNum, int isBool, int isArit);
 
 %}
 
@@ -52,6 +51,7 @@ int checa_tipo(TS var, int isNum, int isBool, int isArit);
 		int fim;
 		int isArit;
 		int isBool;
+		int isNum;
 	}tipoRel;
 }
 
@@ -130,12 +130,16 @@ bloco_principal:  variavel_declaracao_inicio funcao_declaracao_inicio BLOCO_ABRE
 componente:	estrutura {;}
 			|componente estrutura{;}
 ;
-estrutura: 	estrutura_simples PONTO_VIRGULA {$$ = getLinhaAtual();pulou_linhas = 0;}
-			|estrutura_bloco {$$ = getLinhaAtual();pulou_linhas = 0;}
+estrutura: 	estrutura_simples PONTO_VIRGULA {$$ = getLinhaAtual(); pulou_linhas = 0;}
+			|estrutura_bloco {$$ = getLinhaAtual(); pulou_linhas = 0;}
 ;
 estrutura_bloco: bloco_composto {;}
 				|WHILE rel DO estrutura	
 				{
+					if(!$rel.isBool){
+						erro_semantico = 1;
+						printf("ERRO Linha %d: Tipo incompativel. Esperado condicao de tipo boolean \n", yylineno);
+					}
 					pulou_linhas = 0;
 					int linhaaux;
 					setLinhaAtual($rel.fim);
@@ -147,41 +151,49 @@ estrutura_bloco: bloco_composto {;}
 					linhaaux = $rel.inicio - ($estrutura + 2); //+2 instruções pro jump no final
 					montador(yyout, INSTR_JUMP, linhaaux, -1);
 				}
-				|IF rel THEN estrutura %prec IF_CONFLICT
+				|IF {pulou_linhas = 0;} estrutura_if {;}	
+
+estrutura_if: rel THEN estrutura %prec IF_CONFLICT
 				{
+					if(!$rel.isBool){
+						erro_semantico = 1;
+						printf("ERRO Linha %d: Tipo incompativel. Esperado condicao de tipo boolean \n", yylineno);
+					}
 					pulou_linhas = 0;
 					int linhaaux;
 					setLinhaAtual($rel.fim);
-					printf("estrutura: %d\t rel_fim: %d\n", $estrutura, $rel.fim);
 
 					linhaaux = ($estrutura - 1) - ($rel.fim + 1); //(PC+4) - 2 instruções de linha_rel
 					montador(yyout, INSTR_JUMP_REL_FALSE, linhaaux, -1);
 
 					setLinhaAtual($estrutura);
 				}
-				|IF rel THEN estrutura ELSE 
+				|rel THEN estrutura ELSE 
 				{
 					pulou_linhas = 0;
-					setLinhaAtual($4 + 2); //mais duas instruções do jump
+					setLinhaAtual($3 + 2); //mais duas instruções do jump
 				} 
 				estrutura 
 				{
+					if(!$rel.isBool){
+						erro_semantico = 1;
+						printf("ERRO Linha %d: Tipo incompativel. Esperado condicao de tipo boolean \n", yylineno);
+					}
 					pulou_linhas = 0;
 					int linhaaux, linhatual_aux;
 					linhatual_aux = getLinhaAtual();
 
 					setLinhaAtual($rel.fim);
-					linhaaux = ($4 - 1 + 2) - ($rel.fim + 1); //(PC-4 + 2 instruções de jump) - 2 instruções de linha_rel
+					linhaaux = ($3 - 1 + 2) - ($rel.fim + 1); //(PC-4 + 2 instruções de jump) - 2 instruções de linha_rel
 					montador(yyout, INSTR_JUMP_REL_FALSE, linhaaux, -1);
 
-					setLinhaAtual($4);
+					setLinhaAtual($3);
 
-					linhaaux = (linhatual_aux - 2) - $4; //(PC+4) - 2 instruções de linha_rel
+					linhaaux = (linhatual_aux - 2) - $3; //(PC+4) - 2 instruções de linha_rel
 					montador(yyout, INSTR_JUMP, linhaaux, -1);
 
 					setLinhaAtual(linhatual_aux);
 				}
-
 bloco_composto:	BLOCO_ABRE componente BLOCO_FECHA {;}
 ;
 
@@ -195,7 +207,8 @@ estrutura_simples:		ID OP_ATRIB exp
 								printf("ERRO Linha %d: %s nao declarado \n", yylineno, $ID);
 							}
 							else{
-								int tipo = checa_tipo(buscar_elemento_indice(index), $exp.isNum, $exp.isBool, $exp.isArit);
+								TS aux = buscar_elemento_indice(index);
+								int tipo = checa_tipo(aux.tipo, $exp.isNum, $exp.isBool, $exp.isArit);
 								if(tipo){
 									if(!$exp.isArit){
 										if($exp.isNum || $exp.isBool){
@@ -526,8 +539,6 @@ rel:	 exp REL_MENOR exp
 				pulou_linhas = 0;
 			}
 
-
-
 			escreverComentario(yyout, "Processo de relacao <=");
 			$$.inicio = getLinhaAtual();
 
@@ -541,7 +552,6 @@ rel:	 exp REL_MENOR exp
 			$$.isArit = 0;
 			$$.isBool = 1;
 
-
 			escreverComentario(yyout, "Fim de <=");
 		
 		}
@@ -552,7 +562,6 @@ rel:	 exp REL_MENOR exp
 				setLinhaAtual(getLinhaAtual() - 2);
 				pulou_linhas = 0;
 			}
-
 
 			escreverComentario(yyout, "Processo de relacao <>");
 			$$.inicio = getLinhaAtual();
@@ -586,6 +595,7 @@ rel:	 exp REL_MENOR exp
 			$$.fim = getLinhaAtual();
 			setLinhaAtual($$.fim + 2);
 			pulou_linhas = 1;
+			$$.isBool = 1;
 			
 			escreverComentario(yyout, "Fim de AND");
 		
@@ -605,9 +615,9 @@ rel:	 exp REL_MENOR exp
 			$$.fim = getLinhaAtual();
 			setLinhaAtual($$.fim + 2);
 			pulou_linhas = 1;
+			$$.isBool = 1;
 			
 			escreverComentario(yyout, "Fim de OR");
-		
 		
 		}
 		|exp 
@@ -735,20 +745,18 @@ void processa_operacao(int flag_a, int val1, int inAc1, int flag_b, int val2, in
 	montador(yyout, tipo, -1, -1);	
 }
 
-int checa_tipo(TS var, int isNum, int isBool, int isArit){
-	switch(var.tipo){
+int checa_tipo(tipoID tipo, int isNum, int isBool, int isArit){
+	switch(tipo){
 		case(INTEGER):
 			if(!isNum && !isArit){
 				erro_semantico = 1;
 				printf("ERRO Linha %d: Tipo incompativel. Esperado expressao de tipo integer \n", yylineno);
-				return 0;
 			}
 		break;
 		case(BOOLEAN):
 			if(!isBool){
 				erro_semantico = 1;
 				printf("ERRO Linha %d: Tipo incompativel. Esperado expressao de tipo boolean \n", yylineno);
-				return 0;
 			}
 		break;
 		default:
@@ -785,6 +793,7 @@ int main(int argc, char* argv[]){
 	extern FILE *yyin;
 	extern FILE *yyout;
 	int erro;
+	char saida[40];
 
 	++argv; --argc; 	    /* abre arquivo de entrada se houver */
 	if(argc > 0){
@@ -798,28 +807,29 @@ int main(int argc, char* argv[]){
 		yyin = stdin;
 
 	if(argc > 1)
-		yyout = fopen(argv[1],"wt");
+		strcpy(saida, argv[1]);
 	else
-		yyout = fopen("a.out","wt");
+		strcpy(saida, "a.out");
 
-	montador(yyout, INSTR_INICIO, -1, ac);
+	yyout = fopen(saida,"wt");
+
+	montador(yyout, INSTR_INICIO, -1, -1);
 	erro = yyparse();	
-	montador(yyout, INSTR_FIM, -1, ac);
+	montador(yyout, INSTR_FIM, -1, -1);
 	
-	if(erro == 0){		/*Se o programa estiver sintaticamente correto, ele checa o semantico*/
+	if(!erro){
 		//imprimir_lista();
-		
-		printf("\nPrograma sintaticamente correto\n");
-		
-		if(erro_semantico == 0)
-			printf("Programa semanticamente correto\n");
-		
 		verifica_tabela();
 	}
 	
 	fclose(yyin);
 	fclose(yyout);
 	excluir_TS();
+
+	if(erro || erro_semantico)
+		remove(saida); //apague arquivo de saída
+
+	return 0;
 }
 
 void yyerror (const char *s){

@@ -7,7 +7,7 @@ void montador(FILE *out, tipoInstr tipo, int valor, int reg){
 		case INSTR_INICIO:
 			emitComment(out, "INICIO" );
 			emitRM(out, "LD",mp,0,ac,"load maxaddress from location 0");
-			emitRM(out, "ST",reg,0,ac,"clear location 0");
+			emitRM(out, "ST",ac,0,ac,"clear location 0");
 		break;
 
 		case INSTR_FIM:

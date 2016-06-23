@@ -1,16 +1,15 @@
-program Exe17;
-(*Imprime tabuada*)
+program Exe3;
+(*Imprime a tabuada de 1 até 9*)
 var 
 	a, b, aux: integer;
 
 begin
-	a := 1;
-	b := 1;
-	
-	while b < 11 do
+
+	b := 1;	
+	while b < 10 do
 	begin
 		a := 1;
-		while a < 11 do
+		while a <= 10 do
 		begin
 			aux := a * b;
 			write(aux);

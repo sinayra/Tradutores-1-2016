@@ -1,4 +1,9 @@
 program Exe22;
+(*
+	Se a, b e c forem menores que 10
+		escreva 10
+	escreva a
+*)
 var 
 	a, b, c: integer;
 
@@ -8,7 +13,6 @@ begin
 	if a < 10 then
 		if b < 10 then
 			if c < 10 then
-				write(c);
-	a := 10;
+				write(10);
 	write(a);
 end.

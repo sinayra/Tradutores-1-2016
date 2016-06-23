@@ -93,7 +93,7 @@ extern int yydebug;
 typedef union YYSTYPE
 {
 /* Line 2058 of yacc.c  */
-#line 37 "sintatico.y"
+#line 36 "sintatico.y"
 
 	char *cadeia;
 	int valor;
@@ -112,11 +112,12 @@ typedef union YYSTYPE
 		int fim;
 		int isArit;
 		int isBool;
+		int isNum;
 	}tipoRel;
 
 
 /* Line 2058 of yacc.c  */
-#line 120 "sintatico.tab.h"
+#line 121 "sintatico.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

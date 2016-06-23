@@ -1,4 +1,4 @@
-program Exe10;
+program Exe4;
 (*Testando precedencia*)
 
 var 
